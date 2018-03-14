@@ -20,7 +20,7 @@ from typing import List, Iterable, Tuple
 import math
 import unicodedata
 
-from pybtex.database import parse_file, parse_string, BibliographyData, Entry, BibliographyDataError
+import pybtex.database
 
 
 VERSION = '0.0.1'
@@ -128,7 +128,9 @@ DATASETS = {
 
 class Entry:
     """
-    Currently a wrapper around pybtex which is not to my liking.
+    Currently a wrapper around pybtex which is not to my liking.  But
+    this establishes a minimal API that should make it easier to swap
+    in another backend should that be needed.
     """
     def __init__(self, obj):
         self.obj = obj
@@ -139,6 +141,16 @@ class Entry:
     def key(self):
         return self.obj.key
 
+    def match(self, term):
+        """
+        TODO: replace this with something befitting of a computer scientist.
+        """
+        for item in self.obj.fields.values():
+            if term.lower() in item.lower():
+                return True
+
+    def bibtex(self):
+        return pybtex.database.BibliographyData({self.key(): self.obj}).to_string('bibtex')
 
 class WrapperAroundCrummyPythonBibtexParsers:
     """
@@ -148,16 +160,15 @@ class WrapperAroundCrummyPythonBibtexParsers:
         self.file = file
 
         if os.path.exists(file):
-            self.db = parse_file(file)
+            self.db = pybtex.database.parse_file(file)
         else:
-            self.db = BibliographyData()
+            self.db = pybtex.database.BibliographyData()
         self._current = 0
         self._keys = self.db.entries.keys()
         self._max = len(self)
 
     def __len__(self):
         return len(self.db.entries.keys())
-
 
     def search(self, keys):
         pass
@@ -183,7 +194,12 @@ class WrapperAroundCrummyPythonBibtexParsers:
 
 
 def _find(args):
-    print('I should be searching for', args.terms, 'but I haven\'t been implemented!')
+    db = WrapperAroundCrummyPythonBibtexParsers()
+
+    matches = []
+    for entry in db:
+        if all([entry.match(term) for term in args.terms]):
+            print(entry.bibtex())
 
 
 def _add(args):
