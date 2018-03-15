@@ -16,6 +16,8 @@
 """
 A setuptools based setup module.
 
+    python3 setup.py sdist upload -r pypi
+
 See:
 - https://packaging.python.org/en/latest/distributing.html
 - https://github.com/pypa/sampleproject

@@ -22,8 +22,7 @@ import unicodedata
 
 import pybtex.database
 
-
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 
 try:
     # SIGPIPE is not available on Windows machines, throwing an exception.
@@ -193,6 +192,32 @@ class WrapperAroundCrummyPythonBibtexParsers:
             return Entry(self.db.entries[self._keys[self._current - 1]])
 
 
+def download_file(bibfile) -> None:
+    """Downloads the specified bibfile and adds it to the database.
+
+    :param bibfile: the test set to download
+    """
+
+    import tempfile, ssl
+
+    db = WrapperAroundCrummyPythonBibtexParsers()
+    tmpfile = tempfile.NamedTemporaryFile(mode='wb', delete=False, suffix='.bib')
+
+    try:
+        with urllib.request.urlopen(bibfile) as f:
+            tmpfile.write(f.read())
+            tmpfile.close()
+
+    except ssl.SSLError or urllib.error.URLError:
+        print("WHAT!")
+        # logging.warning('An SSL error was encountered in downloading the files. If you\'re on a Mac, '
+        #                 'you may need to run the "Install Certificates.command" file located in the '
+        #                 '"Python 3" folder, often found under /Applications')
+        sys.exit(1)
+
+    return tmpfile.name
+
+
 def _find(args):
     db = WrapperAroundCrummyPythonBibtexParsers()
 
@@ -205,7 +230,12 @@ def _find(args):
 def _add(args):
     db = WrapperAroundCrummyPythonBibtexParsers()
 
-    new_entries = WrapperAroundCrummyPythonBibtexParsers(args.file)
+    file = args.file
+
+    if file.startswith('http'):
+        file = download_file(file)
+
+    new_entries = WrapperAroundCrummyPythonBibtexParsers(file)
     added = 0
     skipped = 0
     for entry in new_entries:

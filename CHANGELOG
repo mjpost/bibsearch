@@ -1,0 +1,7 @@
+0.0.2 (2018-03-15)
+	- Added downloading of URLS if http:// prefix found
+
+0.0.1 (2018-03-14)
+	- Initial release
+	- Supports adding a database and minimal searching
+	- Backend based on pybtex
