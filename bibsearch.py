@@ -151,6 +151,24 @@ class Entry:
     def bibtex(self):
         return pybtex.database.BibliographyData({self.key(): self.obj}).to_string('bibtex')
 
+def download_file(bibfile) -> None:
+    """Downloads the specified bibfile and adds it to the database.
+
+    :param bibfile: the test set to download
+    """
+
+    import ssl
+
+    try:
+        with urllib.request.urlopen(bibfile) as f:
+            return f.read().decode("utf-8")
+    except ssl.SSLError or urllib.error.URLError:
+        print("WHAT!")
+        # logging.warning('An SSL error was encountered in downloading the files. If you\'re on a Mac, '
+        #                 'you may need to run the "Install Certificates.command" file located in the '
+        #                 '"Python 3" folder, often found under /Applications')
+        sys.exit(1)
+
 class WrapperAroundCrummyPythonBibtexParsers:
     """
     Currently a wrapper around pybtex which I find suboptimal.
@@ -158,10 +176,13 @@ class WrapperAroundCrummyPythonBibtexParsers:
     def __init__(self, file=DBFILE):
         self.file = file
 
-        if os.path.exists(file):
-            self.db = pybtex.database.parse_file(file)
+        if file.startswith('http'):
+            self.db = pybtex.database.parse_string(download_file(file), "bibtex")
         else:
-            self.db = pybtex.database.BibliographyData()
+            if os.path.exists(file):
+                self.db = pybtex.database.parse_file(file)
+            else:
+                self.db = pybtex.database.BibliographyData()
         self._current = 0
         self._keys = self.db.entries.keys()
         self._max = len(self)
@@ -191,33 +212,6 @@ class WrapperAroundCrummyPythonBibtexParsers:
             self._current += 1
             return Entry(self.db.entries[self._keys[self._current - 1]])
 
-
-def download_file(bibfile) -> None:
-    """Downloads the specified bibfile and adds it to the database.
-
-    :param bibfile: the test set to download
-    """
-
-    import tempfile, ssl
-
-    db = WrapperAroundCrummyPythonBibtexParsers()
-    tmpfile = tempfile.NamedTemporaryFile(mode='wb', delete=False, suffix='.bib')
-
-    try:
-        with urllib.request.urlopen(bibfile) as f:
-            tmpfile.write(f.read())
-            tmpfile.close()
-
-    except ssl.SSLError or urllib.error.URLError:
-        print("WHAT!")
-        # logging.warning('An SSL error was encountered in downloading the files. If you\'re on a Mac, '
-        #                 'you may need to run the "Install Certificates.command" file located in the '
-        #                 '"Python 3" folder, often found under /Applications')
-        sys.exit(1)
-
-    return tmpfile.name
-
-
 def _find(args):
     db = WrapperAroundCrummyPythonBibtexParsers()
 
@@ -231,9 +225,6 @@ def _add(args):
     db = WrapperAroundCrummyPythonBibtexParsers()
 
     file = args.file
-
-    if file.startswith('http'):
-        file = download_file(file)
 
     new_entries = WrapperAroundCrummyPythonBibtexParsers(file)
     added = 0
