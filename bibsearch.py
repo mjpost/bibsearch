@@ -6,21 +6,23 @@ Tool for downloading, maintaining, and search a BibTeX database.
 """
 
 import argparse
-import gzip
+# import gzip
 import logging
 import os
-import re
+# import re
 import sys
-import tarfile
+# import tarfile
 import urllib.request
-from collections import Counter, namedtuple
-from itertools import zip_longest
-from typing import List, Iterable, Tuple
+# from collections import Counter, namedtuple
+# from itertools import zip_longest
+# from typing import List, Iterable, Tuple
 
-import math
-import unicodedata
+# import math
+# import unicodedata
 
 import pybtex.database
+
+import biblib.biblib.bib as biblib  # TODO: ugly import
 
 VERSION = '0.0.2'
 
@@ -42,7 +44,7 @@ except ImportError:
 # in which case the os.path.join() throws a TypeError. Using expanduser() is
 # a safe way to get the user's home folder.
 BIBSEARCHDIR = os.path.join(os.path.expanduser("~"), '.bibsearch')
-DBFILE = os.path.join(BIBSEARCHDIR, 'db.yaml')
+DBFILE = os.path.join(BIBSEARCHDIR, 'db.bib')
 
 
 # This defines data locations.
@@ -76,53 +78,53 @@ DATASETS = {
 }
 
 
-    # bibtex_file = open(args.bibtex_file)
-    # parser = BibTexParser()
-    # parser.customization = convert_to_unicode
-    # db = bibtexparser.load(bibtex_file, parser=parser)
-    # entries = list(filter(lambda x: 'Post, Matt' in x.get('author',''), db.entries))
+# bibtex_file = open(args.bibtex_file)
+# parser = BibTexParser()
+# parser.customization = convert_to_unicode
+# db = bibtexparser.load(bibtex_file, parser=parser)
+# entries = list(filter(lambda x: 'Post, Matt' in x.get('author',''), db.entries))
 
-    # entries_map = defaultdict(list)
-    # for entry in entries:
-    #     remove = [key for key in entry.keys() if key.startswith('bdsk') or key.startswith('date-')]
-    #     for key in remove:
-    #         del entry[key]
+# entries_map = defaultdict(list)
+# for entry in entries:
+#     remove = [key for key in entry.keys() if key.startswith('bdsk') or key.startswith('date-')]
+#     for key in remove:
+#         del entry[key]
 
-    #     for key in entry:
-    #         entry[key] = clean(entry[key])
+#     for key in entry:
+#         entry[key] = clean(entry[key])
 
-    # for entry in entries:
-    #     if not 'link' in entry:
-    #         if 'url' in entry:
-    #             url = entry['url']
-    #             if not url.startswith('http://'):
-    #                 entry.link = 'papers/' + url
-    #             else:
-    #                 entry.link = url
-    #             del entry['url']
-    #         elif 'file' in entry:
-    #             entry['link'] = 'papers/' + entry['file']
-    #             del entry['file']
+# for entry in entries:
+#     if not 'link' in entry:
+#         if 'url' in entry:
+#             url = entry['url']
+#             if not url.startswith('http://'):
+#                 entry.link = 'papers/' + url
+#             else:
+#                 entry.link = url
+#             del entry['url']
+#         elif 'file' in entry:
+#             entry['link'] = 'papers/' + entry['file']
+#             del entry['file']
 
-    #     if 'abstract' not in entry or entry['abstract'] == '':
-    #         print('Error: empty abstract for {}'.format(entry['title']), file=sys.stderr)
+#     if 'abstract' not in entry or entry['abstract'] == '':
+#         print('Error: empty abstract for {}'.format(entry['title']), file=sys.stderr)
 
-    #     if entry['ENTRYTYPE'] == 'article':
-    #         entry['venue'] = entry['journal']
-    #     elif entry['ENTRYTYPE'] == 'techreport':
-    #         entry['venue'] = 'Technical Report %s, %s' % (entry['number'], entry['institution'])
-    #     elif entry['ENTRYTYPE'] == 'phdthesis':
-    #         entry['venue'] = 'PhD Thesis, %s' % (entry['school'])
-    #     else:
-    #         entry['venue'] = entry['booktitle']
+#     if entry['ENTRYTYPE'] == 'article':
+#         entry['venue'] = entry['journal']
+#     elif entry['ENTRYTYPE'] == 'techreport':
+#         entry['venue'] = 'Technical Report %s, %s' % (entry['number'], entry['institution'])
+#     elif entry['ENTRYTYPE'] == 'phdthesis':
+#         entry['venue'] = 'PhD Thesis, %s' % (entry['school'])
+#     else:
+#         entry['venue'] = entry['booktitle']
 
-    #     authors = entry.get('author', '').split(' and ')
-    #     for i,author in enumerate(authors):
-    #         if ', ' in author:
-    #             authors[i] = ' '.join(author.split(', ')[::-1])
-    #             entry['authors'] = ','.join(authors)
+#     authors = entry.get('author', '').split(' and ')
+#     for i,author in enumerate(authors):
+#         if ', ' in author:
+#             authors[i] = ' '.join(author.split(', ')[::-1])
+#             entry['authors'] = ','.join(authors)
 
-    #     entries_map[entry['year']].append(entry)
+#     entries_map[entry['year']].append(entry)
 
 
 class Entry:
@@ -130,6 +132,8 @@ class Entry:
     Currently a wrapper around pybtex which is not to my liking.  But
     this establishes a minimal API that should make it easier to swap
     in another backend should that be needed.
+
+    TODO: not sure if we should write a wrapper class or derive from biblib.Entry
     """
     def __init__(self, obj):
         self.obj = obj
@@ -144,52 +148,63 @@ class Entry:
         """
         TODO: replace this with something befitting of a computer scientist.
         """
-        for item in self.obj.fields.values():
+        for item in self.obj.values():
             if term.lower() in item.lower():
                 return True
 
     def bibtex(self):
-        return pybtex.database.BibliographyData({self.key(): self.obj}).to_string('bibtex')
+        return self.obj.to_bib()
+
 
 class WrapperAroundCrummyPythonBibtexParsers:
     """
     Currently a wrapper around pybtex which I find suboptimal.
     """
-    def __init__(self, file=DBFILE):
-        self.file = file
+    def __init__(self, fname=DBFILE):
+        self.fname = fname
 
-        if os.path.exists(file):
-            self.db = pybtex.database.parse_file(file)
+        if os.path.exists(fname):
+            self.db = biblib.Parser().parse(open(fname), log_fp=sys.stderr)
         else:
-            self.db = pybtex.database.BibliographyData()
-        self._current = 0
-        self._keys = self.db.entries.keys()
-        self._max = len(self)
+            self.db = biblib.Parser()
 
     def __len__(self):
-        return len(self.db.entries.keys())
+        return len(self.db.get_entries())
 
     def search(self, keys):
         pass
 
     def save(self):
-        if not os.path.exists(os.path.dirname(self.file)):
-            os.makedirs(os.path.dirname(self.file))
+        # TODO: saving back in bib format. Is this what we want?
+        if not os.path.exists(os.path.dirname(self.fname)):
+            os.makedirs(os.path.dirname(self.fname))
 
-        self.db.to_file(DBFILE, bib_format='yaml')
+        with open(self.fname, "w") as fp:
+            for e in self:
+                print(e.obj.to_bib(), file=fp)
+
+        #~ self.db.__pos_factory.__log_fp = None
+        #~ self.db.to_file(DBFILE, bib_format='yaml')
 
     def add(self, entry):
-        self.db.add_entry(entry.key(), entry.obj)
+        entries = self.db.get_entries()
+        key = entry.key().lower()  # biblib works with lower case
+        if key in entries:
+            raise ValueError("Duplicate bibtex key %s" % key)
+        else:
+            entries[key] = entry.obj
 
     def __iter__(self):
-        return self
+        for i in self.db.get_entries().values():
+            yield Entry(i)
 
-    def __next__(self):
-        if self._current >= self._max:
-            raise StopIteration
-        else:
-            self._current += 1
-            return Entry(self.db.entries[self._keys[self._current - 1]])
+    #~ def __next__(self):
+    #~     raise NotImplementedError
+        #~ if self._current >= self._max:
+        #~     raise stopiteration
+        #~ else:
+        #~     self._current += 1
+        #~     return entry(self.db.entries[self._keys[self._current - 1]])
 
 
 def download_file(bibfile) -> None:
@@ -242,7 +257,7 @@ def _add(args):
         try:
             db.add(entry)
             added += 1
-        except:
+        except ValueError:
             skipped += 1
 
     print('Added', added, 'entries, skipped', skipped, 'duplicates')
