@@ -51,19 +51,21 @@ DBFILE = os.path.join(BIBSEARCHDIR, 'db.yaml')
 # The other keys are each language pair contained in the tarball, and the respective locations of the source and reference data within each.
 # Many of these are *.sgm files, which are processed to produced plain text that can be used by this script.
 # The canonical location of unpacked, processed data is $SACREBLEU/$TEST/$SOURCE-$TARGET.{$SOURCE,$TARGET}
-DATASETS = {
+# TODO: Probably a good idea to move it outside of the main .py
+BIBSETPREFIX="bib://"
+BIBSETS = {
     'cl': {
         '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-43-issue-1-april-2017.bib',
                  'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-43-issue-2-june-2017.bib',
                  'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-43-issue-3-september-2017.bib',
                  'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-43-issue-4-december-2017.bib'],
     },
-    'tacl': {'https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-5-issue-1.bib',
+    'tacl': ['https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-5-issue-1.bib',
              'https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-4-issue-1.bib',
              'https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-3-issue-1.bib',
              'https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-2-issue-1.bib',
-             'https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-1-issue-1.bib',
-    },
+             # 'https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-1-issue-1.bib', # not found
+    ],
     'acl': {
         '2017': [
             'http://aclweb.org/anthology/P/P17/P17-1.bib',
@@ -220,13 +222,9 @@ def _find(args):
         if all([entry.match(term) for term in args.terms]):
             print(entry.bibtex())
 
-
-def _add(args):
-    db = WrapperAroundCrummyPythonBibtexParsers()
-
-    file = args.file
-
-    new_entries = WrapperAroundCrummyPythonBibtexParsers(file)
+def _add_file(fname, db):
+    logging.info("Adding entries from %s", fname)
+    new_entries = WrapperAroundCrummyPythonBibtexParsers(fname)
     added = 0
     skipped = 0
     for entry in new_entries:
@@ -235,6 +233,42 @@ def _add(args):
             added += 1
         except:
             skipped += 1
+
+    return added, skipped
+
+def get_fnames_from_bibset(raw_fname):
+    fnames = []
+    fields = raw_fname[len(BIBSETPREFIX):].strip().split('/')
+    currentSet = BIBSETS
+    for f in fields:
+        try:
+            currentSet = currentSet[f]
+        except:
+            logging.error("Invalid branch '%s' in bib specification '%s'",
+                          f, raw_fname)
+            sys.exit(1)
+    def rec_extract_bib(dict_or_list):
+        result = []
+        if isinstance(dict_or_list, list):
+            result = dict_or_list
+        else:
+            for v in dict_or_list.values():
+                result += rec_extract_bib(v)
+        return result
+    return rec_extract_bib(currentSet)
+
+def _add(args):
+    db = WrapperAroundCrummyPythonBibtexParsers()
+
+    raw_fname = args.file
+    fnames = [raw_fname] if not raw_fname.startswith(BIBSETPREFIX) \
+                         else get_fnames_from_bibset(raw_fname)
+    added = 0
+    skipped = 0
+    for f in fnames:
+        f_added, f_skipped = _add_file(f, db)
+        added += f_added
+        skipped += f_skipped
 
     print('Added', added, 'entries, skipped', skipped, 'duplicates')
     db.save()
@@ -271,4 +305,5 @@ def main():
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
     main()
