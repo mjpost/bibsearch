@@ -21,7 +21,7 @@ import sqlite3
 # import math
 # import unicodedata
 
-import pybtex.database
+#import pybtex.database
 
 import biblib.biblib.bib as biblib  # TODO: ugly import
 
@@ -127,36 +127,6 @@ DATASETS = {
 
 #     entries_map[entry['year']].append(entry)
 
-
-#~ class Entry:
-#~     """
-#~     Currently a wrapper around pybtex which is not to my liking.  But
-#~     this establishes a minimal API that should make it easier to swap
-#~     in another backend should that be needed.
-
-#~     TODO: not sure if we should write a wrapper class or derive from biblib.Entry
-#~     """
-#~     def __init__(self, obj):
-#~         self.obj = obj
-
-#~     def __str__(self):
-#~         return str(self.obj)
-
-#~     def key(self):
-#~         return self.obj.key
-
-#~     def match(self, term):
-#~         """
-#~         TODO: replace this with something befitting of a computer scientist.
-#~         """
-#~         for item in self.obj.values():
-#~             if term.lower() in item.lower():
-#~                 return True
-
-#~     def bibtex(self):
-#~         return self.obj.to_bib()
-
-
 class BibDB:
     """
     Currently a wrapper around pybtex which I find suboptimal.
@@ -171,21 +141,21 @@ class BibDB:
         self.connection = sqlite3.connect(self.fname)
         self.cursor = self.connection.cursor()
         if createDB:
-            self.cursor.execute('CREATE TABLE bib (\
-                key string PRIMARY KEY,\
-                author string,\
-                title string,\
-                year int,\
-                fulltext string\
+            self.cursor.execute('CREATE VIRTUAL TABLE bib USING fts5(\
+                key,\
+                author,\
+                title,\
+                year,\
+                fulltext\
                 )')
 
     def __len__(self):
-        pass
-        #return len(self.db.get_entries())
+        raise NotImplementedError
 
     def search(self, query):
-        self.cursor.execute("SELECT fulltext FROM bib WHERE author LIKE ?",
-                            ["%" + " ".join(query) + "%"])
+        self.cursor.execute("SELECT fulltext FROM bib \
+                            WHERE bib MATCH '{author title year}: ' || ?",
+                            [" ".join(query)])
         return self.cursor
 
     def save(self):
@@ -203,14 +173,6 @@ class BibDB:
 
     def __iter__(self):
         raise NotImplementedError
-
-    #~ def __next__(self):
-    #~     raise NotImplementedError
-        #~ if self._current >= self._max:
-        #~     raise stopiteration
-        #~ else:
-        #~     self._current += 1
-        #~     return entry(self.db.entries[self._keys[self._current - 1]])
 
 
 def download_file(bibfile) -> None:
