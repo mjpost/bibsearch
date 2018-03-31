@@ -13,6 +13,7 @@ import os
 import sys
 # import tarfile
 import urllib.request
+import sqlite3
 # from collections import Counter, namedtuple
 # from itertools import zip_longest
 # from typing import List, Iterable, Tuple
@@ -44,7 +45,7 @@ except ImportError:
 # in which case the os.path.join() throws a TypeError. Using expanduser() is
 # a safe way to get the user's home folder.
 BIBSEARCHDIR = os.path.join(os.path.expanduser("~"), '.bibsearch')
-DBFILE = os.path.join(BIBSEARCHDIR, 'db.bib')
+DBFILE = os.path.join(BIBSEARCHDIR, 'bib.db')
 
 
 # This defines data locations.
@@ -127,76 +128,81 @@ DATASETS = {
 #     entries_map[entry['year']].append(entry)
 
 
-class Entry:
-    """
-    Currently a wrapper around pybtex which is not to my liking.  But
-    this establishes a minimal API that should make it easier to swap
-    in another backend should that be needed.
+#~ class Entry:
+#~     """
+#~     Currently a wrapper around pybtex which is not to my liking.  But
+#~     this establishes a minimal API that should make it easier to swap
+#~     in another backend should that be needed.
 
-    TODO: not sure if we should write a wrapper class or derive from biblib.Entry
-    """
-    def __init__(self, obj):
-        self.obj = obj
+#~     TODO: not sure if we should write a wrapper class or derive from biblib.Entry
+#~     """
+#~     def __init__(self, obj):
+#~         self.obj = obj
 
-    def __str__(self):
-        return str(self.obj)
+#~     def __str__(self):
+#~         return str(self.obj)
 
-    def key(self):
-        return self.obj.key
+#~     def key(self):
+#~         return self.obj.key
 
-    def match(self, term):
-        """
-        TODO: replace this with something befitting of a computer scientist.
-        """
-        for item in self.obj.values():
-            if term.lower() in item.lower():
-                return True
+#~     def match(self, term):
+#~         """
+#~         TODO: replace this with something befitting of a computer scientist.
+#~         """
+#~         for item in self.obj.values():
+#~             if term.lower() in item.lower():
+#~                 return True
 
-    def bibtex(self):
-        return self.obj.to_bib()
+#~     def bibtex(self):
+#~         return self.obj.to_bib()
 
 
-class WrapperAroundCrummyPythonBibtexParsers:
+class BibDB:
     """
     Currently a wrapper around pybtex which I find suboptimal.
     """
     def __init__(self, fname=DBFILE):
         self.fname = fname
-
-        if os.path.exists(fname):
-            self.db = biblib.Parser().parse(open(fname), log_fp=sys.stderr)
-        else:
-            self.db = biblib.Parser()
+        createDB = False
+        if not os.path.exists(self.fname):
+            if not os.path.exists(os.path.dirname(self.fname)):
+                os.makedirs(os.path.dirname(self.fname))
+            createDB = True
+        self.connection = sqlite3.connect(self.fname)
+        self.cursor = self.connection.cursor()
+        if createDB:
+            self.cursor.execute('CREATE TABLE bib (\
+                key string PRIMARY KEY,\
+                author string,\
+                title string,\
+                year int,\
+                fulltext string\
+                )')
 
     def __len__(self):
-        return len(self.db.get_entries())
-
-    def search(self, keys):
         pass
+        #return len(self.db.get_entries())
+
+    def search(self, query):
+        self.cursor.execute("SELECT fulltext FROM bib WHERE author LIKE ?",
+                            ["%" + " ".join(query) + "%"])
+        return self.cursor
 
     def save(self):
-        # TODO: saving back in bib format. Is this what we want?
-        if not os.path.exists(os.path.dirname(self.fname)):
-            os.makedirs(os.path.dirname(self.fname))
+        self.connection.commit()
 
-        with open(self.fname, "w") as fp:
-            for e in self:
-                print(e.obj.to_bib(), file=fp)
-
-        #~ self.db.__pos_factory.__log_fp = None
-        #~ self.db.to_file(DBFILE, bib_format='yaml')
-
-    def add(self, entry):
-        entries = self.db.get_entries()
-        key = entry.key().lower()  # biblib works with lower case
-        if key in entries:
-            raise ValueError("Duplicate bibtex key %s" % key)
-        else:
-            entries[key] = entry.obj
+    def add(self, entry: biblib.Entry):
+        # TODO: check for duplicates
+        self.cursor.execute('INSERT INTO bib VALUES (?,?,?,?,?)',
+                            (entry.key,
+                             entry.get("author"),
+                             entry.get("title"),
+                             entry.get("year"),
+                             entry.to_bib())
+                            )
 
     def __iter__(self):
-        for i in self.db.get_entries().values():
-            yield Entry(i)
+        raise NotImplementedError
 
     #~ def __next__(self):
     #~     raise NotImplementedError
@@ -234,35 +240,30 @@ def download_file(bibfile) -> None:
 
 
 def _find(args):
-    db = WrapperAroundCrummyPythonBibtexParsers()
-
-    matches = []
-    for entry in db:
-        if all([entry.match(term) for term in args.terms]):
-            print(entry.bibtex())
+    db = BibDB()
+    for entry in db.search(args.terms):
+        print(entry[0])
 
 
 def _add(args):
-    db = WrapperAroundCrummyPythonBibtexParsers()
+    db = BibDB()
 
-    file = args.file
+    fname = args.file
+    if fname.startswith('http'):
+        fname = download_file(fname)
 
-    if file.startswith('http'):
-        file = download_file(file)
-
-    new_entries = WrapperAroundCrummyPythonBibtexParsers(file)
+    new_entries = biblib.Parser().parse(open(fname), log_fp=sys.stderr).get_entries()
     added = 0
     skipped = 0
-    for entry in new_entries:
+    for entry in new_entries.values():
         try:
             db.add(entry)
             added += 1
-        except ValueError:
+        except sqlite3.IntegrityError:
             skipped += 1
 
     print('Added', added, 'entries, skipped', skipped, 'duplicates')
     db.save()
-
 
 def _print(args):
     db = WrapperAroundCrummyPythonBibtexParsers()
