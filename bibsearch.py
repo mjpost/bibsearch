@@ -9,7 +9,7 @@ import argparse
 # import gzip
 import logging
 import os
-# import re
+import re
 import sys
 # import tarfile
 import urllib.request
@@ -109,6 +109,13 @@ class BibDB:
         self.cursor.execute("SELECT fulltext FROM bib \
                             WHERE bib MATCH '{author title year}: ' || ?",
                             [" ".join(query)])
+        return self.cursor
+
+    def search_strict(self, column_values):
+        query = ' AND '.join(["%s=?" % cv[0] for cv in column_values])
+        # This query building is done inside the programm, it should be safe!
+        self.cursor.execute("SELECT fulltext FROM bib WHERE %s" % query, # This is safe!
+                            [cv[1] for cv in column_values])
         return self.cursor
 
     def save(self):
@@ -216,6 +223,46 @@ def _print(args):
         for entry in db:
             print(entry + "\n")
 
+def _tex(args):
+    citation_re = re.compile(r'\\citation{(.*)}')
+    bibdata_re = re.compile(r'\\bibdata{(.*)}')
+    db = BibDB()
+    aux_fname = args.file
+    if not aux_fname.endswith(".aux"):
+        if aux_fname.endswit(".tex"):
+            aux_fname = aux_fname[:-4]
+        else:
+            aux_fname = aux_fname + ".aux"
+    bibfile = None
+    entries = []
+    for l in open(aux_fname):
+        match = citation_re.match(l)
+        if match:
+            key = match.group(1)
+            bib_entry = db.search_strict([("key", key)]).fetchone()
+            if bib_entry:
+                entries.append(bib_entry[0])
+            else:
+                logging.warning("Entry '%s' not found", key)
+        elif args.write_bibfile or args.overwrite_bibfile:
+            match = bibdata_re.match(l)
+            if match:
+                bibfile = match.group(1)
+    if bibfile:
+        bibfile = os.path.join(os.path.dirname(aux_fname), bibfile+".bib")
+        if os.path.exists(bibfile):
+            if args.overwrite_bibfile:
+                logging.info("Overwriting bib file %s.", bibfile)
+            else:
+                logging.error("Refusing to overwrite bib file %s. Use '-B' to force.", bibfile)
+                sys.exit(1)
+        else:
+            logging.info("Writing bib file %s.", bibfile)
+        fp_out = open(bibfile, "w")
+    else:
+        fp_out = sys.stdout
+    for e in entries:
+        print(e + "\n", file=fp_out)
 
 def main():
     parser = argparse.ArgumentParser(description='bibsearch: Download, manage, and search a BibTeX database.')
@@ -234,6 +281,12 @@ def main():
     parser_find.add_argument('-b', '--bibtex', help='Print entries in bibtex format', action='store_true')
     parser_find.add_argument('terms', nargs='+', help="One or more search terms which are ANDed together")
     parser_find.set_defaults(func=_find)
+
+    parser_tex = subparsers.add_parser('tex', help='Create .bib file for a latex article')
+    parser_tex.add_argument('file', help='Article file name or .aux file')
+    parser_tex.add_argument('-b', '--write-bibfile', help='Autodetect and write bibfile', action='store_true')
+    parser_tex.add_argument('-B', '--overwrite-bibfile', help='Autodetect and write bibfile', action='store_true')
+    parser_tex.set_defaults(func=_tex)
 
     args = parser.parse_args()
     args.func(args)
