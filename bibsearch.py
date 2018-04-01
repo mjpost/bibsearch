@@ -75,6 +75,9 @@ def download_file(bibfile) -> None:
         #                 'you may need to run the "Install Certificates.command" file located in the '
         #                 '"Python 3" folder, often found under /Applications')
         sys.exit(1)
+    except:
+        logging.warning("Error dowloading '%s'", bibfile)
+        return ""
 
 
 class BibDB:
