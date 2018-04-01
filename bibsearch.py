@@ -16,6 +16,7 @@ import urllib.request
 from collections import Counter, namedtuple
 from itertools import zip_longest
 from typing import List, Iterable, Tuple
+import yaml
 
 import math
 import unicodedata
@@ -53,29 +54,6 @@ DBFILE = os.path.join(BIBSEARCHDIR, 'db.yaml')
 # The canonical location of unpacked, processed data is $SACREBLEU/$TEST/$SOURCE-$TARGET.{$SOURCE,$TARGET}
 # TODO: Probably a good idea to move it outside of the main .py
 BIBSETPREFIX="bib://"
-BIBSETS = {
-    'cl': {
-        '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-43-issue-1-april-2017.bib',
-                 'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-43-issue-2-june-2017.bib',
-                 'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-43-issue-3-september-2017.bib',
-                 'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-43-issue-4-december-2017.bib'],
-    },
-    'tacl': ['https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-5-issue-1.bib',
-             'https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-4-issue-1.bib',
-             'https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-3-issue-1.bib',
-             'https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-2-issue-1.bib',
-             # 'https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-1-issue-1.bib', # not found
-    ],
-    'acl': {
-        '2017': [
-            'http://aclweb.org/anthology/P/P17/P17-1.bib',
-            'http://aclweb.org/anthology/P/P17/P17-2.bib',
-            'http://aclweb.org/anthology/P/P17/P17-3.bib',
-            'http://aclweb.org/anthology/P/P17/P17-4.bib',
-            'http://aclweb.org/anthology/P/P17/P17-5.bib',
-        ],
-    },
-}
 
 
     # bibtex_file = open(args.bibtex_file)
@@ -239,7 +217,7 @@ def _add_file(fname, db):
 def get_fnames_from_bibset(raw_fname):
     fnames = []
     fields = raw_fname[len(BIBSETPREFIX):].strip().split('/')
-    currentSet = BIBSETS
+    currentSet = yaml.load(open("acl.yml"))
     for f in fields:
         try:
             currentSet = currentSet[f]
