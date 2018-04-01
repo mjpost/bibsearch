@@ -6,22 +6,25 @@ Tool for downloading, maintaining, and search a BibTeX database.
 """
 
 import argparse
-import gzip
+# import gzip
 import logging
 import os
-import re
+# import re
 import sys
-import tarfile
+# import tarfile
 import urllib.request
-from collections import Counter, namedtuple
-from itertools import zip_longest
-from typing import List, Iterable, Tuple
+import sqlite3
 import yaml
+# from collections import Counter, namedtuple
+# from itertools import zip_longest
+# from typing import List, Iterable, Tuple
 
-import math
-import unicodedata
+# import math
+# import unicodedata
 
-import pybtex.database
+#import pybtex.database
+
+import biblib.biblib.bib as biblib  # TODO: ugly import
 
 VERSION = '0.0.2'
 
@@ -43,7 +46,7 @@ except ImportError:
 # in which case the os.path.join() throws a TypeError. Using expanduser() is
 # a safe way to get the user's home folder.
 BIBSEARCHDIR = os.path.join(os.path.expanduser("~"), '.bibsearch')
-DBFILE = os.path.join(BIBSEARCHDIR, 'db.yaml')
+DBFILE = os.path.join(BIBSEARCHDIR, 'bib.db')
 
 
 # This defines data locations.
@@ -54,82 +57,6 @@ DBFILE = os.path.join(BIBSEARCHDIR, 'db.yaml')
 # The canonical location of unpacked, processed data is $SACREBLEU/$TEST/$SOURCE-$TARGET.{$SOURCE,$TARGET}
 # TODO: Probably a good idea to move it outside of the main .py
 BIBSETPREFIX="bib://"
-
-
-    # bibtex_file = open(args.bibtex_file)
-    # parser = BibTexParser()
-    # parser.customization = convert_to_unicode
-    # db = bibtexparser.load(bibtex_file, parser=parser)
-    # entries = list(filter(lambda x: 'Post, Matt' in x.get('author',''), db.entries))
-
-    # entries_map = defaultdict(list)
-    # for entry in entries:
-    #     remove = [key for key in entry.keys() if key.startswith('bdsk') or key.startswith('date-')]
-    #     for key in remove:
-    #         del entry[key]
-
-    #     for key in entry:
-    #         entry[key] = clean(entry[key])
-
-    # for entry in entries:
-    #     if not 'link' in entry:
-    #         if 'url' in entry:
-    #             url = entry['url']
-    #             if not url.startswith('http://'):
-    #                 entry.link = 'papers/' + url
-    #             else:
-    #                 entry.link = url
-    #             del entry['url']
-    #         elif 'file' in entry:
-    #             entry['link'] = 'papers/' + entry['file']
-    #             del entry['file']
-
-    #     if 'abstract' not in entry or entry['abstract'] == '':
-    #         print('Error: empty abstract for {}'.format(entry['title']), file=sys.stderr)
-
-    #     if entry['ENTRYTYPE'] == 'article':
-    #         entry['venue'] = entry['journal']
-    #     elif entry['ENTRYTYPE'] == 'techreport':
-    #         entry['venue'] = 'Technical Report %s, %s' % (entry['number'], entry['institution'])
-    #     elif entry['ENTRYTYPE'] == 'phdthesis':
-    #         entry['venue'] = 'PhD Thesis, %s' % (entry['school'])
-    #     else:
-    #         entry['venue'] = entry['booktitle']
-
-    #     authors = entry.get('author', '').split(' and ')
-    #     for i,author in enumerate(authors):
-    #         if ', ' in author:
-    #             authors[i] = ' '.join(author.split(', ')[::-1])
-    #             entry['authors'] = ','.join(authors)
-
-    #     entries_map[entry['year']].append(entry)
-
-
-class Entry:
-    """
-    Currently a wrapper around pybtex which is not to my liking.  But
-    this establishes a minimal API that should make it easier to swap
-    in another backend should that be needed.
-    """
-    def __init__(self, obj):
-        self.obj = obj
-
-    def __str__(self):
-        return str(self.obj)
-
-    def key(self):
-        return self.obj.key
-
-    def match(self, term):
-        """
-        TODO: replace this with something befitting of a computer scientist.
-        """
-        for item in self.obj.fields.values():
-            if term.lower() in item.lower():
-                return True
-
-    def bibtex(self):
-        return pybtex.database.BibliographyData({self.key(): self.obj}).to_string('bibtex')
 
 def download_file(bibfile) -> None:
     """Downloads the specified bibfile and adds it to the database.
@@ -149,73 +76,73 @@ def download_file(bibfile) -> None:
         #                 '"Python 3" folder, often found under /Applications')
         sys.exit(1)
 
-class WrapperAroundCrummyPythonBibtexParsers:
-    """
-    Currently a wrapper around pybtex which I find suboptimal.
-    """
-    def __init__(self, file=DBFILE):
-        self.file = file
 
-        if file.startswith('http'):
-            self.db = pybtex.database.parse_string(download_file(file), "bibtex")
-        else:
-            if os.path.exists(file):
-                self.db = pybtex.database.parse_file(file)
-            else:
-                self.db = pybtex.database.BibliographyData()
-        self._current = 0
-        self._keys = self.db.entries.keys()
-        self._max = len(self)
+class BibDB:
+    def __init__(self, fname=DBFILE):
+        self.fname = fname
+        createDB = False
+        if not os.path.exists(self.fname):
+            if not os.path.exists(os.path.dirname(self.fname)):
+                os.makedirs(os.path.dirname(self.fname))
+            createDB = True
+        self.connection = sqlite3.connect(self.fname)
+        self.cursor = self.connection.cursor()
+        if createDB:
+            self.cursor.execute('CREATE VIRTUAL TABLE bib USING fts5(\
+                key,\
+                author,\
+                title,\
+                year,\
+                fulltext\
+                )')
 
     def __len__(self):
-        return len(self.db.entries.keys())
+        raise NotImplementedError
 
-    def search(self, keys):
-        pass
+    def search(self, query):
+        self.cursor.execute("SELECT fulltext FROM bib \
+                            WHERE bib MATCH '{author title year}: ' || ?",
+                            [" ".join(query)])
+        return self.cursor
 
     def save(self):
-        if not os.path.exists(os.path.dirname(self.file)):
-            os.makedirs(os.path.dirname(self.file))
+        self.connection.commit()
 
-        self.db.to_file(DBFILE, bib_format='yaml')
-
-    def add(self, entry):
-        self.db.add_entry(entry.key(), entry.obj)
+    def add(self, entry: biblib.Entry):
+        # TODO: check for duplicates
+        self.cursor.execute('INSERT INTO bib VALUES (?,?,?,?,?)',
+                            (entry.key,
+                             entry.get("author"),
+                             entry.get("title"),
+                             entry.get("year"),
+                             entry.to_bib())
+                            )
 
     def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self._current >= self._max:
-            raise StopIteration
-        else:
-            self._current += 1
-            return Entry(self.db.entries[self._keys[self._current - 1]])
+        raise NotImplementedError
 
 def _find(args):
-    db = WrapperAroundCrummyPythonBibtexParsers()
-
-    matches = []
-    for entry in db:
-        if all([entry.match(term) for term in args.terms]):
-            print(entry.bibtex())
+    db = BibDB()
+    for entry in db.search(args.terms):
+        print(entry[0])
 
 def _add_file(fname, db):
     logging.info("Adding entries from %s", fname)
-    new_entries = WrapperAroundCrummyPythonBibtexParsers(fname)
+    source = download_file(fname) if fname.startswith('http') else open(fname)
+
+    new_entries = biblib.Parser().parse(source, log_fp=sys.stderr).get_entries()
     added = 0
     skipped = 0
-    for entry in new_entries:
+    for entry in new_entries.values():
         try:
             db.add(entry)
             added += 1
-        except:
+        except sqlite3.IntegrityError:
             skipped += 1
 
     return added, skipped
 
 def get_fnames_from_bibset(raw_fname):
-    fnames = []
     fields = raw_fname[len(BIBSETPREFIX):].strip().split('/')
     currentSet = yaml.load(open("acl.yml"))
     for f in fields:
@@ -235,8 +162,9 @@ def get_fnames_from_bibset(raw_fname):
         return result
     return rec_extract_bib(currentSet)
 
+
 def _add(args):
-    db = WrapperAroundCrummyPythonBibtexParsers()
+    db = BibDB()
 
     raw_fname = args.file
     fnames = [raw_fname] if not raw_fname.startswith(BIBSETPREFIX) \
@@ -251,14 +179,14 @@ def _add(args):
     print('Added', added, 'entries, skipped', skipped, 'duplicates')
     db.save()
 
-
 def _print(args):
-    db = WrapperAroundCrummyPythonBibtexParsers()
-    if args.summary:
-        print('Database has', len(db), 'entries')
-    else:
-        for entry in db:
-            print(entry)
+    raise NotImplementedError
+    #~ db = WrapperAroundCrummyPythonBibtexParsers()
+    #~ if args.summary:
+    #~     print('Database has', len(db), 'entries')
+    #~ else:
+    #~     for entry in db:
+    #~         print(entry)
 
 
 def main():
