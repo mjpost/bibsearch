@@ -216,15 +216,17 @@ def _add_file(fname, db):
 
 def get_fnames_from_bibset(raw_fname):
     fnames = []
-    fields = raw_fname[len(BIBSETPREFIX):].strip().split('/')
     currentSet = yaml.load(open("acl.yml"))
-    for f in fields:
-        try:
-            currentSet = currentSet[f]
-        except:
-            logging.error("Invalid branch '%s' in bib specification '%s'",
-                          f, raw_fname)
-            sys.exit(1)
+    bib_spec = raw_fname[len(BIBSETPREFIX):].strip()
+    if bib_spec:
+        fields = bib_spec.split('/')
+        for f in fields:
+            try:
+                currentSet = currentSet[f]
+            except:
+                logging.error("Invalid branch '%s' in bib specification '%s'",
+                              f, raw_fname)
+                sys.exit(1)
     def rec_extract_bib(dict_or_list):
         result = []
         if isinstance(dict_or_list, list):
