@@ -102,7 +102,8 @@ class BibDB:
                 )')
 
     def __len__(self):
-        raise NotImplementedError
+        self.cursor.execute('SELECT COUNT(*) FROM bib')
+        return int(self.cursor.fetchone()[0])
 
     def search(self, query):
         self.cursor.execute("SELECT fulltext FROM bib \
@@ -114,27 +115,34 @@ class BibDB:
         self.connection.commit()
 
     def add(self, entry: biblib.Entry):
-        # TODO: check for duplicates
-        self.cursor.execute('INSERT INTO bib VALUES (?,?,?,?,?)',
-                            (entry.key,
-                             entry.get("author"),
-                             entry.get("title"),
-                             entry.get("year"),
-                             entry.to_bib())
-                            )
+        """ Returns if the entry was added or if it was a duplicate"""
+        self.cursor.execute('SELECT 1 FROM bib WHERE key=? LIMIT 1', (entry.key,))
+        if not self.cursor.fetchone():
+            self.cursor.execute('INSERT INTO bib VALUES (?,?,?,?,?)',
+                                (entry.key,
+                                 entry.get("author"),
+                                 entry.get("title"),
+                                 entry.get("year"),
+                                 entry.to_bib())
+                                )
+            return True
+        else:
+            return False
 
     def __iter__(self):
-        raise NotImplementedError
+        self.cursor.execute("SELECT fulltext FROM bib")
+        for e in self.cursor:
+            yield e[0]
 
 def _find(args):
     db = BibDB()
     if not args.bibtex:
-        parser = biblib.Parser()
         textwrapper = textwrap.TextWrapper(subsequent_indent="  ")
     for entry in db.search(args.terms):
         if args.bibtex:
             print(entry[0] + "\n")
         else:
+            parser = biblib.Parser()
             for e in parser.parse(entry[0]).get_entries().values():
                 author = [a.pretty() for a in bibutils.parse_names(e["author"])]
                 author = ", ".join(author[:-2] + [" and ".join(author[-2:])])
@@ -153,10 +161,9 @@ def _add_file(fname, db):
     added = 0
     skipped = 0
     for entry in new_entries.values():
-        try:
-            db.add(entry)
+        if db.add(entry):
             added += 1
-        except sqlite3.IntegrityError:
+        else:
             skipped += 1
 
     return added, skipped
@@ -202,13 +209,12 @@ def _add(args):
     db.save()
 
 def _print(args):
-    raise NotImplementedError
-    #~ db = WrapperAroundCrummyPythonBibtexParsers()
-    #~ if args.summary:
-    #~     print('Database has', len(db), 'entries')
-    #~ else:
-    #~     for entry in db:
-    #~         print(entry)
+    db = BibDB()
+    if args.summary:
+        print('Database has', len(db), 'entries')
+    else:
+        for entry in db:
+            print(entry + "\n")
 
 
 def main():
