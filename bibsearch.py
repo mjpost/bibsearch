@@ -14,6 +14,7 @@ import sys
 # import tarfile
 import urllib.request
 import sqlite3
+import textwrap
 import yaml
 # from collections import Counter, namedtuple
 # from itertools import zip_longest
@@ -24,7 +25,8 @@ import yaml
 
 #import pybtex.database
 
-import biblib.biblib.bib as biblib  # TODO: ugly import
+import biblib.biblib.bib as biblib  # TODO: ugly imports
+import biblib.biblib.algo as bibutils
 
 VERSION = '0.0.2'
 
@@ -126,8 +128,22 @@ class BibDB:
 
 def _find(args):
     db = BibDB()
+    if not args.bibtex:
+        parser = biblib.Parser()
+        textwrapper = textwrap.TextWrapper(subsequent_indent="  ")
     for entry in db.search(args.terms):
-        print(entry[0])
+        if args.bibtex:
+            print(entry[0] + "\n")
+        else:
+            for e in parser.parse(entry[0]).get_entries().values():
+                author = [a.pretty() for a in bibutils.parse_names(e["author"])]
+                author = ", ".join(author[:-2] + [" and ".join(author[-2:])])
+                lines = textwrapper.wrap('{key}: {author} "{title}", {year}'.format(
+                                key=e.key,
+                                author=author,
+                                title=e["title"],
+                                year=e["year"]))
+                print("\n".join(lines) + "\n")
 
 def _add_file(fname, db):
     logging.info("Adding entries from %s", fname)
@@ -208,7 +224,8 @@ def main():
     parser_dump.add_argument('--summary', action='store_true', help='Just print a summary')
     parser_dump.set_defaults(func=_print)
 
-    parser_find = subparsers.add_parser('find', help='Search the database')
+    parser_find = subparsers.add_parser('find', help='Search the database', aliases=['search'])
+    parser_find.add_argument('-b', '--bibtex', help='Print entries in bibtex format', action='store_true')
     parser_find.add_argument('terms', nargs='+', help="One or more search terms which are ANDed together")
     parser_find.set_defaults(func=_find)
 
