@@ -97,6 +97,7 @@ class BibDB:
                 key,\
                 author,\
                 title,\
+                event,\
                 year,\
                 fulltext\
                 )')
@@ -106,8 +107,8 @@ class BibDB:
         return int(self.cursor.fetchone()[0])
 
     def search(self, query):
-        self.cursor.execute("SELECT fulltext FROM bib \
-                            WHERE bib MATCH '{author title year}: ' || ?",
+        self.cursor.execute("SELECT fulltext, event FROM bib \
+                            WHERE bib MATCH '{key author title year event}: ' || ?",
                             [" ".join(query)])
         return self.cursor
 
@@ -121,14 +122,15 @@ class BibDB:
     def save(self):
         self.connection.commit()
 
-    def add(self, entry: biblib.Entry):
+    def add(self, event, entry: biblib.Entry):
         """ Returns if the entry was added or if it was a duplicate"""
         self.cursor.execute('SELECT 1 FROM bib WHERE key=? LIMIT 1', (entry.key,))
         if not self.cursor.fetchone():
-            self.cursor.execute('INSERT INTO bib VALUES (?,?,?,?,?)',
+            self.cursor.execute('INSERT INTO bib VALUES (?,?,?,?,?,?)',
                                 (entry.key,
                                  entry.get("author"),
                                  entry.get("title"),
+                                 event,
                                  entry.get("year"),
                                  entry.to_bib())
                                 )
@@ -151,24 +153,26 @@ def _find(args):
         else:
             parser = biblib.Parser()
             for e in parser.parse(entry[0]).get_entries().values():
+                # It consists only of one entry, but biblib only provides an iterator interface
                 author = [a.pretty() for a in bibutils.parse_names(e["author"])]
                 author = ", ".join(author[:-2] + [" and ".join(author[-2:])])
-                lines = textwrapper.wrap('{key}: {author} "{title}", {year}'.format(
+                lines = textwrapper.wrap('{key}: {author} "{title}", {event} {year}'.format(
                                 key=e.key,
                                 author=author,
                                 title=e["title"],
+                                event = entry[1].upper(),
                                 year=e["year"]))
                 print("\n".join(lines) + "\n")
 
-def _add_file(fname, db):
-    logging.info("Adding entries from %s", fname)
+def _add_file(event, fname, db):
+    logging.info("Adding entries from %s (%s)", fname, event.upper())
     source = download_file(fname) if fname.startswith('http') else open(fname)
 
     new_entries = biblib.Parser().parse(source, log_fp=sys.stderr).get_entries()
     added = 0
     skipped = 0
     for entry in new_entries.values():
-        if db.add(entry):
+        if db.add(event, entry):
             added += 1
         else:
             skipped += 1
@@ -179,8 +183,10 @@ def get_fnames_from_bibset(raw_fname):
     fields = raw_fname[len(BIBSETPREFIX):].strip().split('/')
     currentSet = yaml.load(open("acl.yml"))
     bib_spec = raw_fname[len(BIBSETPREFIX):].strip()
+    event=None
     if bib_spec:
         fields = bib_spec.split('/')
+        event = fields[0]
         for f in fields:
             try:
                 currentSet = currentSet[f]
@@ -188,27 +194,30 @@ def get_fnames_from_bibset(raw_fname):
                 logging.error("Invalid branch '%s' in bib specification '%s'",
                               f, raw_fname)
                 sys.exit(1)
-    def rec_extract_bib(dict_or_list):
+    def rec_extract_bib(dict_or_list, event):
         result = []
         if isinstance(dict_or_list, list):
-            result = dict_or_list
+            result = [(event, fname) for fname in dict_or_list]
         else:
-            for v in dict_or_list.values():
-                result += rec_extract_bib(v)
+            for (k, v) in dict_or_list.items():
+                if not event: # We are at the first level, extract event
+                    result += rec_extract_bib(v, k)
+                else:
+                    result += rec_extract_bib(v, event)
         return result
-    return rec_extract_bib(currentSet)
+    return rec_extract_bib(currentSet, event)
 
 
 def _add(args):
     db = BibDB()
 
     raw_fname = args.file
-    fnames = [raw_fname] if not raw_fname.startswith(BIBSETPREFIX) \
+    event_fnames = [(args.event, raw_fname)] if not raw_fname.startswith(BIBSETPREFIX) \
                          else get_fnames_from_bibset(raw_fname)
     added = 0
     skipped = 0
-    for f in fnames:
-        f_added, f_skipped = _add_file(f, db)
+    for event, f in event_fnames:
+        f_added, f_skipped = _add_file(event, f, db)
         added += f_added
         skipped += f_skipped
 
@@ -229,8 +238,8 @@ def _tex(args):
     db = BibDB()
     aux_fname = args.file
     if not aux_fname.endswith(".aux"):
-        if aux_fname.endswit(".tex"):
-            aux_fname = aux_fname[:-4]
+        if aux_fname.endswith(".tex"):
+            aux_fname = aux_fname[:-4] + ".aux"
         else:
             aux_fname = aux_fname + ".aux"
     bibfile = None
