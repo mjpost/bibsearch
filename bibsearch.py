@@ -114,11 +114,9 @@ class BibDB:
                             [" ".join(query)])
         return self.cursor
 
-    def search_strict(self, column_values):
-        query = ' AND '.join(["%s=?" % cv[0] for cv in column_values])
-        # This query building is done inside the programm, it should be safe!
-        self.cursor.execute("SELECT fulltext FROM bib WHERE %s" % query, # This is safe!
-                            [cv[1] for cv in column_values])
+    def search_key(self, key):
+        self.cursor.execute("SELECT fulltext FROM bib WHERE key=? OR custom_key=?",
+                            [key, key])
         return self.cursor
 
     def save(self):
@@ -297,7 +295,7 @@ def _tex(args):
         match = citation_re.match(l)
         if match:
             key = match.group(1)
-            bib_entry = db.search_strict([("key", key)]).fetchone()
+            bib_entry = db.search_key(key).fetchone()
             if bib_entry:
                 entries.append(bib_entry[0])
             else:
