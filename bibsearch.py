@@ -14,6 +14,7 @@ import sys
 # import tarfile
 import urllib.request
 import sqlite3
+import stop_words
 import textwrap
 import yaml
 # from collections import Counter, namedtuple
@@ -95,6 +96,7 @@ class BibDB:
         if createDB:
             self.cursor.execute('CREATE VIRTUAL TABLE bib USING fts5(\
                 key,\
+                custom_key,\
                 author,\
                 title,\
                 event,\
@@ -107,8 +109,8 @@ class BibDB:
         return int(self.cursor.fetchone()[0])
 
     def search(self, query):
-        self.cursor.execute("SELECT fulltext, event FROM bib \
-                            WHERE bib MATCH '{key author title year event}: ' || ?",
+        self.cursor.execute("SELECT fulltext, event, key FROM bib \
+                            WHERE bib MATCH '{key custom_key author title year event}: ' || ?",
                             [" ".join(query)])
         return self.cursor
 
@@ -126,10 +128,23 @@ class BibDB:
         """ Returns if the entry was added or if it was a duplicate"""
         self.cursor.execute('SELECT 1 FROM bib WHERE key=? LIMIT 1', (entry.key,))
         if not self.cursor.fetchone():
-            self.cursor.execute('INSERT INTO bib VALUES (?,?,?,?,?,?)',
-                                (entry.key,
-                                 entry.get("author"),
-                                 entry.get("title"),
+            original_key = entry.key
+            try:
+                custom_key = generate_custom_key(entry)
+                entry.key = custom_key
+            except:
+                custom_key = None
+            try:
+                utf_author = bibutils.tex_to_unicode(entry.get("author"))
+                utf_title = bibutils.tex_to_unicode(entry.get("title"))
+            except:
+                utf_author = entry.get("author")
+                utf_title = entry.get("title")
+            self.cursor.execute('INSERT INTO bib VALUES (?,?,?,?,?,?,?)',
+                                (original_key,
+                                 custom_key,
+                                 utf_author,
+                                 utf_title,
                                  event,
                                  entry.get("year"),
                                  entry.to_bib())
@@ -143,29 +158,63 @@ class BibDB:
         for e in self.cursor:
             yield e[0]
 
+custom_key_skip_chars = str.maketrans("", "", " `~!@#$%^&*()+=[]{}|\\'\":;,<.>/?")
+custom_key_skip_words = set(stop_words.get_stop_words("en"))
+def generate_custom_key(entry: biblib.Entry):
+    # TODO: fault tolerance against missing fields!
+    year = int(entry["year"])
+    author_surname = bibutils.parse_names(entry["author"])[0]\
+        .pretty(template="{last}")\
+        .lower()\
+        .translate(custom_key_skip_chars)
+
+    filtered_title = [w for w in [t.lower() for t in entry["title"].split()] if w not in custom_key_skip_words]
+    if filtered_title:
+        title_word = filtered_title[0]
+    else:
+        title_word = entry["title"][0]
+    title_word = title_word.translate(custom_key_skip_chars)
+
+    return "{surname}{year:02}_{title}".format(
+        surname=author_surname,
+        year=year%1000,
+        title=title_word)
+
+
 def _find(args):
     db = BibDB()
     if not args.bibtex:
         textwrapper = textwrap.TextWrapper(subsequent_indent="  ")
-    for entry in db.search(args.terms):
+    for (fulltext, event, original_key) in db.search(args.terms):
+        parser = biblib.Parser()
+        entry, = parser.parse(fulltext).get_entries().values() # We have a single entry
+        if args.original_key:
+            entry.key = original_key
+            fulltext = entry.to_bib()
         if args.bibtex:
-            print(entry[0] + "\n")
+            print(fulltext + "\n")
         else:
-            parser = biblib.Parser()
-            for e in parser.parse(entry[0]).get_entries().values():
-                # It consists only of one entry, but biblib only provides an iterator interface
-                author = [a.pretty() for a in bibutils.parse_names(e["author"])]
-                author = ", ".join(author[:-2] + [" and ".join(author[-2:])])
-                lines = textwrapper.wrap('{key}: {author} "{title}", {event} {year}'.format(
-                                key=e.key,
-                                author=author,
-                                title=e["title"],
-                                event = entry[1].upper(),
-                                year=e["year"]))
-                print("\n".join(lines) + "\n")
+            author = [a.pretty() for a in bibutils.parse_names(entry["author"])]
+            author = ", ".join(author[:-2] + [" and ".join(author[-2:])])
+            try:
+                utf_author = bibutils.tex_to_unicode(entry.get("author"))
+                utf_title = bibutils.tex_to_unicode(entry.get("title"))
+            except:
+                utf_author = entry.get("author")
+                utf_title = entry.get("title")
+            lines = textwrapper.wrap('[{key}] {author} "{title}", {event}{year}'.format(
+                            key=entry.key,
+                            author=utf_author,
+                            title=utf_title,
+                            event = event.upper() + " " if event else "",
+                            year=entry["year"]))
+            print("\n".join(lines) + "\n")
 
 def _add_file(event, fname, db):
-    logging.info("Adding entries from %s (%s)", fname, event.upper())
+    log_msg = "Adding entries from %s" % fname
+    if event:
+        log_msg += " (%s)" % event.upper()
+    logging.info(log_msg)
     source = download_file(fname) if fname.startswith('http') else open(fname)
 
     new_entries = biblib.Parser().parse(source, log_fp=sys.stderr).get_entries()
@@ -179,7 +228,7 @@ def _add_file(event, fname, db):
 
     return added, skipped
 
-def get_fnames_from_bibset(raw_fname):
+def get_fnames_from_bibset(raw_fname, override_event):
     fields = raw_fname[len(BIBSETPREFIX):].strip().split('/')
     currentSet = yaml.load(open("acl.yml"))
     bib_spec = raw_fname[len(BIBSETPREFIX):].strip()
@@ -205,7 +254,7 @@ def get_fnames_from_bibset(raw_fname):
                 else:
                     result += rec_extract_bib(v, event)
         return result
-    return rec_extract_bib(currentSet, event)
+    return rec_extract_bib(currentSet, event if not override_event else override_event)
 
 
 def _add(args):
@@ -213,7 +262,7 @@ def _add(args):
 
     raw_fname = args.file
     event_fnames = [(args.event, raw_fname)] if not raw_fname.startswith(BIBSETPREFIX) \
-                         else get_fnames_from_bibset(raw_fname)
+                         else get_fnames_from_bibset(raw_fname, args.event)
     added = 0
     skipped = 0
     for event, f in event_fnames:
@@ -280,6 +329,7 @@ def main():
 
     parser_add = subparsers.add_parser('add', help='Add a BibTeX file')
     parser_add.add_argument('file', type=str, default=None, help='BibTeX file to add')
+    parser_add.add_argument("-e", "--event", help="Event for entries")
     parser_add.set_defaults(func=_add)
 
     parser_dump = subparsers.add_parser('print', help='Print the BibTeX database')
@@ -288,6 +338,7 @@ def main():
 
     parser_find = subparsers.add_parser('find', help='Search the database', aliases=['search'])
     parser_find.add_argument('-b', '--bibtex', help='Print entries in bibtex format', action='store_true')
+    parser_find.add_argument('-o', "--original-key", help='Print the original key of the entries', action='store_true')
     parser_find.add_argument('terms', nargs='+', help="One or more search terms which are ANDed together")
     parser_find.set_defaults(func=_find)
 
