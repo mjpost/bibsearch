@@ -82,6 +82,10 @@ def download_file(bibfile) -> None:
         logging.warning("Error dowloading '%s'", bibfile)
         return ""
 
+def fulltext_to_single_entry(fulltext):
+    parser = biblib.Parser()
+    entry, = parser.parse(fulltext).get_entries().values()
+    return entry
 
 class BibDB:
     def __init__(self, fname=DBFILE):
@@ -151,6 +155,22 @@ class BibDB:
         else:
             return False
 
+    def update_custom_key(self, original_key, new_custom_key):
+        self.cursor.execute('SELECT key, fulltext FROM bib WHERE key=? OR custom_key=? LIMIT 1',
+                            [new_custom_key, new_custom_key])
+        match = self.cursor.fetchone()
+        if match:
+            logging.error("Entry with key %s already exists", new_custom_key)
+            print(match[1], file=sys.stderr)
+            print("[Original key: %s]" % match[0], file=sys.stderr)
+            sys.exit(1)
+        self.cursor.execute("SELECT fulltext FROM bib WHERE key=? LIMIT 1", (original_key,))
+        entry = fulltext_to_single_entry(self.cursor.fetchone())
+        entry.key = new_custom_key
+        self.cursor.execute("UPDATE bib SET custom_key=?, fulltext=? WHERE key=?",
+                            [new_custom_key, entry.to_bib(), original_key])
+        self.save()
+
     def __iter__(self):
         self.cursor.execute("SELECT fulltext FROM bib")
         for e in self.cursor:
@@ -184,8 +204,7 @@ def _find(args):
     if not args.bibtex:
         textwrapper = textwrap.TextWrapper(subsequent_indent="  ")
     for (fulltext, event, original_key) in db.search(args.terms):
-        parser = biblib.Parser()
-        entry, = parser.parse(fulltext).get_entries().values() # We have a single entry
+        entry = fulltext_to_single_entry(fulltext)
         if args.original_key:
             entry.key = original_key
             fulltext = entry.to_bib()
@@ -320,6 +339,22 @@ def _tex(args):
     for e in entries:
         print(e + "\n", file=fp_out)
 
+def _set_custom_key(args):
+    db = BibDB()
+    n_entries = 0
+    for (_, _, original_key) in db.search(args.terms):
+        n_entries += 1
+        if n_entries > 1:
+            break
+    if n_entries == 0:
+        logging.error("Search returned no results. Aborting.")
+        sys.exit(1)
+    elif n_entries > 1:
+        logging.error("Search returned several entries. Aborting.")
+        sys.exit(1)
+    logging.info("Updating custom key of %s to %s", original_key, args.new_key)
+    db.update_custom_key(original_key, args.new_key)
+
 def main():
     parser = argparse.ArgumentParser(description='bibsearch: Download, manage, and search a BibTeX database.')
     parser.add_argument('--version', '-V', action='version', version='%(prog)s {}'.format(VERSION))
@@ -345,6 +380,11 @@ def main():
     parser_tex.add_argument('-b', '--write-bibfile', help='Autodetect and write bibfile', action='store_true')
     parser_tex.add_argument('-B', '--overwrite-bibfile', help='Autodetect and write bibfile', action='store_true')
     parser_tex.set_defaults(func=_tex)
+
+    parser_key = subparsers.add_parser('key', help='Change key of entry')
+    parser_key.add_argument('-k', '--new-key', help='New key')
+    parser_key.add_argument('terms', nargs='+', help='One or more search terms which uniquely identify an entry')
+    parser_key.set_defaults(func=_set_custom_key)
 
     args = parser.parse_args()
     args.func(args)
