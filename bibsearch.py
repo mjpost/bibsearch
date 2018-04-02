@@ -16,6 +16,7 @@ import urllib.request
 import sqlite3
 import stop_words
 import textwrap
+from tqdm import tqdm
 import yaml
 # from collections import Counter, namedtuple
 # from itertools import zip_longest
@@ -231,7 +232,8 @@ def _add_file(event, fname, db):
     log_msg = "Adding entries from %s" % fname
     if event:
         log_msg += " (%s)" % event.upper()
-    logging.info(log_msg)
+    tqdm.write(log_msg)
+    #~ logging.info(log_msg)
     source = download_file(fname) if fname.startswith('http') else open(fname)
 
     new_entries = biblib.Parser().parse(source, log_fp=sys.stderr).get_entries()
@@ -282,7 +284,7 @@ def _add(args):
                          else get_fnames_from_bibset(raw_fname, args.event)
     added = 0
     skipped = 0
-    for event, f in event_fnames:
+    for event, f in tqdm(event_fnames, ncols=80, bar_format="{l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]"):
         f_added, f_skipped = _add_file(event, f, db)
         added += f_added
         skipped += f_skipped
