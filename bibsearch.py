@@ -30,7 +30,7 @@ import yaml
 import biblib.biblib.bib as biblib  # TODO: ugly imports
 import biblib.biblib.algo as bibutils
 
-VERSION = '0.0.2'
+VERSION = '0.1.0'
 
 try:
     # SIGPIPE is not available on Windows machines, throwing an exception.
@@ -228,18 +228,17 @@ def _find(args):
                             year=entry["year"]))
             print("\n".join(lines) + "\n")
 
-def _add_file(event, fname, db):
-    log_msg = "Adding entries from %s" % fname
-    if event:
-        log_msg += " (%s)" % event.upper()
-    tqdm.write(log_msg)
-    #~ logging.info(log_msg)
+def _add_file(event, fname, db, per_file_progress_bar):
     source = download_file(fname) if fname.startswith('http') else open(fname)
 
     new_entries = biblib.Parser().parse(source, log_fp=sys.stderr).get_entries()
     added = 0
     skipped = 0
-    for entry in new_entries.values():
+    if per_file_progress_bar:
+        iterable = tqdm(new_entries.values(), ncols=80, bar_format="{l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]")
+    else:
+        iterable = new_entries.values()
+    for entry in iterable:
         if db.add(event, entry):
             added += 1
         else:
@@ -284,8 +283,20 @@ def _add(args):
                          else get_fnames_from_bibset(raw_fname, args.event)
     added = 0
     skipped = 0
-    for event, f in tqdm(event_fnames, ncols=80, bar_format="{l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]"):
-        f_added, f_skipped = _add_file(event, f, db)
+    if len(event_fnames) > 1:
+        iterable = tqdm(event_fnames, ncols=80, bar_format="{l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]")
+        per_file_progress_bar = False
+    else:
+        iterable = event_fnames
+        per_file_progress_bar = True
+    for event, f in iterable:
+        if not per_file_progress_bar:
+            log_msg = "Adding entries from %s" % f
+            if event:
+                log_msg += " (%s)" % event.upper()
+            tqdm.write(log_msg)
+
+        f_added, f_skipped = _add_file(event, f, db, per_file_progress_bar)
         added += f_added
         skipped += f_skipped
 
@@ -360,6 +371,7 @@ def _set_custom_key(args):
 def main():
     parser = argparse.ArgumentParser(description='bibsearch: Download, manage, and search a BibTeX database.')
     parser.add_argument('--version', '-V', action='version', version='%(prog)s {}'.format(VERSION))
+    parser.set_defaults(func=lambda _ : parser.print_help())
     subparsers = parser.add_subparsers()
 
     parser_add = subparsers.add_parser('add', help='Add a BibTeX file')

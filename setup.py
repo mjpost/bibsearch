@@ -47,9 +47,9 @@ setup(
     # The project's main homepage.
     url = 'https://github.com/mjpost/bibsearch',
 
-    author = 'Matt Post',
-    author_email='post@cs.jhu.edu',
-    maintainer_email='post@cs.jhu.edu',
+    author = 'Matt Post, David Vilar',
+    author_email='post@cs.jhu.edu, david.vilar@gmail.com',
+    maintainer_email='post@cs.jhu.edu, david.vilar@gmail.com',
 
     license = 'Apache License 2.0',
 
@@ -67,7 +67,6 @@ setup(
         'Intended Audience :: Developers',
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering',
-        'Topic :: Scientific/Engineering :: Artificial Intelligence',
         'Topic :: Text Processing',
 
         # Pick your license as you wish (should match "license" above)
@@ -88,7 +87,7 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires = ['typing', 'pybtex'],
+    install_requires = ['typing', 'tqdm', 'pyaml', 'stop-words'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
