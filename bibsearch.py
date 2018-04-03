@@ -25,9 +25,9 @@ import yaml
 # import math
 # import unicodedata
 
-#import pybtex.database
+import pybtex.database as pybtex
 
-import biblib.biblib.bib as biblib  # TODO: ugly imports
+#import biblib.biblib.bib as biblib  # TODO: ugly imports
 import biblib.biblib.algo as bibutils
 
 VERSION = '0.1.0'
@@ -83,9 +83,13 @@ def download_file(bibfile) -> None:
         logging.warning("Error dowloading '%s'", bibfile)
         return ""
 
+def single_entry_to_fulltext(entry: pybtex.Entry, overwrite_key: str = None):
+    effective_key = entry.key if not overwrite_key else overwrite_key
+    formatter = pybtex.BibliographyData(entries={effective_key: entry})
+    return formatter.to_string(bib_format="bibtex")
+
 def fulltext_to_single_entry(fulltext):
-    parser = biblib.Parser()
-    entry, = parser.parse(fulltext).get_entries().values()
+    entry, = pybtex.parse_string(fulltext, bib_format="bibtex").entries.values()
     return entry
 
 class BibDB:
@@ -127,31 +131,31 @@ class BibDB:
     def save(self):
         self.connection.commit()
 
-    def add(self, event, entry: biblib.Entry):
+    def add(self, event, entry: pybtex.Entry):
         """ Returns if the entry was added or if it was a duplicate"""
         self.cursor.execute('SELECT 1 FROM bib WHERE key=? LIMIT 1', (entry.key,))
         if not self.cursor.fetchone():
             original_key = entry.key
             try:
                 custom_key = generate_custom_key(entry)
-                entry.key = custom_key
             except:
                 custom_key = None
             try:
-                utf_author = bibutils.tex_to_unicode(entry.get("author"))
-                utf_title = bibutils.tex_to_unicode(entry.get("title"))
+                utf_author = bibutils.tex_to_unicode(entry.fields.get("author"))
+                utf_title = bibutils.tex_to_unicode(entry.fields.get("title"))
             except:
-                utf_author = entry.get("author")
-                utf_title = entry.get("title")
+                utf_author = entry.fields.get("author")
+                utf_title = entry.fields.get("title")
             self.cursor.execute('INSERT INTO bib VALUES (?,?,?,?,?,?,?)',
                                 (original_key,
                                  custom_key,
                                  utf_author,
                                  utf_title,
                                  event,
-                                 entry.get("year"),
-                                 entry.to_bib())
+                                 entry.fields.get("year"),
+                                 single_entry_to_fulltext(entry, custom_key)
                                 )
+                               )
             return True
         else:
             return False
@@ -179,19 +183,19 @@ class BibDB:
 
 custom_key_skip_chars = str.maketrans("", "", " `~!@#$%^&*()+=[]{}|\\'\":;,<.>/?")
 custom_key_skip_words = set(stop_words.get_stop_words("en"))
-def generate_custom_key(entry: biblib.Entry):
+def generate_custom_key(entry: pybtex.Entry):
     # TODO: fault tolerance against missing fields!
-    year = int(entry["year"])
-    author_surname = bibutils.parse_names(entry["author"])[0]\
+    year = int(entry.fields["year"])
+    author_surname = bibutils.parse_names(entry.fields["author"])[0]\
         .pretty(template="{last}")\
         .lower()\
         .translate(custom_key_skip_chars)
 
-    filtered_title = [w for w in [t.lower() for t in entry["title"].split()] if w not in custom_key_skip_words]
+    filtered_title = [w for w in [t.lower() for t in entry.fields["title"].split()] if w not in custom_key_skip_words]
     if filtered_title:
         title_word = filtered_title[0]
     else:
-        title_word = entry["title"][0]
+        title_word = entry.fields["title"][0]
     title_word = title_word.translate(custom_key_skip_chars)
 
     return "{surname}{year:02}_{title}".format(
@@ -208,30 +212,30 @@ def _find(args):
         entry = fulltext_to_single_entry(fulltext)
         if args.original_key:
             entry.key = original_key
-            fulltext = entry.to_bib()
+            fulltext = single_entry_to_fulltext(entry)
         if args.bibtex:
             print(fulltext + "\n")
         else:
-            author = [a.pretty() for a in bibutils.parse_names(entry["author"])]
+            author = [a.pretty() for a in bibutils.parse_names(entry.fields["author"])]
             author = ", ".join(author[:-2] + [" and ".join(author[-2:])])
             try:
-                utf_author = bibutils.tex_to_unicode(entry.get("author"))
-                utf_title = bibutils.tex_to_unicode(entry.get("title"))
+                utf_author = bibutils.tex_to_unicode(entry.fields.get("author"))
+                utf_title = bibutils.tex_to_unicode(entry.fields.get("title"))
             except:
-                utf_author = entry.get("author")
-                utf_title = entry.get("title")
+                utf_author = entry.fields.get("author")
+                utf_title = entry.fields.get("title")
             lines = textwrapper.wrap('[{key}] {author} "{title}", {event}{year}'.format(
                             key=entry.key,
                             author=utf_author,
                             title=utf_title,
                             event = event.upper() + " " if event else "",
-                            year=entry["year"]))
+                            year=entry.fields["year"]))
             print("\n".join(lines) + "\n")
 
 def _add_file(event, fname, db, per_file_progress_bar):
     source = download_file(fname) if fname.startswith('http') else open(fname)
 
-    new_entries = biblib.Parser().parse(source, log_fp=sys.stderr).get_entries()
+    new_entries = pybtex.parse_string(source, bib_format="bibtex").entries
     added = 0
     skipped = 0
     if per_file_progress_bar:
