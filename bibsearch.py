@@ -80,7 +80,7 @@ def download_file(bibfile) -> None:
         #                 '"Python 3" folder, often found under /Applications')
         sys.exit(1)
     except:
-        logging.warning("Error dowloading '%s'", bibfile)
+        logging.warning("Error downloading '%s'", bibfile)
         return ""
 
 def single_entry_to_fulltext(entry: pybtex.Entry, overwrite_key: str = None):
@@ -233,9 +233,12 @@ def _find(args):
             print("\n".join(lines) + "\n")
 
 def _add_file(event, fname, db, per_file_progress_bar):
-    source = download_file(fname) if fname.startswith('http') else open(fname)
-
-    new_entries = pybtex.parse_string(source, bib_format="bibtex").entries
+    if fname.startswith('http'):
+        new_entries = pybtex.parse_string(download_file(fname),
+                                          bib_format="bibtex").entries
+    else:
+        new_entries = pybtex.parse_file(fname,
+                                        bib_format="bibtex").entries
     added = 0
     skipped = 0
     if per_file_progress_bar:
