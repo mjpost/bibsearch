@@ -26,9 +26,7 @@ import yaml
 # import unicodedata
 
 import pybtex.database as pybtex
-
-#import biblib.biblib.bib as biblib  # TODO: ugly imports
-import biblib.biblib.algo as bibutils
+import bibutils
 
 VERSION = '0.1.0'
 
