@@ -1,0 +1,1274 @@
+acl:
+  '1979': ['https://aclanthology.coli.uni-saarland.de/volumes/17th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1980': ['https://aclanthology.coli.uni-saarland.de/volumes/18th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1981': ['https://aclanthology.coli.uni-saarland.de/volumes/19th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1982': ['https://aclanthology.coli.uni-saarland.de/volumes/20th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1983': ['https://aclanthology.coli.uni-saarland.de/volumes/21st-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1984': ['https://aclanthology.coli.uni-saarland.de/volumes/10th-international-conference-on-computational-linguistics-and-22nd-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1985': ['https://aclanthology.coli.uni-saarland.de/volumes/23rd-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1986': ['https://aclanthology.coli.uni-saarland.de/volumes/24th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1987': ['https://aclanthology.coli.uni-saarland.de/volumes/25th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1988': ['https://aclanthology.coli.uni-saarland.de/volumes/26th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1989': ['https://aclanthology.coli.uni-saarland.de/volumes/27th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1990': ['https://aclanthology.coli.uni-saarland.de/volumes/28th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1991': ['https://aclanthology.coli.uni-saarland.de/volumes/29th-annual-meeting-of-the-association-for-ational-linguistics.bib']
+  '1992': ['https://aclanthology.coli.uni-saarland.de/volumes/30th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1993': ['https://aclanthology.coli.uni-saarland.de/volumes/31st-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1994': ['https://aclanthology.coli.uni-saarland.de/volumes/32nd-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1995': ['https://aclanthology.coli.uni-saarland.de/volumes/33rd-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1996': ['https://aclanthology.coli.uni-saarland.de/volumes/34th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1997': ['https://aclanthology.coli.uni-saarland.de/volumes/35th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/36th-annual-meeting-of-the-association-for-computational-linguistics-and-17th-international-conference-on-computational-linguistics-volume-1.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/36th-annual-meeting-of-the-association-for-computational-linguistics-and-17th-international-conference-on-computational-linguistics-volume-2.bib']
+  '1999': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-37th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '2000': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-38th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '2001': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-39th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-40th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '2003': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-41st-annual-meeting-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/the-companion-volume-to-the-proceedings-of-41st-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-42nd-annual-meeting-of-the-association-for-computational-linguistics-acl-04.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-interactive-poster-and-demonstration-sessions.bib']
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-43rd-annual-meeting-of-the-association-for-computational-linguistics-acl-05.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-student-research-workshop-b5aa4a8a-cc2b-47b9-afeb-0f69c6901627.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-interactive-poster-and-demonstration-sessions-ff08abb0-df2b-4a40-ac6b-e577460da410.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-21st-international-conference-on-computational-linguistics-and-44th-annual-meeting-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-coling-acl-2006-main-conference-poster-sessions.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-coling-acl-2006-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-coling-acl-2006-interactive-presentation-sessions.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-45th-annual-meeting-of-the-association-of-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-45th-annual-meeting-of-the-association-for-computational-linguistics-companion-volume-proceedings-of-the-demo-and-poster-sessions.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-2007-student-research-workshop.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-08-hlt.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-08-hlt-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-08-hlt-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-08-hlt-demo-session.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/tutorial-abstracts-of-acl-08-hlt.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-joint-conference-of-the-47th-annual-meeting-of-the-acl-and-the-4th-international-joint-conference-on-natural-language-processing-of-the-afnlp.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-ijcnlp-2009-conference-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-ijcnlp-2009-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-ijcnlp-2009-software-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/tutorial-abstracts-of-acl-ijcnlp-2009.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-48th-annual-meeting-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-2010-conference-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-2010-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-2010-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/tutorial-abstracts-of-acl-2010.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-49th-annual-meeting-of-the-association-for-computational-linguistics-human-language-technologies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-49th-annual-meeting-of-the-association-for-computational-linguistics-human-language-technologies-7afb2395-0fc0-4f1b-a600-9b6f3933f5f9.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-2011-student-session.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-hlt-2011-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/tutorial-abstracts-of-acl-2011.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-50th-annual-meeting-of-the-association-for-computational-linguistics-volume-1-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-50th-annual-meeting-of-the-association-for-computational-linguistics-volume-2-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-2012-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/tutorial-abstracts-of-acl-2012.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-2012-special-workshop-on-rediscovering-50-years-of-discoveries.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-2012-student-research-workshop.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-51st-annual-meeting-of-the-association-for-computational-linguistics-volume-1-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-51st-annual-meeting-of-the-association-for-computational-linguistics-volume-2-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/51st-annual-meeting-of-the-association-for-computational-linguistics-proceedings-of-the-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-51st-annual-meeting-of-the-association-for-computational-linguistics-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-51st-annual-meeting-of-the-association-for-computational-linguistics-tutorials.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-52nd-annual-meeting-of-the-association-for-computational-linguistics-volume-1-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-52nd-annual-meeting-of-the-association-for-computational-linguistics-volume-2-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-2014-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-52nd-annual-meeting-of-the-association-for-computational-linguistics-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-52nd-annual-meeting-of-the-association-for-computational-linguistics-tutorials.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-53rd-annual-meeting-of-the-association-for-computational-linguistics-and-the-7th-international-joint-conference-on-natural-language-processing-volume-1-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-53rd-annual-meeting-of-the-association-for-computational-linguistics-and-the-7th-international-joint-conference-on-natural-language-processing-volume-2-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-ijcnlp-2015-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-ijcnlp-2015-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/tutorials.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-54th-annual-meeting-of-the-association-for-computational-linguistics-volume-1-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-54th-annual-meeting-of-the-association-for-computational-linguistics-volume-2-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-2016-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-2016-system-demonstrations.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-55th-annual-meeting-of-the-association-for-computational-linguistics-volume-1-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-55th-annual-meeting-of-the-association-for-computational-linguistics-volume-2-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-2017-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-2017-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-2017-tutorial-abstracts.bib']
+aha:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-aha-workshop-on-information-discovery-in-text.bib']
+akbc:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-multilingual-and-cross-lingual-methods-in-nlp.bib']
+alnlp:
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2009-workshop-on-active-learning-for-natural-language-processing.bib']
+alr:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-workshop-on-asian-language-resources.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-12th-workshop-on-asian-language-resources-alr12.bib']
+alta:
+  '2003': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-workshop-2003.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-workshop-2004.bib']
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-workshop-2005.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-workshop-2006.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-workshop-2007.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-association-workshop-2008.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-association-workshop-2009.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-association-workshop-2010.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-association-workshop-2011.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-association-workshop-2012.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-association-workshop-2013-alta-2013.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-association-workshop-2014.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-association-workshop-2015.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-association-workshop-2016.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-australasian-language-technology-association-workshop-2017.bib']
+alw:
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-workshop-on-abusive-language-online.bib']
+anlp:
+  '1983': ['https://aclanthology.coli.uni-saarland.de/volumes/first-conference-on-applied-natural-language-processing.bib']
+  '1988': ['https://aclanthology.coli.uni-saarland.de/volumes/second-conference-on-applied-natural-language-processing.bib']
+  '1992': ['https://aclanthology.coli.uni-saarland.de/volumes/third-conference-on-applied-natural-language-processing.bib']
+  '1994': ['https://aclanthology.coli.uni-saarland.de/volumes/fourth-conference-on-applied-natural-language-processing.bib']
+  '1997': ['https://aclanthology.coli.uni-saarland.de/volumes/fifth-conference-on-applied-natural-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/fifth-conference-on-applied-natural-language-processing-descriptions-of-system-demonstrations-and-videos.bib']
+  '2000': ['https://aclanthology.coli.uni-saarland.de/volumes/sixth-applied-natural-language-processing-conference.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/1st-meeting-of-the-north-american-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-anlp-naacl-2000-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/author-index-to-the-proceedings-of-anlp-naacl-2000-and-the-student-research-workshop.bib']
+argmining:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-workshop-on-argument-mining-argmining2016.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-4th-workshop-on-argument-mining.bib']
+atanlp:
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-applications-of-tree-automata-techniques-in-natural-language-processing.bib']
+ats-ma:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-automatic-text-simplification-methods-and-applications-in-the-multilingual-society-ats-ma-2014.bib']
+bea:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighth-workshop-on-innovative-use-of-nlp-for-building-educational-applications.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ninth-workshop-on-innovative-use-of-nlp-for-building-educational-applications.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-tenth-workshop-on-innovative-use-of-nlp-for-building-educational-applications.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-workshop-on-innovative-use-of-nlp-for-building-educational-applications.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-12th-workshop-on-innovative-use-of-nlp-for-building-educational-applications.bib']
+bioasq:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-bioasq-workshop.bib']
+bionlp:
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-bionlp-2009-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-bionlp-2009-workshop-companion-volume-for-shared-task.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-bionlp-2011-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-bionlp-shared-task-2011-workshop.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/bionlp-proceedings-of-the-2012-workshop-on-biomedical-natural-language-processing.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2013-workshop-on-biomedical-natural-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-bionlp-shared-task-2013-workshop.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-bionlp-2014.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-bionlp-15.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-15th-workshop-on-biomedical-natural-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-4th-bionlp-shared-task-workshop.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/bionlp-2017.bib']
+bsnlp:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/the-5th-workshop-on-balto-slavic-natural-language-processing.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-6th-workshop-on-balto-slavic-natural-language-processing.bib']
+bucc:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-workshop-on-building-and-using-comparable-corpora.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighth-workshop-on-building-and-using-comparable-corpora.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-workshop-on-building-and-using-comparable-corpora.bib']
+catocl:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eacl-2014-workshop-on-computational-approaches-to-causality-in-language-catocl.bib']
+ccnlg:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-inlg-2016-workshop-on-computational-creativity-in-natural-language-generation.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-computational-creativity-in-natural-language-generation-cc-nlg-2017.bib']
+cl:
+  '1979': ['https://aclanthology.coli.uni-saarland.de/volumes/acl-microfiche-series-1-83-including-computational-linguistics-1974-1979.bib']
+  '1980': ['https://aclanthology.coli.uni-saarland.de/volumes/american-journal-of-computational-linguistics-volume-6-number-1-january-march-1980.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/american-journal-of-computational-linguistics-volume-6-number-2-april-june-1980.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/american-journal-of-computational-linguistics-volume-6-number-3-4-july-december-1980.bib']
+  '1981': ['https://aclanthology.coli.uni-saarland.de/volumes/american-journal-of-computational-linguistics-volume-7-number-1-january-march-1981.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/american-journal-of-computational-linguistics-volume-7-number-2-april-june-1981.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/american-journal-of-computational-linguistics-volume-7-number-3-july-september-1981.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/american-journal-of-computational-linguistics-volume-7-number-4-october-december-1981.bib']
+  '1982': ['https://aclanthology.coli.uni-saarland.de/volumes/american-journal-of-computational-linguistics-volume-8-number-1-january-march-1982.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/american-journal-of-computational-linguistics-volume-8-number-2-april-june-1982.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/american-journal-of-computational-linguistics-volume-8-number-3-4-july-december-1982.bib']
+  '1983': ['https://aclanthology.coli.uni-saarland.de/volumes/american-journal-of-computational-linguistics-volume-9-number-1-january-march-1983.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/american-journal-of-computational-linguistics-volume-9-number-2-april-june-1983.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/american-journal-of-computational-linguistics-volume-9-number-3-4-july-december-1983.bib']
+  '1984': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-formerly-the-american-journal-of-computational-linguistics-volume-10-number1-january-march-1984.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-formerly-the-american-journal-of-computational-linguistics-volume-10-number-2-april-june-1984.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-formerly-the-american-journal-of-computational-linguistics-volume-10-number-3-4-july-december-1984.bib']
+  '1985': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-formerly-the-american-journal-of-computational-linguistics-volume-11-number-1-january-march-1985.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-formerly-the-american-journal-of-computational-linguistics-volume-11-number-2-3-april-september-1985.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-formerly-the-american-journal-of-computational-linguistics-volume-11-number-4-october-december-1985.bib']
+  '1986': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-formerly-the-american-journal-of-computational-linguistics-volume-12-number-1-january-march-1986.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-formerly-the-american-journal-of-computational-linguistics-volume-12-number-2-april-june-1986.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-formerly-the-american-journal-of-computational-linguistics-volume-12-number-3-july-september-1986.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-formerly-the-american-journal-of-computational-linguistics-volume-12-number-4-october-december-1986.bib']
+  '1987': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-formerly-the-american-journal-of-computational-linguistics-volume-13-numbers-1-2-january-june-1987.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-formerly-the-american-journal-of-computational-linguistics-volume-13-numbers-3-4-july-december-1987.bib']
+  '1988': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-association-formerly-the-american-journal-of-computational-linguistics-volume-14-number-1-winter-1988.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-14-number-2-june-1988.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-14-number-3-september-1988.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-14-number-4-december-1988-lfp-a-logic-for-linguistic-descriptions-and-an-analysis-of-its-complexity.bib']
+  '1989': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-15-number-1-march-1989.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-15-number-2-june-1989.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-15-number-3-september-1989.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-15-number-4-december-1989.bib']
+  '1990': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-16-number-1-march-1990.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-16-number-2-june-1990.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-16-number-3-september-1990.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-16-number-4-december-1990.bib']
+  '1991': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-17-number-1-march-1991.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-17-number-2-june-1991.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-17-number-3-september-1991.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computationai-linguistics-volume-17-number-4-december-1991.bib']
+  '1992': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-18-number-1-march-1992.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-18-number-2-special-issue-on-inheritance-i.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-18-number-3-september-1992-special-issue-on-inheritance-ii.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-18-number-4-december-1992.bib']
+  '1993': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-19-number-1-march-1993-special-issue-on-using-large-corpora-i.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-19-number-2-june-1993-special-issue-on-using-large-corpora-ii.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-19-number-3-september-1993.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-19-number-4-december-1993.bib']
+  '1994': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-20-number-1-march-1994.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-20-number-2-june-1994.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-20-number-3-september-1994.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-20-number-4-december-1994.bib']
+  '1995': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-21-number-1-march-1995.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-21-number-2-june-1995.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-21-number-3-september-1995.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-21-number-4-december-1995.bib']
+  '1996': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-22-number-1-march-1996.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-22-number-2-june-1996.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume22-number-3-september-1996.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-22-number-4-december-1996.bib']
+  '1997': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-lingustics-volume-23-number-1-march-1997.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-23-number-2-june-1997.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-23-number-3-september-1997.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-23-number-4-december-1997.bib']
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-special-issue-on-word-sense-disambiguation.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-24-number-2-june-1998.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-24-number-3-september-1998.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-24-number-4-december-1998.bib']
+  '1999': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguisitics-volume25-number-l-march-1999.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-25-number-2-june-1999.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-25-number-3-september-1999.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-25-number-4-december-1999.bib']
+  '2000': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-26-number-1-march-2000.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-26-number-2-june-2000.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-26-number-3-september-2000.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-26-number-4-december-2000.bib']
+  '2001': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-27-number-1-march-2001.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-27-number-2-june-2001.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-27-number-3-september-2001.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-27-number-4-december-2001.bib']
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-28-number-1-march-2002.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-28-number-2-june-2002.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-28-number-3-september-2002.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-28-number-4-december-2002.bib']
+  '2003': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-29-number-1-march-2003.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-29-number-2-june-2003.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-29-number-3-september-2003-special-issue-on-the-web-as-corpus.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-29-number-4-december-2003.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-30-number-1-march-2004.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-30-number-2-june-2004.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-30-number-3-september-2004.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-30-number-4-december-2004.bib']
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-31-number-1-march-2005.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-31-number-2-june-2005.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-31-number-3-september-2005.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-31-number-4-december-2005.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-32-number-1-march-2006.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-32-number-2-june-2006.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-32-number-3-september-2006.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-32-number-4-december-2006.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-33-number-1-march-2007.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-33-number-2-june-2007.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-33-number-3-september-2007.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-33-number-4-december-2007.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-34-number-1-march-2008.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-34-number-2-june-2008-special-issue-on-semantic-role-labeling.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-34-number-3-september-2008.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-34-number-4-december-2008.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-35-number-1-march-2009.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-35-number-2-june-2009-special-issue-on-prepositions.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-35-number-3-september-2009.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-35-number-4-december-2009.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-36-number-1-march-2010.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-36-number-2-june-2010.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-36-issue-3-september-2010.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-36-issue-4-december-2010.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-37-issue-1-march-2011.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-37-issue-2-june-2011.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-37-issue-3-september-2011.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-37-issue-4-december-2011.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-38-issue-1-march-2012.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-38-issue-2-june-2012.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-38-issue-3-september-2012.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-38-issue-4-december-2012.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-39-issue-1-march-2013.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-39-issue-2-june-2013.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-39-issue-3-september-2013.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-39-issue-4-december-2013.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-40-issue-1-march-2014.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-40-issue-2-june-2014.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-40-issue-3-september-2014.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-40-issue-4-december-2014.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-41-issue-1-march-2015.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-41-issue-2-june-2015.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-41-issue-3-september-2015.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-41-issue-4-december-2015.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-42-issue-1-march-2016.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-42-issue-2-june-2016.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-42-issue-3-september-2016.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-42-issue-4-december-2016.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-43-issue-1-april-2017.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-43-issue-2-june-2017.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-43-issue-3-september-2017.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/computational-linguistics-volume-43-issue-4-december-2017.bib']
+cl4lc:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-computational-linguistics-for-linguistic-complexity-cl4lc.bib']
+clfl:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-3rd-workshop-on-computational-linguistics-for-literature-clfl.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-workshop-on-computational-linguistics-for-literature.bib']
+clinicalnlp:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-clinical-natural-language-processing-workshop-clinicalnlp.bib']
+clp:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-cips-sighan-joint-conference-on-chinese-language-processing.bib']
+clpsych:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-computational-linguistics-and-clinical-psychology-from-linguistic-signal-to-clinical-reality.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-workshop-on-computational-linguistics-and-clinical-psychology-from-linguistic-signal-to-clinical-reality.bib']
+cltw:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-celtic-language-technology-workshop.bib']
+cmcl:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-annual-workshop-on-cognitive-modeling-and-computational-linguistics-cmcl.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-workshop-on-cognitive-modeling-and-computational-linguistics.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-6th-workshop-on-cognitive-modeling-and-computational-linguistics.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-7th-workshop-on-cognitive-modeling-and-computational-linguistics-cmcl-2017.bib']
+  '2018': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-8th-workshop-on-cognitive-modeling-and-computational-linguistics-cmcl-2018.bib']
+cnewsstory:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-workshop-on-computing-news-storylines.bib']
+cns:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-computing-news-storylines-cns-2016.bib']
+codeswitch:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-workshop-on-computational-approaches-to-code-switching.bib']
+cogacll:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-5th-workshop-on-cognitive-aspects-of-computational-language-learning-cogacll.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-workshop-on-cognitive-aspects-of-computational-language-learning.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-7th-workshop-on-cognitive-aspects-of-computational-language-learning.bib']
+cogalex:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-4th-workshop-on-cognitive-aspects-of-the-lexicon-cogalex.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-5th-workshop-on-cognitive-aspects-of-the-lexicon-cogalex-v.bib']
+coling:
+  '1965': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-1965.bib']
+  '1967': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-1967-volume-1-conference-internationale-sur-le-traitement-automatique-des-langues.bib']
+  '1969': ['https://aclanthology.coli.uni-saarland.de/volumes/international-conference-on-computational-linguistics-coling-1969-preprint-no-10.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-conference-on-computational-linguistics-coling-1969-preprint-no-20.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-conference-on-computational-linguistics-coling-1969-preprint-no-30.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-conference-on-computational-linguistics-coling-1969-preprint-no-40.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-conference-on-computational-linguistics-coling-1969-preprint-no-50.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-conference-on-computational-linguistics-coling-1969-preprint-no-60.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-conference-on-computational-linguistics-coling-1969-preprint-no-70.bib']
+  '1973': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-1973-volume-1-computational-and-mathematical-linguistics-proceedings-of-the-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-1973-volume-2-computational-and-mathematical-linguistics-proceedings-of-the-international-conference-on-computational-linguistics.bib']
+  '1980': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-1980-volume-1-the-8th-international-conference-on-computational-linguistics.bib']
+  '1982': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-1982-proceedings-of-the-ninth-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-1982-abstracts-proceedings-of-the-ninth-international-conference-on-computational-linguistics-abstracts.bib']
+  '1984': ['https://aclanthology.coli.uni-saarland.de/volumes/10th-international-conference-on-computational-linguistics-and-22nd-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1986': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-1986-volume-1-the-11th-international-conference-on-computational-linguistics.bib']
+  '1988': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-budapest-1988-volume-1-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-budapest-1988-volume-2-international-conference-on-computational-linguistics.bib']
+  '1990': ['https://aclanthology.coli.uni-saarland.de/volumes/colng-1990-volume-1-papers-presented-to-the-13th-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/colng-1990-volume-2-papers-presented-to-the-13th-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/colng-1990-volume-3-papers-presented-to-the-13th-international-conference-on-computational-linguistics.bib']
+  '1992': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-1992-volume-1-the-15th-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-1992-volume-2-the-15th-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-1992-volume-3-the-15th-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-1992-volume-4-the-15th-international-conference-on-computational-linguistics.bib']
+  '1994': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-1994-volume-1-the-15th-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-1994-volume-2-the-15th-international-conference-on-computational-linguistics.bib']
+  '1996': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-1996-volume-1-the-16th-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-1996-volume-2-the-16th-international-conference-on-computational-linguistics.bib']
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-1998-volume-1-the-17th-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-1998-volume-2-the-17th-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/36th-annual-meeting-of-the-association-for-computational-linguistics-and-17th-international-conference-on-computational-linguistics-volume-1.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/36th-annual-meeting-of-the-association-for-computational-linguistics-and-17th-international-conference-on-computational-linguistics-volume-2.bib']
+  '2000': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-2000-volume-1-the-18th-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-2000-volume-2-the-18th-international-conference-on-computational-linguistics.bib']
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-2002-the-19th-international-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-2002-the-17th-international-conference-on-computational-linguistics-project-notes.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-2004-proceedings-of-the-20th-international-conference-on-computational-linguistics.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-21st-international-conference-on-computational-linguistics-and-44th-annual-meeting-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-coling-acl-2006-main-conference-poster-sessions.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-coling-acl-2006-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-coling-acl-2006-interactive-presentation-sessions.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-22nd-international-conference-on-computational-linguistics-coling-2008.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-2008-companion-volume-posters.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-2008-companion-volume-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-2008-educational-natural-language-processing-tutorial-notes.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-2008-advanced-dynamic-programming-in-computational-linguistics-theory-algorithms-and-applications-tutorial-notes.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-23rd-international-conference-on-computational-linguistics-coling-2010.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-2010-posters.bib', 'https://aclanthology.coli.uni-saarland.de/volumes/coling-2010-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-2010-paraphrases-and-applications-tutorial-notes.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/coling-2010-kernel-engineering-for-fast-and-easy-design-of-natural-language-applications-tutorial-notes.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-coling-2012.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-coling-2012-posters.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-coling-2012-demonstration-papers.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-coling-2014-the-25th-international-conference-on-computational-linguistics-technical-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-coling-2014-the-25th-international-conference-on-computational-linguistics-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-coling-2014-the-25th-international-conference-on-computational-linguistics-tutorial-abstracts.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-coling-2016-the-26th-international-conference-on-computational-linguistics-technical-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-coling-2016-the-26th-international-conference-on-computational-linguistics-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-coling-2016-the-26th-international-conference-on-computational-linguistics-tutorial-abstracts.bib']
+comacoma:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-workshop-on-computational-approaches-to-compound-analysis-comacoma-2014.bib']
+computerm:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-4th-international-workshop-on-computational-terminology-computerm.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-5th-international-workshop-on-computational-terminology-computerm2016.bib']
+conll:
+  '1997': ['https://aclanthology.coli.uni-saarland.de/volumes/conll97-computational-natural-language-learning.bib']
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/new-methods-in-language-processing-and-computational-natural-language-learning.bib']
+  '1999': ['https://aclanthology.coli.uni-saarland.de/volumes/eacl-1999-conll-99-computational-natural-language-learning.bib']
+  '2000': ['https://aclanthology.coli.uni-saarland.de/volumes/fourth-conference-on-computational-natural-language-learning-and-the-second-learning-language-in-logic-workshop.bib']
+  '2001': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-2001-workshop-on-computational-natural-language-learning-conll.bib']
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-02-the-6th-conference-on-natural-language-learning-2002-conll-2002.bib']
+  '2003': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-seventh-conference-on-natural-language-learning-at-hlt-naacl-2003.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighth-conference-on-computational-natural-language-learning-conll-2004-at-hlt-naacl-2004.bib']
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ninth-conference-on-computational-natural-language-learning-conll-2005.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-tenth-conference-on-computational-natural-language-learning-conll-x.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2007-joint-conference-on-empirical-methods-in-natural-language-processing-and-computational-natural-language-learning-emnlp-conll.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/conll-2008-proceedings-of-the-twelfth-conference-on-computational-natural-language-learning.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-thirteenth-conference-on-computational-natural-language-learning-conll-2009.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-thirteenth-conference-on-computational-natural-language-learning-conll-2009-shared-task.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourteenth-conference-on-computational-natural-language-learning.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourteenth-conference-on-computational-natural-language-learning-shared-task.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifteenth-conference-on-computational-natural-language-learning.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifteenth-conference-on-computational-natural-language-learning-shared-task.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2012-joint-conference-on-empirical-methods-in-natural-language-processing-and-computational-natural-language-learning.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/joint-conference-on-emnlp-and-conll-shared-task.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-seventeenth-conference-on-computational-natural-language-learning.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-seventeenth-conference-on-computational-natural-language-learning-shared-task.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighteenth-conference-on-computational-natural-language-learning.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighteenth-conference-on-computational-natural-language-learning-shared-task.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-nineteenth-conference-on-computational-natural-language-learning.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-nineteenth-conference-on-computational-natural-language-learning-shared-task.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-20th-signll-conference-on-computational-natural-language-learning.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-conll-16-shared-task.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-21st-conference-on-computational-natural-language-learning-conll-2017.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-conll-sigmorphon-2017-shared-task-universal-morphological-reinflection.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-conll-2017-shared-task-multilingual-parsing-from-raw-text-to-universal-dependencies.bib']
+corbon:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-coreference-resolution-beyond-ontonotes-corbon-2016.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-coreference-resolution-beyond-ontonotes-corbon-2017.bib']
+cosli:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-iwcs-2013-workshop-on-computational-models-of-spatial-language-interpretation-and-generation-cosli-3.bib']
+csct:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-iwcs-2013-workshop-on-computational-semantics-in-clinical-text-csct-2013.bib']
+cvir:
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/content-visualization-and-intermedia-representations-cvir-98.bib']
+cvsc:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-continuous-vector-space-models-and-their-compositionality-cvsc.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-3rd-workshop-on-continuous-vector-space-models-and-their-compositionality.bib']
+depling:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-international-conference-on-dependency-linguistics-depling-2013.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-international-conference-on-dependency-linguistics-depling-2015.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-international-conference-on-dependency-linguistics-depling-2017.bib']
+discomt:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-workshop-on-discourse-in-machine-translation.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-workshop-on-discourse-in-machine-translation.bib']
+eacl:
+  '1983': ['https://aclanthology.coli.uni-saarland.de/volumes/first-conference-of-the-european-chapter-of-the-association-for-computatlona-linguistics.bib']
+  '1985': ['https://aclanthology.coli.uni-saarland.de/volumes/second-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib']
+  '1987': ['https://aclanthology.coli.uni-saarland.de/volumes/third-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib']
+  '1989': ['https://aclanthology.coli.uni-saarland.de/volumes/fourth-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib']
+  '1991': ['https://aclanthology.coli.uni-saarland.de/volumes/fifth-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib']
+  '1993': ['https://aclanthology.coli.uni-saarland.de/volumes/sixth-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib']
+  '1995': ['https://aclanthology.coli.uni-saarland.de/volumes/seventh-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib']
+  '1997': ['https://aclanthology.coli.uni-saarland.de/volumes/8th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/35th-annual-meeting-of-the-association-for-computational-linguistics.bib']
+  '1999': ['https://aclanthology.coli.uni-saarland.de/volumes/ninth-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib']
+  '2003': ['https://aclanthology.coli.uni-saarland.de/volumes/10th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/demonstrations.bib', 'https://aclanthology.coli.uni-saarland.de/volumes/student-research-workshop.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/11th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/demonstrations-b932eed1-192a-4cc3-b82f-572e828e75c5.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/student-research-workshop-6352b5d0-a22e-4e0d-928f-c4b2abc2a83e.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-12th-conference-of-the-european-chapter-of-the-acl-eacl-2009.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-demonstrations-session-at-eacl-2009.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-student-research-workshop-at-eacl-2009.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-13th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-demonstrations-at-the-13th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-student-research-workshop-at-the-13th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-14th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-demonstrations-at-the-14th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-student-research-workshop-at-the-14th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-14th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics-volume-2-short-papers.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-15th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics-volume-1-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-15th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics-volume-2-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-software-demonstrations-of-the-15th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-student-research-workshop-at-the-15th-conference-of-the-european-chapter-of-the-association-for-computational-linguistics.bib']
+eamt:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-18th-annual-conference-of-the-european-association-for-machine-translation.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-19th-annual-conference-of-the-european-association-for-machine-translation.bib']
+emnlp:
+  '1996': ['https://aclanthology.coli.uni-saarland.de/volumes/conference-on-empirical-methods-in-natural-language-processing.bib']
+  '1997': ['https://aclanthology.coli.uni-saarland.de/volumes/second-conference-on-empirical-methods-in-natural-language-processing.bib']
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-conference-on-empirical-methods-for-natural-language-processing.bib']
+  '1999': ['https://aclanthology.coli.uni-saarland.de/volumes/1999-joint-sigdat-conference-on-empirical-methods-in-natural-language-processing-and-very-large-corpora.bib']
+  '2000': ['https://aclanthology.coli.uni-saarland.de/volumes/2000-joint-sigdat-conference-on-empirical-methods-in-natural-language-processing-and-very-large-corpora.bib']
+  '2001': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2001-conference-on-empirical-methods-in-natural-language-processing.bib']
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2002-conference-on-empirical-methods-in-natural-language-processing-emnlp-2002.bib']
+  '2003': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2003-conference-on-empirical-methods-in-natural-language-processing.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2004-conference-on-empirical-methods-in-natural-language-processing.bib']
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technology-conference-and-conference-on-empirical-methods-in-natural-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-hlt-emnlp-2005-interactive-demonstrations.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2006-conference-on-empirical-methods-in-natural-language-processing.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2007-joint-conference-on-empirical-methods-in-natural-language-processing-and-computational-natural-language-learning-emnlp-conll.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2008-conference-on-empirical-methods-in-natural-language-processing.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2009-conference-on-empirical-methods-in-natural-language-processing.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2010-conference-on-empirical-methods-in-natural-language-processing.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2011-conference-on-empirical-methods-in-natural-language-processing.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2012-joint-conference-on-empirical-methods-in-natural-language-processing-and-computational-natural-language-learning.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2013-conference-on-empirical-methods-in-natural-language-processing.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2014-conference-on-empirical-methods-in-natural-language-processing-emnlp.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2015-conference-on-empirical-methods-in-natural-language-processing.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2016-conference-on-empirical-methods-in-natural-language-processing.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2017-conference-on-empirical-methods-in-natural-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2017-conference-on-empirical-methods-in-natural-language-processing-system-demonstrations.bib']
+enlg:
+  '2001': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-2001-eighth-european-workshop-on-natural-language-generation-ewnlg.bib']
+  '2003': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-9th-european-workshop-on-natural-language-generation-enlg-2003-at-eacl-2003.bib']
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-tenth-european-workshop-on-natural-language-generation-enlg-05.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eleventh-european-workshop-on-natural-language-generation-enlg-07.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-12th-european-workshop-on-natural-language-generation-enlg-2009.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-13th-european-workshop-on-natural-language-generation.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-15th-european-workshop-on-natural-language-generation-enlg.bib']
+ethnlp:
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-acl-workshop-on-ethics-in-natural-language-processing.bib']
+events:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-workshop-on-events-definition-detection-coreference-and-representation.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-the-3rd-workshop-on-events-definition-detection-coreference-and-representation.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-workshop-on-events.bib']
+exprom:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-workshop-on-extra-propositional-aspects-of-meaning-in-computational-semantics-exprom-2015.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-extra-propositional-aspects-of-meaning-in-computational-linguistics-exprom.bib']
+fsmnlp:
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/finite-state-methods-in-natural-language-processing.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-9th-international-workshop-on-finite-state-methods-and-natural-language-processing.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-international-conference-on-finite-state-methods-and-natural-language-processing.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-12th-international-conference-on-finite-state-methods-and-natural-language-processing-2015-fsmnlp-2015-dusseldorf.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-13th-international-conference-on-finite-state-methods-and-natural-language-processing-fsmnlp-2017.bib']
+geaf:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-grammar-engineering-across-frameworks-geaf-2015-workshop.bib']
+gems:
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-gems-2011-workshop-on-geometrical-models-of-natural-language-semantics.bib']
+gramlex:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-grammar-and-lexicon-interactions-and-interfaces-gramlex.bib']
+gwc:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-seventh-global-wordnet-conference.bib']
+hlt:
+  '1986': ['https://aclanthology.coli.uni-saarland.de/volumes/strategic-computing-natural-language-workshop-proceedings-of-a-workshop-held-at-marina-del-rey-california-may-1-2-1986.bib']
+  '1989': ['https://aclanthology.coli.uni-saarland.de/volumes/speech-and-natural-language-proceedings-of-a-workshop-held-at-philadelphia-pennsylvania-february-21-23-1989.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/speech-and-natural-language-proceedings-of-a-workshop-held-at-cape-cod-massachusetts-october-15-18-1989.bib']
+  '1990': ['https://aclanthology.coli.uni-saarland.de/volumes/speech-and-natural-language-proceedings-of-a-workshop-held-at-hidden-valley-pennsylvania-june-24-27-1990.bib']
+  '1991': ['https://aclanthology.coli.uni-saarland.de/volumes/speech-and-natural-language-proceedings-of-a-workshop-held-at-pacific-grove-california-february-19-22-1991.bib']
+  '1992': ['https://aclanthology.coli.uni-saarland.de/volumes/speech-and-natural-language-proceedings-of-a-workshop-held-at-harriman-new-york-february-23-26-1992.bib']
+  '1993': ['https://aclanthology.coli.uni-saarland.de/volumes/human-language-technology-proceedings-of-a-workshop-held-at-plainsboro-new-jersey-march-21-24-1993.bib']
+  '1994': ['https://aclanthology.coli.uni-saarland.de/volumes/human-language-technology-proceedings-of-a-workshop-held-at-plainsboro-new-jersey-march-8-11-1994.bib']
+  '2001': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-international-conference-on-human-language-technology-research.bib']
+  '2003': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2003-human-language-technology-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/companion-volume-of-the-proceedings-of-hlt-naacl-2003-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-hlt-naacl-2003-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/companion-volume-of-the-proceedings-of-hlt-naacl-2003-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/companion-volume-of-the-proceedings-of-hlt-naacl-2003-tutorial-abstracts.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-hlt-naacl-2004.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-student-research-workshop-at-hlt-naacl-2004.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/demonstration-papers-at-hlt-naacl-2004.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-hlt-naacl-2004-short-papers.bib']
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technology-conference-and-conference-on-empirical-methods-in-natural-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-hlt-emnlp-2005-interactive-demonstrations.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-naacl-main-conference.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-naacl-companion-volume-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-naacl-companion-volume-doctoral-consortium.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-naacl-companion-volume-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-naacl-companion-volume-tutorial-abstracts.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/human-language-technologies-2007-the-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-proceedings-of-the-main-conference.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/human-language-technologies-2007-the-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-companion-volume-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2007-doctoral-consortium.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technologies-the-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-naacl-hlt.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-naacl-companion-volume-tutorial-abstracts-9cd4f48d-0ebd-4054-b6ab-3af28f9d25af.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-08-hlt.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-08-hlt-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-08-hlt-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-08-hlt-demo-session.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/tutorial-abstracts-of-acl-08-hlt.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technologies-the-2009-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technologies-the-2009-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-companion-volume-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technologies-the-2009-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-companion-volume-student-research-workshop-and-doctoral-consortium.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technologies-the-2009-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-companion-volume-tutorial-abstracts.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technologies-the-2009-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-companion-volume-demonstration-session.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/human-language-technologies-the-2010-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2010-demonstration-session.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2010-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/naacl-hlt-2010-tutorial-abstracts.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2012-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2012-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-demonstration-session-at-the-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/tutorial-abstracts-at-the-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/naacl-hlt-workshop-on-future-directions-and-needs-in-the-spoken-dialog-community-tools-and-data-sdctd-2012.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-workshop-on-the-induction-of-linguistic-structure.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2012-workshop-on-computational-linguistics-for-literature.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2012-workshop-will-we-ever-really-replace-the-n-gram-model-on-the-future-of-language-modeling-for-hlt.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2013-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2013-naacl-hlt-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2013-naacl-hlt-demonstration-session.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/naacl-hlt-2013-tutorial-abstracts.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2015-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2015-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2015-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2015-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-tutorial-abstracts.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2016-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2016-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2016-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-tutorial-abstracts.bib']
+hytra:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-workshop-on-hybrid-approaches-to-translation.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-3rd-workshop-on-hybrid-approaches-to-machine-translation-hytra.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-workshop-on-hybrid-approaches-to-translation-hytra.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-workshop-on-hybrid-approaches-to-translation-hytra6.bib']
+icon:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-international-conference-on-natural-language-processing.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-12th-international-conference-on-natural-language-processing.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-13th-international-conference-on-natural-language-processing.bib']
+icos:
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-international-workshop-on-inference-in-computational-semantics-icos-5.bib']
+ijcnlp:
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/second-international-joint-conference-on-natural-language-processing-full-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/companion-volume-to-the-proceedings-of-conference-including-posters-demos-and-tutorial-abstracts.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-sighan-workshop-on-chinese-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-workshop-on-asian-language-resources-alr-05-and-first-symposium-on-asian-language-resources-network-alrn.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-international-workshop-on-paraphrasing-iwp2005.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-international-workshop-on-linguistically-interpreted-corpora-linc-2005.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-ontolex-2005-ontologies-and-lexical-resources.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-international-joint-conference-on-natural-language-processing-volume-i.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-international-joint-conference-on-natural-language-processing-volume-ii.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ijcnlp-08-workshop-on-nlp-for-less-privileged-languages.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-sighan-workshop-on-chinese-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ijcnlp-08-workshop-on-named-entity-recognition-for-south-and-south-east-asian-languages.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-cross-lingual-information-access-clia-addressing-the-information-need-of-multilingual-societies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-6th-workshop-on-asian-language-resources.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-technologies-and-corpora-for-asia-pacific-speech-translation-tcast.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-joint-conference-of-the-47th-annual-meeting-of-the-acl-and-the-4th-international-joint-conference-on-natural-language-processing-of-the-afnlp.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-ijcnlp-2009-conference-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-ijcnlp-2009-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-ijcnlp-2009-software-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/tutorial-abstracts-of-acl-ijcnlp-2009.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-5th-international-joint-conference-on-natural-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ijcnlp-2011-system-demonstrations.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-international-joint-conference-on-natural-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/the-companion-volume-of-the-proceedings-of-ijcnlp-2013-system-demonstrations.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-53rd-annual-meeting-of-the-association-for-computational-linguistics-and-the-7th-international-joint-conference-on-natural-language-processing-volume-1-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-53rd-annual-meeting-of-the-association-for-computational-linguistics-and-the-7th-international-joint-conference-on-natural-language-processing-volume-2-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-ijcnlp-2015-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-ijcnlp-2015-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/tutorials.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighth-international-joint-conference-on-natural-language-processing-volume-1-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighth-international-joint-conference-on-natural-language-processing-volume-2-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ijcnlp-2017-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ijcnlp-2017-shared-tasks.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ijcnlp-2017-tutorial-abstracts.bib']
+inlg:
+  '1990': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-international-workshop-on-natural-language-generation.bib']
+  '1994': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-seventh-international-workshop-on-natural-language-generation.bib']
+  '1996': ['https://aclanthology.coli.uni-saarland.de/volumes/eighth-international-natural-language-generation-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/eighth-international-natural-language-generation-workshop-posters-and-demonstrations.bib']
+  '2000': ['https://aclanthology.coli.uni-saarland.de/volumes/inlg-2000-proceedings-of-the-first-international-conference-on-natural-language-generation.bib']
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-international-natural-language-generation-conference.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-international-natural-language-generation-conference.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-international-natural-language-generation-conference.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-6th-international-natural-language-generation-conference.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/inlg-2012-proceedings-of-the-seventh-international-natural-language-generation-conference.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-8th-international-natural-language-generation-conference-inlg.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-inlg-and-sigdial-2014-joint-session.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-9th-international-natural-language-generation-conference.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-international-conference-on-natural-language-generation.bib']
+iwcs:
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eight-international-conference-on-computational-semantics.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ninth-international-conference-on-computational-semantics-iwcs-2011.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-international-conference-on-computational-semantics-iwcs-2013-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-international-conference-on-computational-semantics-iwcs-2013-short-papers.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-international-conference-on-computational-semantics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-joint-acl-iso-workshop-on-interoperable-semantic-annotation-isa-11.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-models-for-modality-annotation.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-1st-workshop-on-language-and-ontologies.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/iwcs-2017-12th-international-conference-on-computational-semantics-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/iwcs-2017-12th-international-conference-on-computational-semantics-short-papers.bib']
+iwpt:
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ninth-international-workshop-on-parsing-technology.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-tenth-international-conference-on-parsing-technologies.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-international-conference-on-parsing-technologies-iwpt-09.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-12th-international-conference-on-parsing-technologies.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-14th-international-conference-on-parsing-technologies.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-15th-international-conference-on-parsing-technologies.bib']
+jep-taln-recital:
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-joint-conference-jep-taln-recital-2012-volume-1-jep.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-joint-conference-jep-taln-recital-2012-volume-2-taln.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-joint-conference-jep-taln-recital-2012-volume-3-recital.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-joint-conference-jep-taln-recital-2012-volume-4-invited-conferences.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-joint-conference-jep-taln-recital-2012-volume-5-software-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/jep-taln-recital-2012-workshop-deft-2012-defi-fouille-de-textes-deft-2012-workshop-text-mining-challenge.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/jep-taln-recital-2012-workshop-degels-2012-defi-geste-langue-des-signes-degels-2012-gestures-and-sign-language-challenge.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/jep-taln-recital-2012-workshop-talaf-2012-traitement-automatique-des-langues-africaines-talaf-2012-african-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/jep-taln-recital-2012-workshop-iladi-2012-interactions-langagieres-pour-personnes-agees-dans-les-habitats-intelligents-iladi-2012-language-interaction-for-elderly-in-smart-homes.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-taln-2013-volume-1-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-taln-2013-volume-2-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-taln-2013-volume-3-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-taln-2013-volume-4-invited-conferences.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-recital-2013.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-taln-2014-volume-1-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-taln-2014-volume-2-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-taln-2014-volume-3-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-taln-2014-volume-4-recital-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/taln-recital-2014-workshop-deft-2014-defi-fouille-de-textes-deft-2014-workshop-text-mining-challenge.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/taln-recital-2014-workshop-fondamental-2014-ressources-lexicales-et-tal-vue-d-ensemble-sur-les-dictionnaires-electroniques-de-jean-dubois-et-francoise-dubois-charlier-fondamental-2014-lexical-resources-and-nlp.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/taln-recital-2014-workshop-talaf-2014-traitement-automatique-des-langues-africaines-talaf-2014-african-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/taln-recital-2014-workshop-semdis-2014-enjeux-actuels-de-la-semantique-distributionnelle-semdis-2014-current-challenges-in-distributional-semantics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/taln-recital-2014-workshop-rltln-2014-reseaux-lexicaux-pour-le-tal-rltln-2014-lexical-networks-for-nlp.bib']
+lasm:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-language-analysis-in-social-media.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-5th-workshop-on-language-analysis-for-social-media-lasm.bib']
+latech:
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-language-technology-for-cultural-heritage-data-latech-2007.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eacl-2009-workshop-on-language-technology-and-resources-for-cultural-heritage-social-sciences-humanities-and-education-latech-shelt-r-2009.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-5th-acl-hlt-workshop-on-language-technology-for-cultural-heritage-social-sciences-and-humanities.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-6th-workshop-on-language-technology-for-cultural-heritage-social-sciences-and-humanities.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-7th-workshop-on-language-technology-for-cultural-heritage-social-sciences-and-humanities.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-8th-workshop-on-language-technology-for-cultural-heritage-social-sciences-and-humanities-latech.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-9th-sighum-workshop-on-language-technology-for-cultural-heritage-social-sciences-and-humanities-latech.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-sighum-workshop-on-language-technology-for-cultural-heritage-social-sciences-and-humanities.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-joint-sighum-workshop-on-computational-linguistics-for-cultural-heritage-social-sciences-humanities-and-literature.bib']
+latentvar:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-1st-workshop-on-vector-space-modeling-for-natural-language-processing.bib']
+law:
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-linguistic-annotation-workshop.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-linguistic-annotation-workshop-law-iii.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-linguistic-annotation-workshop.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-5th-linguistic-annotation-workshop.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-linguistic-annotation-workshop.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-7th-linguistic-annotation-workshop-and-interoperability-with-discourse.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-law-viii-the-8th-linguistic-annotation-workshop.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-9th-linguistic-annotation-workshop.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-linguistic-annotation-workshop-held-in-conjunction-with-acl-2016-law-x-2016.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-linguistic-annotation-workshop.bib']
+ldl:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-4th-workshop-on-linked-data-in-linguistics-resources-and-applications.bib']
+lg-lp:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-workshop-on-lexical-and-grammatical-resources-for-language-processing.bib']
+louhi:
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2010-second-louhi-workshop-on-text-and-data-mining-of-health-documents.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-5th-international-workshop-on-health-text-mining-and-information-analysis-louhi.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-international-workshop-on-health-text-mining-and-information-analysis.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-seventh-international-workshop-on-health-text-mining-and-information-analysis.bib']
+lrec:
+  '2000': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-international-conference-on-language-resources-and-evaluation-lrec-00.bib']
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-international-conference-on-language-resources-and-evaluation-lrec-02.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-international-conference-on-language-resources-and-evaluation-lrec-04.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-international-conference-on-language-resources-and-evaluation-lrec-06.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/lrec-2008.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-seventh-conference-on-international-language-resources-and-evaluation-lrec-10.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighth-international-conference-on-language-resources-and-evaluation-lrec-2012.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ninth-international-conference-on-language-resources-and-evaluation-lrec-2014.bib']
+lsdsem:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-workshop-on-linking-computational-models-of-lexical-sentential-and-discourse-level-semantics.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-linking-models-of-lexical-sentential-and-discourse-level-semantics.bib']
+lt4dh:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-language-technology-resources-and-tools-for-digital-humanities-lt4dh.bib']
+lt4var:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-emnlp-2014-workshop-on-language-technology-for-closely-related-languages-and-language-variants.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-joint-workshop-on-language-technology-for-closely-related-languages-varieties-and-dialects.bib']
+metaphor:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-workshop-on-metaphor-in-nlp.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-workshop-on-metaphor-in-nlp.bib']
+mol:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-13th-meeting-on-the-mathematics-of-language-mol-13.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-14th-meeting-on-the-mathematics-of-language-mol-2015.bib']
+moocs:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-emnlp-2014-workshop-on-analysis-of-large-scale-social-interaction-in-moocs.bib']
+muc:
+  '1991': ['https://aclanthology.coli.uni-saarland.de/volumes/third-message-understanding-conference-muc-3-proceedings-of-a-conference-held-in-san-diego-california-may-21-23-1991.bib']
+  '1992': ['https://aclanthology.coli.uni-saarland.de/volumes/fourth-message-understanding-conference-muc-4-proceedings-of-a-conference-held-in-mclean-virginia-june-16-18-1992.bib']
+  '1993': ['https://aclanthology.coli.uni-saarland.de/volumes/fifth-message-understanding-conference-muc-5-proceedings-of-a-conference-held-in-baltimore-maryland-august-25-27-1993.bib']
+  '1995': ['https://aclanthology.coli.uni-saarland.de/volumes/sixth-message-understanding-conference-muc-6-proceedings-of-a-conference-held-in-columbia-maryland-november-6-8-1995.bib']
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/seventh-message-understanding-conference-muc-7-proceedings-of-a-conference-held-in-fairfax-virginia-april-29-may-1-1998.bib']
+multiling:
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-multiling-2017-workshop-on-summarization-and-summary-evaluation-across-source-types-and-genres.bib']
+mwe:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-9th-workshop-on-multiword-expressions.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-workshop-on-multiword-expressions-mwe.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-workshop-on-multiword-expressions.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-12th-workshop-on-multiword-expressions.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-13th-workshop-on-multiword-expressions-mwe-2017.bib']
+naacl:
+  '2000': ['https://aclanthology.coli.uni-saarland.de/volumes/sixth-applied-natural-language-processing-conference.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/1st-meeting-of-the-north-american-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-anlp-naacl-2000-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/author-index-to-the-proceedings-of-anlp-naacl-2000-and-the-student-research-workshop.bib']
+  '2001': ['https://aclanthology.coli.uni-saarland.de/volumes/second-meeting-of-the-north-american-chapter-of-the-association-for-computational-linguistics.bib']
+  '2003': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2003-human-language-technology-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/companion-volume-of-the-proceedings-of-hlt-naacl-2003-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-hlt-naacl-2003-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/companion-volume-of-the-proceedings-of-hlt-naacl-2003-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/companion-volume-of-the-proceedings-of-hlt-naacl-2003-tutorial-abstracts.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-hlt-naacl-2004.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-student-research-workshop-at-hlt-naacl-2004.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/demonstration-papers-at-hlt-naacl-2004.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-hlt-naacl-2004-short-papers.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-naacl-main-conference.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-naacl-companion-volume-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-naacl-companion-volume-doctoral-consortium.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-naacl-companion-volume-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-naacl-companion-volume-tutorial-abstracts.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/human-language-technologies-2007-the-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-proceedings-of-the-main-conference.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/human-language-technologies-2007-the-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-companion-volume-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2007-doctoral-consortium.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technologies-the-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-naacl-hlt.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-human-language-technology-conference-of-the-naacl-companion-volume-tutorial-abstracts-9cd4f48d-0ebd-4054-b6ab-3af28f9d25af.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technologies-the-2009-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technologies-the-2009-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-companion-volume-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technologies-the-2009-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-companion-volume-student-research-workshop-and-doctoral-consortium.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technologies-the-2009-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-companion-volume-tutorial-abstracts.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-human-language-technologies-the-2009-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-companion-volume-demonstration-session.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/human-language-technologies-the-2010-annual-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2010-demonstration-session.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2010-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/naacl-hlt-2010-tutorial-abstracts.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2012-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2012-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-demonstration-session-at-the-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/tutorial-abstracts-at-the-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/naacl-hlt-workshop-on-future-directions-and-needs-in-the-spoken-dialog-community-tools-and-data-sdctd-2012.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-workshop-on-the-induction-of-linguistic-structure.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2012-workshop-on-computational-linguistics-for-literature.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2012-workshop-will-we-ever-really-replace-the-n-gram-model-on-the-future-of-language-modeling-for-hlt.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2013-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2013-naacl-hlt-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2013-naacl-hlt-demonstration-session.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/naacl-hlt-2013-tutorial-abstracts.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2015-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2015-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2015-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2015-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-tutorial-abstracts.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2016-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2016-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2016-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-tutorial-abstracts.bib']
+nesp-nlp:
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-negation-and-speculation-in-natural-language-processing.bib']
+news:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-named-entity-workshop.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-named-entity-workshop.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-events-and-stories-in-the-news-workshop.bib']
+nlp-css:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-workshop-on-nlp-and-computational-social-science.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-workshop-on-nlp-and-computational-social-science.bib']
+nlp-tea:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-natural-language-processing-techniques-for-educational-applications.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-3rd-workshop-on-natural-language-processing-techniques-for-educational-applications-nlptea2016.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-4th-workshop-on-natural-language-processing-techniques-for-educational-applications-nlptea-2017.bib']
+nlp4call:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-workshop-on-nlp-for-computer-assisted-language-learning.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-workshop-on-nlp-for-computer-assisted-language-learning.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-joint-workshop-on-nlp-for-computer-assisted-language-learning-and-nlp-for-language-acquisition.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-joint-workshop-on-nlp-for-computer-assisted-language-learning-and-nlp-for-language-acquisition-8fdf550c-c9f8-4a6a-be98-011cb4b33b34.bib']
+nlp4ita:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-natural-language-processing-for-improving-textual-accessibility.bib']
+nlp4tm:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-natural-language-processing-for-translation-memories.bib']
+nlplod:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-workshop-on-natural-language-processing-and-linked-open-data.bib']
+nmt:
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-workshop-on-neural-machine-translation.bib']
+nodalida:
+  '1977': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-1st-nordic-conference-of-computational-linguistics-nodalida-1977.bib']
+  '1979': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-nordic-conference-of-computational-linguistics-nodalida-1979.bib']
+  '1981': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-3rd-nordic-conference-of-computational-linguistics-nodalida-1981.bib']
+  '1983': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-4th-nordic-conference-of-computational-linguistics-nodalida-1983.bib']
+  '1985': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-5th-nordic-conference-of-computational-linguistics-nodalida-1985.bib']
+  '1987': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-6th-nordic-conference-of-computational-linguistics-nodalida-1987.bib']
+  '1989': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-7th-nordic-conference-of-computational-linguistics-nodalida-1989.bib']
+  '1991': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-8th-nordic-conference-of-computational-linguistics-nodalida-1991.bib']
+  '1993': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-9th-nordic-conference-of-computational-linguistics-nodalida-1993.bib']
+  '1995': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-nordic-conference-of-computational-linguistics-nodalida-1995.bib']
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-nordic-conference-of-computational-linguistics-nodalida-1998.bib']
+  '1999': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-12th-nordic-conference-of-computational-linguistics-nodalida-1999.bib']
+  '2001': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-13th-nordic-conference-of-computational-linguistics-nodalida-2001.bib']
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-15th-nordic-conference-of-computational-linguistics-nodalida-2005.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-16th-nordic-conference-of-computational-linguistics-nodalida-2007.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-17th-nordic-conference-of-computational-linguistics-nodalida-2009.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-18th-nordic-conference-of-computational-linguistics-nodalida-2011.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-19th-nordic-conference-of-computational-linguistics-nodalida-2013.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-20th-nordic-conference-of-computational-linguistics-nodalida-2015.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-21st-nordic-conference-on-computational-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-nodalida-2017-workshop-on-processing-historical-language.bib']
+oiaf4hlt:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-open-infrastructures-and-analysis-frameworks-for-hlt.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-international-workshop-on-worldwide-language-service-infrastructure-and-second-workshop-on-open-infrastructures-and-analysis-frameworks-for-human-language-technologies-wlsi-oiaf4hlt2016.bib']
+paclic:
+  '1995': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '1996': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-12th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '1999': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-13th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '2000': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-14th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '2001': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-15th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-16th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '2003': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-17th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-18th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-19th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-20th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-21st-pacific-asia-conference-on-language-information-and-computation.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-22nd-pacific-asia-conference-on-language-information-and-computation.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-23rd-pacific-asia-conference-on-language-information-and-computation-volume-1.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-23rd-pacific-asia-conference-on-language-information-and-computation-volume-2.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-24th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-25th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-26th-pacific-asia-conference-on-language-information-and-computation.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-27th-pacific-asia-conference-on-language-information-and-computation-paclic-27.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/paclic-27-workshop-on-computer-assisted-language-learning.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-28th-pacific-asia-conference-on-language-information-and-computing.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-29th-pacific-asia-conference-on-language-information-and-computation.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-29th-pacific-asia-conference-on-language-information-and-computation-posters.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-30th-pacific-asia-conference-on-language-information-and-computation-keynote-speeches-and-invited-talks.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-30th-pacific-asia-conference-on-language-information-and-computation-oral-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-30th-pacific-asia-conference-on-language-information-and-computation-posters.bib']
+pitr:
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-workshop-on-predicting-and-improving-text-readability-for-target-reader-populations.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-workshop-on-predicting-and-improving-text-readability-for-target-reader-populations.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-3rd-workshop-on-predicting-and-improving-text-readability-for-target-reader-populations-pitr.bib']
+prep:
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-acl-sigsem-workshop-on-prepositions.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-acl-sigsem-workshop-on-prepositions.bib']
+ranlp:
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-international-conference-ranlp-2009.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-student-research-workshop.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-international-conference-recent-advances-in-natural-language-processing-2011.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-student-research-workshop-associated-with-ranlp-2011.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-international-conference-recent-advances-in-natural-language-processing-ranlp-2013.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-student-research-workshop-associated-with-ranlp-2013.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-international-conference-recent-advances-in-natural-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-student-research-workshop-817bbadb-a2d6-4b1b-9a85-aaaa0788c2a8.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-international-conference-recent-advances-in-natural-language-processing-ranlp-2017.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-student-research-workshop-associated-with-ranlp-2017.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-1st-workshop-on-natural-language-processing-and-information-retrieval-associated-with-ranlp-2017.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-knowledge-resources-for-the-socio-economic-sciences-and-humanities-associated-with-ranlp-2017.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-human-informed-translation-and-interpreting-technology.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-biomedical-nlp-workshop-associated-with-ranlp-2017.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-workshop-on-language-technology-for-digital-humanities-in-central-and-south-eastern-europe.bib']
+rep4nlp:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-1st-workshop-on-representation-learning-for-nlp.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-representation-learning-for-nlp.bib']
+repeval:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-1st-workshop-on-evaluating-vector-space-representations-for-nlp.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-evaluating-vector-space-representations-for-nlp.bib']
+robonlp:
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-workshop-on-language-grounding-for-robotics.bib']
+rocling-ijclclp:
+  '1988': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-rocling-i-computational-linguistics-conference-i.bib']
+  '1989': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-rocling-ii-computational-linguistics-conference-ii.bib']
+  '1990': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-rocling-iii-computational-linguistics-conference-iii.bib']
+  '1991': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-rocling-iv-computational-linguistics-conference-iv.bib']
+  '1992': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-rocling-v-computational-linguistics-conference-v.bib']
+  '1993': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-rocling-vi-computational-linguistics-conference-vi.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/rocling-1993-short-papers.bib']
+  '1994': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-rocling-vii-computational-linguistics-conference-vii.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/rocling-1994-poster-papers.bib']
+  '1995': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-rocling-viii-computational-linguistics-conference-viii.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/rocling-1995-poster-papers.bib']
+  '1996': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-rocling-ix-computational-linguistics-conference-ix.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-1-number-1-august-1996.bib']
+  '1997': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-research-on-computational-linguistics-international-conference.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/rocling-1997-poster-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-2-number-1-february-1997-special-issue-on-computational-resources-for-research-in-chinese-linguistics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-2-number-2-august-1997.bib']
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-research-on-computational-linguistics-conference-xi.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/rocling-1998-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-3-number-1-february-1998-special-issue-on-the-10th-research-on-computational-linguistics-international-conference.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-3-number-2-august-1998.bib']
+  '1999': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-research-on-computational-linguistics-conference-xii.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/rocling-1999-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-4-number-1-february-1999.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-4-number-2-august-1999.bib']
+  '2000': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-research-on-computational-linguistics-conference-xiii.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-5-number-1-february-2000-special-issue-on-chinese-verbal-semantics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-5-number-2-august-2000.bib']
+  '2001': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-research-on-computational-linguistics-conference-xiv.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-6-number-1-february-2001-special-issue-on-natural-language-processing-researches-in-msra.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-6-number-2-august-2001.bib']
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-7-number-1-february-2002-special-issue-on-hownet-and-its-applications.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-7-number-2-august-2002-special-issue-on-computational-chinese-lexical-semantics.bib']
+  '2003': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-research-on-computational-linguistics-conference-xv.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-rocling-2003-student-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/rocling-2003-poster-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-8-number-1-february-2003-special-issue-on-word-formation-and-chinese-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-8-number-2-august-2003.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-16th-conference-on-computational-linguistics-and-speech-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-9-number-1-february-2004-special-issue-on-selected-papers-from-rocling-xv.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-9-number-2-august-2004-special-issue-on-new-trends-of-speech-and-language-processing.bib']
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-17th-conference-on-computational-linguistics-and-speech-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-10-number-1-march-2005.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-10-number-2-june-2005-special-issue-on-annotated-speech-corpora.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-10-number-3-september-2005-special-issue-on-selected-papers-from-rocling-xvi.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-10-number-4-december-2005-special-issue-on-selected-papers-from-clsw-5.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-18th-conference-on-computational-linguistics-and-speech-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-11-number-1-march-2006-special-issue-on-human-computer-speech-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-11-number-2-june-2006.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-11-number-3-september-2006-special-issue-on-selected-papers-from-rocling-xvii.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-11-number-4-december-2006.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-19th-conference-on-computational-linguistics-and-speech-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/rocling-2007-poster-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-12-number-1-march-2007-special-issue-on-affective-speech-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-12-number-2-june-2007.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-12-number-3-september-2007-special-issue-on-invited-papers-from-iscslp-2006.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-12-number-4-december-2007-special-issue-on-speech-and-language-processing-for-taiwanese-minnan-hakka-and-mandarin.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-20th-conference-on-computational-linguistics-and-speech-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/rocling-2008-poster-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-13-number-1-march-2008-special-issue-on-cross-lingual-information-retrieval-and-question-answering.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-13-number-2-june-2008.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-13-number-3-september-2008-special-issue-on-selected-papers-from-rocling-xix.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-13-number-4-december-2008.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-21st-conference-on-computational-linguistics-and-speech-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/rocling-2009-poster-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-14-number-1-march-2009.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-14-number-2-june-2009-special-issue-on-computer-assisted-language-learning.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-14-number-3-september-2009.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-14-number-4-december-2009.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-22nd-conference-on-computational-linguistics-and-speech-processing-rocling-2010.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/rocling-2010-poster-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-15-number-1-march-2010.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-15-number-2-june-2010.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-15-number-3-4-september-december-2010.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-23rd-conference-on-computational-linguistics-and-speech-processing-rocling-2011.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/rocling-2011-poster-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-16-number-1-2-march-june-2011.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-16-number-3-4-september-december-2011.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-24th-conference-on-computational-linguistics-and-speech-processing-rocling-2012.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-17-number-1-march-2012.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-17-number-2-june-2012-specia-issue-on-selected-papers-from-rocling-xxiii.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-17-number-3-september-2012.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-17-number-4-december-2012-special-issue-on-selected-papers-from-rocling-xxiv.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-25th-conference-on-computational-linguistics-and-speech-processing-rocling-2013.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-18-number-1-march-2013.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-18-number-2-june-2013-special-issue-on-chinese-lexical-resources-theories-and-applications.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-18-number-3-september-2013-special-issue-on-processing-lexical-tones-in-natural-speech.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-18-number-4-december-2013-special-issue-on-selected-papers-from-rocling-xxv.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-26th-conference-on-computational-linguistics-and-speech-processing-rocling-2014.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-19-number-1-march-2014.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-19-number-2-june-2014.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-19-number-3-september-2014.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-19-number-4-december-2014-special-issue-on-selected-papers-from-rocling-xxvi.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-27th-conference-on-computational-linguistics-and-speech-processing-rocling-2015.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-20-number-1-june-2015-special-issue-on-chinese-as-a-foreign-language.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-20-number-2-december-2015-special-issue-on-selected-papers-from-rocling-xxvii.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-28th-conference-on-computational-linguistics-and-speech-processing-rocling-2016.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-21-number-1-june-2016.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-21-number-2-december-2016.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-29th-conference-on-computational-linguistics-and-speech-processing-rocling-2017.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-22-number-1-june-2017.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/international-journal-of-computational-linguistics-chinese-language-processing-volume-22-number-2-december-2017-special-issue-on-selected-papers-from-rocling-xxix.bib']
+s2mt:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-1st-workshop-on-semantics-driven-statistical-machine-translation-s2mt-2015.bib']
+sadaatl:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-coling-workshop-on-synchronic-and-diachronic-approaches-to-analyzing-technical-language.bib']
+sedmt:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-semantics-driven-machine-translation-sedmt-2016.bib']
+sembear:
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-computational-semantics-beyond-events-and-roles.bib']
+semeval:
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-pilot-senseval.bib']
+  '2001': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-senseval-2-second-international-workshop-on-evaluating-word-sense-disambiguation-systems.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-senseval-3-the-third-international-workshop-on-the-evaluation-of-systems-for-the-semantic-analysis-of-text.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-international-workshop-on-semantic-evaluations-semeval-2007.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-5th-international-workshop-on-semantic-evaluation.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/sem-2012-the-first-joint-conference-on-lexical-and-computational-semantics-volume-1-proceedings-of-the-main-conference-and-the-shared-task-and-volume-2-proceedings-of-the-sixth-international-workshop-on-semantic-evaluation-semeval-2012.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/second-joint-conference-on-lexical-and-computational-semantics-sem-volume-1-proceedings-of-the-main-conference-and-the-shared-task-semantic-textual-similarity.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/second-joint-conference-on-lexical-and-computational-semantics-sem-volume-2-proceedings-of-the-seventh-international-workshop-on-semantic-evaluation-semeval-2013.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-joint-conference-on-lexical-and-computational-semantics-sem-2014.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-8th-international-workshop-on-semantic-evaluation-semeval-2014.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-joint-conference-on-lexical-and-computational-semantics.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-9th-international-workshop-on-semantic-evaluation-semeval-2015.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-international-workshop-on-semantic-evaluation-semeval-2016.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-joint-conference-on-lexical-and-computational-semantics.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-6th-joint-conference-on-lexical-and-computational-semantics-sem-2017.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-international-workshop-on-semantic-evaluation-semeval-2017.bib']
+semitic:
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-approaches-to-semitic-languages.bib']
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-02-workshop-on-computational-approaches-to-semitic-languages.bib']
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-workshop-on-computational-approaches-to-semitic-languages.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2007-workshop-on-computational-approaches-to-semitic-languages-common-issues-and-resources.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eacl-2009-workshop-on-computational-approaches-to-semitic-languages.bib']
+sense:
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-1st-workshop-on-sense-concept-and-entity-representations-and-their-applications.bib']
+sew:
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-semantic-evaluations-recent-achievements-and-future-directions-sew-2009.bib']
+sigdial:
+  '2000': ['https://aclanthology.coli.uni-saarland.de/volumes/1st-sigdial-workshop-on-discourse-and-dialogue.bib']
+  '2001': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-sigdial-workshop-on-discourse-and-dialogue.bib']
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-sigdial-workshop-on-discourse-and-dialogue.bib']
+  '2003': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-sigdial-workshop-of-discourse-and-dialogue.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-5th-sigdial-workshop-on-discourse-and-dialogue-at-hlt-naacl-2004.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-7th-sigdial-workshop-on-discourse-and-dialogue.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-9th-sigdial-workshop-on-discourse-and-dialogue.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sigdial-2009-conference.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sigdial-2010-conference.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sigdial-2011-conference.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-13th-annual-meeting-of-the-special-interest-group-on-discourse-and-dialogue.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sigdial-2013-conference.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-15th-annual-meeting-of-the-special-interest-group-on-discourse-and-dialogue-sigdial.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-16th-annual-meeting-of-the-special-interest-group-on-discourse-and-dialogue.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-17th-annual-meeting-of-the-special-interest-group-on-discourse-and-dialogue.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-18th-annual-sigdial-meeting-on-discourse-and-dialogue.bib']
+sighan:
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/coling-02-the-first-sighan-workshop-on-chinese-language-processing.bib']
+  '2003': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-sighan-workshop-on-chinese-language-processing.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-sighan-workshop-on-chinese-language-processing.bib']
+  '2005': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-sighan-workshop-on-chinese-language-processing.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-sighan-workshop-on-chinese-language-processing.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-sighan-workshop-on-chinese-language-processing.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/cips-sighan-joint-conference-on-chinese-language-processing.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-cips-sighan-joint-conference-on-chinese-language-processing.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-seventh-sighan-workshop-on-chinese-language-processing.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-cips-sighan-joint-conference-on-chinese-language-processing.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighth-sighan-workshop-on-chinese-language-processing.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-9th-sighan-workshop-on-chinese-language-processing.bib']
+sigmorphon:
+  '1994': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-phonology.bib']
+  '1997': ['https://aclanthology.coli.uni-saarland.de/volumes/computational-phonology-third-meeting-of-the-acl-special-interest-group-in-computational-phonology.bib']
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/sigphon-98-the-computation-of-phonological-constraints.bib']
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-02-workshop-on-morphological-and-phonological-learning.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-7th-meeting-of-the-acl-special-interest-group-in-computational-phonology-current-themes-in-computational-phonology-and-morphology.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighth-meeting-of-the-acl-special-interest-group-on-computational-phonology-and-morphology-at-hlt-naacl-2006.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-ninth-meeting-of-the-acl-special-interest-group-in-computational-morphology-and-phonology.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-tenth-meeting-of-acl-special-interest-group-on-computational-morphology-and-phonology.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-meeting-of-the-acl-special-interest-group-on-computational-morphology-and-phonology.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-twelfth-meeting-of-the-special-interest-group-on-computational-morphology-and-phonology.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-14th-sigmorphon-workshop-on-computational-research-in-phonetics-phonology-and-morphology.bib']
+slpat:
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-workshop-on-speech-and-language-processing-for-assistive-technologies.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-workshop-on-speech-and-language-processing-for-assistive-technologies.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-5th-workshop-on-speech-and-language-processing-for-assistive-technologies.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-slpat-2015-6th-workshop-on-speech-and-language-processing-for-assistive-technologies.bib']
+socialnlp:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ijcnlp-2013-workshop-on-natural-language-processing-for-social-media-socialnlp.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-workshop-on-natural-language-processing-for-social-media-socialnlp.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-international-workshop-on-natural-language-processing-for-social-media.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-international-workshop-on-natural-language-processing-for-social-media.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-international-workshop-on-natural-language-processing-for-social-media.bib']
+spmrl:
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2010-first-workshop-on-statistical-parsing-of-morphologically-rich-languages.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-workshop-on-statistical-parsing-of-morphologically-rich-languages.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-2012-joint-workshop-on-statistical-parsing-and-semantic-processing-of-morphologically-rich-languages.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-workshop-on-statistical-parsing-of-morphologically-rich-languages.bib']
+ssst:
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-ssst-naacl-hlt-2007-amta-workshop-on-syntax-and-structure-in-statistical-translation.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-acl-08-hlt-second-workshop-on-syntax-and-structure-in-statistical-translation-ssst-2.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-workshop-on-syntax-and-structure-in-statistical-translation-ssst-3-at-naacl-hlt-2009.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-fifth-workshop-on-syntax-semantics-and-structure-in-statistical-translation.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-workshop-on-syntax-semantics-and-structure-in-statistical-translation.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-seventh-workshop-on-syntax-semantics-and-structure-in-statistical-translation.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-ssst-8-eighth-workshop-on-syntax-semantics-and-structure-in-statistical-translation.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ninth-workshop-on-syntax-semantics-and-structure-in-statistical-translation.bib']
+statfsm:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sigfsm-workshop-on-statistical-nlp-and-weighted-automata.bib']
+step:
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/semantics-in-text-processing-step-2008-conference-proceedings.bib']
+stil:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-brazilian-symposium-in-information-and-human-language-technology.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-brazilian-symposium-in-information-and-human-language-technology.bib']
+swaie:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-workshop-on-semantic-web-and-information-extraction.bib']
+tacl:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-1.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-2-issue-1.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-3-issue-1.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-4-issue-1.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-5-issue-1.bib']
+tag:
+  '1990': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-international-workshop-on-tree-adjoining-grammar-and-related-frameworks-tag-1.bib']
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-international-workshop-on-tree-adjoining-grammars-and-related-frameworks-tag-4.bib']
+  '2000': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-international-workshop-on-tree-adjoining-grammar-and-related-frameworks-tag-5.bib']
+  '2002': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-international-workshop-on-tree-adjoining-grammar-and-related-frameworks-tag-6.bib']
+  '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-7th-international-workshop-on-tree-adjoining-grammar-and-related-formalisms.bib']
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighth-international-workshop-on-tree-adjoining-grammar-and-related-formalisms.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ninth-international-workshop-on-tree-adjoining-grammar-and-related-frameworks-tag-9.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-international-workshop-on-tree-adjoining-grammar-and-related-frameworks-tag-10.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-11th-international-workshop-on-tree-adjoining-grammars-and-related-formalisms-tag-11.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-12th-international-workshop-on-tree-adjoining-grammars-and-related-formalisms-tag-12.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-13th-international-workshop-on-tree-adjoining-grammars-and-related-formalisms.bib']
+teachingnlp:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-workshop-on-teaching-nlp-and-cl.bib']
+textgraphs:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-textgraphs-8-graph-based-methods-for-natural-language-processing.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-textgraphs-9-the-workshop-on-graph-based-methods-for-natural-language-processing.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-textgraphs-10-the-workshop-on-graph-based-methods-for-natural-language-processing.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-textgraphs-11-the-workshop-on-graph-based-methods-for-natural-language-processing.bib']
+textinfer:
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-textinfer-2011-workshop-on-textual-entailment.bib']
+tinlap:
+  '1975': ['https://aclanthology.coli.uni-saarland.de/volumes/theoretical-issues-in-natural-language-processing-supplement.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/theoretical-issues-in-natural-language-processing.bib']
+  '1978': ['https://aclanthology.coli.uni-saarland.de/volumes/theoretical-issues-in-natural-language-processing-2.bib']
+  '1987': ['https://aclanthology.coli.uni-saarland.de/volumes/theoretical-issues-in-natural-language-processing-3.bib']
+tipster:
+  '1993': ['https://aclanthology.coli.uni-saarland.de/volumes/tipster-text-program-phase-i-proceedings-of-a-workshop-held-at-fredricksburg-virginia-september-19-23-1993.bib']
+  '1996': ['https://aclanthology.coli.uni-saarland.de/volumes/tipster-text-program-phase-ii-proceedings-of-a-workshop-held-at-vienna-virginia-may-6-8-1996.bib']
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/tipster-text-program-phase-iii-proceedings-of-a-workshop-held-at-baltimore-maryland-october-13-15-1998.bib']
+ttnls:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eacl-2014-workshop-on-type-theory-and-natural-language-semantics-ttnls.bib']
+udw:
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-nodalida-2017-workshop-on-universal-dependencies-udw-2017.bib']
+vardial:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-workshop-on-applying-nlp-tools-to-similar-languages-varieties-and-dialects.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-workshop-on-nlp-for-similar-languages-varieties-and-dialects-vardial3.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-workshop-on-nlp-for-similar-languages-varieties-and-dialects-vardial.bib']
+vl:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-workshop-on-vision-and-language.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-workshop-on-vision-and-language.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-workshop-on-vision-and-language.bib']
+vlc:
+  '1993': ['https://aclanthology.coli.uni-saarland.de/volumes/very-large-corpora-academic-and-industrial-perspectives.bib']
+  '1995': ['https://aclanthology.coli.uni-saarland.de/volumes/third-workshop-on-very-large-corpora.bib']
+  '1996': ['https://aclanthology.coli.uni-saarland.de/volumes/fourth-workshop-on-very-large-corpora.bib']
+  '1997': ['https://aclanthology.coli.uni-saarland.de/volumes/fifth-workshop-on-very-large-corpora.bib']
+  '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/sixth-workshop-on-very-large-corpora.bib']
+wac:
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-international-workshop-on-web-as-corpus.bib']
+  '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-hlt-2010-sixth-web-as-corpus-workshop.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-9th-web-as-corpus-workshop-wac-9.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-10th-web-as-corpus-workshop.bib']
+wamm:
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-iwcs-2013-workshop-on-annotation-of-modal-meanings-in-natural-language-wamm.bib']
+wanlp:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-emnlp-2014-workshop-on-arabic-natural-language-processing-anlp.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-workshop-on-arabic-natural-language-processing.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-arabic-natural-language-processing-workshop.bib']
+wassa:
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-3rd-workshop-in-computational-approaches-to-subjectivity-and-sentiment-analysis.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-4th-workshop-on-computational-approaches-to-subjectivity-sentiment-and-social-media-analysis.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-5th-workshop-on-computational-approaches-to-subjectivity-sentiment-and-social-media-analysis.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-6th-workshop-on-computational-approaches-to-subjectivity-sentiment-and-social-media-analysis.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-7th-workshop-on-computational-approaches-to-subjectivity-sentiment-and-social-media-analysis.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-8th-workshop-on-computational-approaches-to-subjectivity-sentiment-and-social-media-analysis.bib']
+wat:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-1st-workshop-on-asian-translation-wat2014.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-asian-translation-wat2015.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-3rd-workshop-on-asian-translation-wat2016.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-4th-workshop-on-asian-translation-wat2017.bib']
+webnlg:
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-international-workshop-on-natural-language-generation-and-the-semantic-web-webnlg-2016.bib']
+wmt:
+  '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-on-the-workshop-on-statistical-machine-translation.bib']
+  '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-workshop-on-statistical-machine-translation.bib']
+  '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-workshop-on-statistical-machine-translation.bib']
+  '2009': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-workshop-on-statistical-machine-translation.bib']
+  '2011': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-sixth-workshop-on-statistical-machine-translation.bib']
+  '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-seventh-workshop-on-statistical-machine-translation.bib']
+  '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighth-workshop-on-statistical-machine-translation.bib']
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ninth-workshop-on-statistical-machine-translation.bib']
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-tenth-workshop-on-statistical-machine-translation.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-conference-on-machine-translation-volume-1-research-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-conference-on-machine-translation-volume-2-shared-task-papers.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-conference-on-machine-translation.bib']
+wnut:
+  '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-noisy-user-generated-text.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-noisy-user-generated-text-wnut.bib']
+  '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-3rd-workshop-on-noisy-user-generated-text.bib']
+wssanlp:
+  '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-workshop-on-south-and-southeast-asian-natural-language-processing.bib']
+  '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-6th-workshop-on-south-and-southeast-asian-natural-language-processing-wssanlp2016.bib']
+

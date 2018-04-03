@@ -1,0 +1,3 @@
+[submodule "biblib"]
+	path = biblib
+	url = https://github.com/aclements/biblib.git
