@@ -101,23 +101,61 @@ class BibDB:
         self.connection = sqlite3.connect(self.fname)
         self.cursor = self.connection.cursor()
         if createDB:
-            self.cursor.execute('CREATE VIRTUAL TABLE bib USING fts5(\
-                key,\
-                custom_key,\
-                author,\
-                title,\
-                event,\
-                year,\
-                fulltext\
-                )')
+            self.cursor.execute("""CREATE TABLE bib (
+                key text UNIQUE,
+                custom_key text UNIQUE,
+                author text,
+                title text,
+                event text,
+                year text,
+                fulltext text
+                )""")
+            self.cursor.executescript(
+            """CREATE VIRTUAL TABLE bibindex USING fts5(
+                key,
+                custom_key,
+                author,
+                title,
+                event,
+                year,
+                fulltext UNINDEXED,
+                content='bib',
+                );
+            CREATE TRIGGER bib_ai AFTER INSERT ON bib BEGIN
+               INSERT INTO bibindex
+                   (rowid, key, custom_key, author, title, event, year, fulltext)
+                   VALUES 
+                   (new.rowid, new.key, new.custom_key, new.author, new.title, 
+                   new.event, new.year, new.fulltext);
+                END;
+            CREATE TRIGGER bib_ad AFTER DELETE ON bib BEGIN
+               INSERT INTO bibindex
+                   (bibindex, rowid, custom_key, author, title, event, year, fulltext)
+                   VALUES 
+                   ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
+                   old.event, old.year, old.fulltext);
+                END;
+            CREATE TRIGGER bibindex_au AFTER UPDATE ON bib BEGIN
+               INSERT INTO bibindex
+                   (bibindex, rowid, key, custom_key, author, title, event, year, fulltext)
+                   VALUES 
+                   ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
+                   old.event, old.year, old.fulltext);
+               INSERT INTO bibindex
+                   (rowid, key, custom_key, author, title, event, year, fulltext)
+                   VALUES 
+                   (new.rowid, new.key, new.custom_key, new.author, new.title, 
+                   new.event, new.year, new.fulltext);
+                END;
+            """)
 
     def __len__(self):
         self.cursor.execute('SELECT COUNT(*) FROM bib')
         return int(self.cursor.fetchone()[0])
 
     def search(self, query):
-        self.cursor.execute("SELECT fulltext, event, key FROM bib \
-                            WHERE bib MATCH '{key custom_key author title year event}: ' || ?",
+        self.cursor.execute("SELECT fulltext, event, key FROM bibindex \
+                            WHERE bibindex MATCH ?",
                             [" ".join(query)])
         return self.cursor
 
@@ -131,48 +169,65 @@ class BibDB:
 
     def add(self, event, entry: pybtex.Entry):
         """ Returns if the entry was added or if it was a duplicate"""
-        self.cursor.execute('SELECT 1 FROM bib WHERE key=? LIMIT 1', (entry.key,))
-        if not self.cursor.fetchone():
-            original_key = entry.key
+        original_key = entry.key
+        try:
+            utf_author = bibutils.tex_to_unicode(entry.fields.get("author"))
+            utf_title = bibutils.tex_to_unicode(entry.fields.get("title"))
+        except:
+            utf_author = entry.fields.get("author")
+            utf_title = entry.fields.get("title")
+        custom_key_tries = 0
+        added = False
+        while not added:
+            custom_key = None
+            if custom_key_tries < 10:
+                try:
+                    custom_key = generate_custom_key(entry, custom_key_tries)
+                except:
+                    pass
+            else:
+                print(custom_key, custom_key_tries)
+                logging.warning("Could not generate a unique custom key for entry %s", original_key)
             try:
-                custom_key = generate_custom_key(entry)
-            except:
-                custom_key = None
-            try:
-                utf_author = bibutils.tex_to_unicode(entry.fields.get("author"))
-                utf_title = bibutils.tex_to_unicode(entry.fields.get("title"))
-            except:
-                utf_author = entry.fields.get("author")
-                utf_title = entry.fields.get("title")
-            self.cursor.execute('INSERT INTO bib VALUES (?,?,?,?,?,?,?)',
-                                (original_key,
-                                 custom_key,
-                                 utf_author,
-                                 utf_title,
-                                 event,
-                                 entry.fields.get("year"),
-                                 single_entry_to_fulltext(entry, custom_key)
-                                )
-                               )
-            return True
-        else:
-            return False
+                self.cursor.execute('INSERT INTO bib(key, custom_key, author, title, event, year, fulltext) VALUES (?,?,?,?,?,?,?)',
+                                    (original_key,
+                                     custom_key,
+                                     utf_author,
+                                     utf_title,
+                                     event,
+                                     str(entry.fields.get("year")),
+                                     single_entry_to_fulltext(entry, custom_key)
+                                    )
+                                   )
+                added = True
+            except sqlite3.IntegrityError as e:
+                error_message = str(e)
+                if "UNIQUE" in error_message:
+                    if "bib.custom_key" in error_message:
+                        # custom_key was already in the DB
+                        custom_key_tries += 1
+                    elif "bib.key" in error_message:
+                        # duplicate entry
+                        break
+                    else:
+                        raise
+                else:
+                    raise
+        return added
 
     def update_custom_key(self, original_key, new_custom_key):
-        self.cursor.execute('SELECT key, fulltext FROM bib WHERE key=? OR custom_key=? LIMIT 1',
-                            [new_custom_key, new_custom_key])
-        match = self.cursor.fetchone()
-        if match:
-            logging.error("Entry with key %s already exists", new_custom_key)
-            print(match[1], file=sys.stderr)
-            print("[Original key: %s]" % match[0], file=sys.stderr)
-            sys.exit(1)
         self.cursor.execute("SELECT fulltext FROM bib WHERE key=? LIMIT 1", (original_key,))
-        entry = fulltext_to_single_entry(self.cursor.fetchone())
+        entry = fulltext_to_single_entry(self.cursor.fetchone()[0])
         entry.key = new_custom_key
-        self.cursor.execute("UPDATE bib SET custom_key=?, fulltext=? WHERE key=?",
-                            [new_custom_key, entry.to_bib(), original_key])
-        self.save()
+        try:
+            self.cursor.execute("UPDATE bib SET custom_key=?, fulltext=? WHERE key=?",
+                                [new_custom_key,
+                                 single_entry_to_fulltext(entry),
+                                 original_key])
+            self.save()
+        except:
+            logging.error("Key %s already exists in the database", new_custom_key)
+            sys.exit(1)
 
     def __iter__(self):
         self.cursor.execute("SELECT fulltext FROM bib")
@@ -181,7 +236,7 @@ class BibDB:
 
 custom_key_skip_chars = str.maketrans("", "", " `~!@#$%^&*()+=[]{}|\\'\":;,<.>/?")
 custom_key_skip_words = set(stop_words.get_stop_words("en"))
-def generate_custom_key(entry: pybtex.Entry):
+def generate_custom_key(entry: pybtex.Entry, suffix_level):
     # TODO: fault tolerance against missing fields!
     year = int(entry.fields["year"])
     author_surname = bibutils.parse_names(entry.fields["author"])[0]\
@@ -196,9 +251,10 @@ def generate_custom_key(entry: pybtex.Entry):
         title_word = entry.fields["title"][0]
     title_word = title_word.translate(custom_key_skip_chars)
 
-    return "{surname}{year:02}_{title}".format(
+    return "{surname}{year:02}{suffix}_{title}".format(
         surname=author_surname,
         year=year%1000,
+        suffix='' if suffix_level==0 else chr(ord('a') + suffix_level - 1),
         title=title_word)
 
 
