@@ -24,7 +24,7 @@ import yaml
 import pybtex.database as pybtex
 import bibutils
 
-VERSION = '0.1.1'
+VERSION = '0.1.2'
 
 try:
     # SIGPIPE is not available on Windows machines, throwing an exception.
