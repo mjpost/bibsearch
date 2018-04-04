@@ -3,32 +3,28 @@
 
 """
 Tool for downloading, maintaining, and search a BibTeX database.
+
+Authors:
+- Matt Post <post@cs.jhu.edu>
+- David Vilar <david.vilar@gmail.com>
 """
 
 import argparse
-# import gzip
 import logging
 import os
 import re
 import sys
-# import tarfile
 import urllib.request
 import sqlite3
 import stop_words
 import textwrap
 from tqdm import tqdm
 import yaml
-# from collections import Counter, namedtuple
-# from itertools import zip_longest
-# from typing import List, Iterable, Tuple
-
-# import math
-# import unicodedata
 
 import pybtex.database as pybtex
 import bibutils
 
-VERSION = '0.1.1'
+VERSION = '0.1.2'
 
 try:
     # SIGPIPE is not available on Windows machines, throwing an exception.
@@ -74,7 +70,7 @@ def single_entry_to_fulltext(entry: pybtex.Entry, overwrite_key: str = None):
     formatter = pybtex.BibliographyData(entries={effective_key: entry})
     return formatter.to_string(bib_format="bibtex")
 
-def fulltext_to_single_entry(fulltext):
+def fulltext_to_single_entry(fulltext) -> pybtex.Entry:
     entry, = pybtex.parse_string(fulltext, bib_format="bibtex").entries.values()
     return entry
 
@@ -147,10 +143,18 @@ class BibDB:
                             [" ".join(query)])
         return self.cursor
 
-    def search_key(self, key):
+    def search_key(self, key) -> str:
+        """
+        Searches the database on the specified key or custom key.
+        Returns the fulltext entry with the queried key as the entry key.
+
+        :param key: The key to search on (key or custom key)
+        :return: The full-text entry.
+        """
         self.cursor.execute("SELECT fulltext FROM bib WHERE key=? OR custom_key=?",
                             [key, key])
-        return self.cursor
+        entry = single_entry_to_fulltext(fulltext_to_single_entry(self.cursor.fetchone()[0]), overwrite_key=key)
+        return entry
 
     def save(self):
         self.connection.commit()
@@ -371,16 +375,17 @@ def _tex(args):
         else:
             aux_fname = aux_fname + ".aux"
     bibfile = None
-    entries = []
+    entries = set()
     for l in open(aux_fname):
         match = citation_re.match(l)
         if match:
-            key = match.group(1)
-            bib_entry = db.search_key(key).fetchone()
-            if bib_entry:
-                entries.append(bib_entry[0])
-            else:
-                logging.warning("Entry '%s' not found", key)
+            keystr = match.group(1)
+            for key in keystr.split(','):
+                bib_entry = db.search_key(key)
+                if bib_entry:
+                    entries.add(bib_entry)
+                else:
+                    logging.warning("Entry '%s' not found", key)
         elif args.write_bibfile or args.overwrite_bibfile:
             match = bibdata_re.match(l)
             if match:

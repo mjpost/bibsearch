@@ -1,5 +1,6 @@
-0.1.1 (2018-04-03)
+0.1.2 (2018-04-03)
     - Removed biblib dependency and go back to pybtex
+    - Bugfixes in handling LaTeX files (multiple citations, generating the right keys)
 
 0.1.0 (2018-04-03)
     - Added ACL anthology repository of bib files, accesible via bib:// URLs
