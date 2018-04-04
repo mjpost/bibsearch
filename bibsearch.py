@@ -457,6 +457,8 @@ def _set_custom_key(args):
     db.update_custom_key(original_key, args.new_key)
 
 def main():
+    logging.basicConfig(level=logging.INFO)
+
     parser = argparse.ArgumentParser(description='bibsearch: Download, manage, and search a BibTeX database.')
     parser.add_argument('--version', '-V', action='version', version='%(prog)s {}'.format(VERSION))
     parser.set_defaults(func=lambda _ : parser.print_help())
@@ -497,5 +499,4 @@ def main():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
     main()
