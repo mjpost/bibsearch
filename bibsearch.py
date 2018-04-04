@@ -41,23 +41,11 @@ try:
 except ImportError:
     logging.warning('Could not import signal.SIGPIPE (this is expected on Windows machines)')
 
-# Where to store downloaded test sets.
-# Define the environment variable $SACREBLEU, or use the default of ~/.sacrebleu.
-#
 # Querying for a HOME environment variable can result in None (e.g., on Windows)
 # in which case the os.path.join() throws a TypeError. Using expanduser() is
 # a safe way to get the user's home folder.
 BIBSEARCHDIR = os.path.join(os.path.expanduser("~"), '.bibsearch')
 DBFILE = os.path.join(BIBSEARCHDIR, 'bib.db')
-
-
-# This defines data locations.
-# At the top level are test sets.
-# Beneath each test set, we define the location to download the test data.
-# The other keys are each language pair contained in the tarball, and the respective locations of the source and reference data within each.
-# Many of these are *.sgm files, which are processed to produced plain text that can be used by this script.
-# The canonical location of unpacked, processed data is $SACREBLEU/$TEST/$SOURCE-$TARGET.{$SOURCE,$TARGET}
-# TODO: Probably a good idea to move it outside of the main .py
 BIBSETPREFIX="bib://"
 
 def download_file(bibfile) -> None:
