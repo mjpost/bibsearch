@@ -17,6 +17,7 @@ import sys
 import urllib.request
 import sqlite3
 import stop_words
+import subprocess
 import textwrap
 from tqdm import tqdm
 import yaml
@@ -43,8 +44,10 @@ except ImportError:
 BIBSEARCHDIR = os.path.join(os.path.expanduser("~"), '.bibsearch')
 DBFILE = os.path.join(BIBSEARCHDIR, 'bib.db')
 BIBSETPREFIX="bib://"
+OPENCOMMAND="open"  # TODO: Customize by OS
+TEMPDIR="/tmp/bibsearch"
 
-def download_file(bibfile) -> None:
+def download_file(url, fname_out=None) -> None:
     """Downloads the specified bibfile and adds it to the database.
 
     :param bibfile: the test set to download
@@ -53,16 +56,21 @@ def download_file(bibfile) -> None:
     import ssl
 
     try:
-        with urllib.request.urlopen(bibfile) as f:
-            return f.read().decode("utf-8")
+        with urllib.request.urlopen(url) as f:
+            if not fname_out:
+                return f.read().decode("utf-8")
+            else:
+                with open(fname_out, "wb") as tmpfile:
+                    tmpfile.write(f.read())
+                return fname_out
     except ssl.SSLError or urllib.error.URLError:
         print("WHAT!")
         # logging.warning('An SSL error was encountered in downloading the files. If you\'re on a Mac, '
         #                 'you may need to run the "Install Certificates.command" file located in the '
         #                 '"Python 3" folder, often found under /Applications')
         sys.exit(1)
-    except:
-        logging.warning("Error downloading '%s'", bibfile)
+    except Exception as e:
+        logging.warning("Error downloading '%s' [%s]", url, str(e))
         return ""
 
 def single_entry_to_fulltext(entry: pybtex.Entry, overwrite_key: str = None):
@@ -138,10 +146,19 @@ class BibDB:
         return int(self.cursor.fetchone()[0])
 
     def search(self, query):
-        self.cursor.execute("SELECT fulltext, event, key FROM bibindex \
-                            WHERE bibindex MATCH ?",
-                            [" ".join(query)])
-        return self.cursor
+        results = []
+        last_results_fname = os.path.join(BIBSEARCHDIR, "lastSearch.yml")
+        if not query:
+            if os.path.exists(last_results_fname):
+                results = yaml.load(open(last_results_fname))
+        else:
+            self.cursor.execute("SELECT fulltext, event, key FROM bibindex \
+                                WHERE bibindex MATCH ?",
+                                [" ".join(query)])
+            results = list(self.cursor)
+            with open(last_results_fname, "w") as fp:
+                yaml.dump(results, fp)
+        return results
 
     def search_key(self, key) -> str:
         """
@@ -245,10 +262,9 @@ def generate_custom_key(entry: pybtex.Entry, suffix_level):
 
     return "{surname}{year:02}{suffix}_{title}".format(
         surname=author_surname,
-        year=year%1000,
+        year=year%100,
         suffix='' if suffix_level==0 else chr(ord('a') + suffix_level - 1),
         title=title_word)
-
 
 def _find(args):
     db = BibDB()
@@ -277,6 +293,24 @@ def _find(args):
                             event = event.upper() + " " if event else "",
                             year=entry.fields["year"]))
             print("\n".join(lines) + "\n")
+
+def _open(args):
+    db = BibDB()
+    results = db.search(args.terms)
+    if not results:
+        logging.error("No documents returned by query")
+        sys.exit(1)
+    elif len(results) > 1:
+        logging.error("%n results returned by query. Narrow down to only one results.", len(results))
+        sys.exit(1)
+    entry = fulltext_to_single_entry(results[0][0])
+    logging.info('Downloading "%s"', entry.fields["title"])
+    if "url" not in entry.fields:
+        logging.error("Entry does not contain an URL field")
+    if not os.path.exists(TEMPDIR):
+        os.makedirs(TEMPDIR)
+    temp_fname = download_file(entry.fields["url"], os.path.join(TEMPDIR, entry.key + ".pdf"))
+    subprocess.run([OPENCOMMAND, temp_fname])
 
 def _add_file(event, fname, db, per_file_progress_bar):
     if fname.startswith('http'):
@@ -440,8 +474,12 @@ def main():
     parser_find = subparsers.add_parser('find', help='Search the database', aliases=['search'])
     parser_find.add_argument('-b', '--bibtex', help='Print entries in bibtex format', action='store_true')
     parser_find.add_argument('-o', "--original-key", help='Print the original key of the entries', action='store_true')
-    parser_find.add_argument('terms', nargs='+', help="One or more search terms which are ANDed together")
+    parser_find.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
     parser_find.set_defaults(func=_find)
+
+    parser_open = subparsers.add_parser('open', help='Open the article, if search returns only one result and url is available')
+    parser_open.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
+    parser_open.set_defaults(func=_open)
 
     parser_tex = subparsers.add_parser('tex', help='Create .bib file for a latex article')
     parser_tex.add_argument('file', help='Article file name or .aux file')
