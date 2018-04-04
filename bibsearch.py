@@ -327,12 +327,13 @@ def _tex(args):
     for l in open(aux_fname):
         match = citation_re.match(l)
         if match:
-            key = match.group(1)
-            bib_entry = db.search_key(key).fetchone()
-            if bib_entry:
-                entries.append(bib_entry[0])
-            else:
-                logging.warning("Entry '%s' not found", key)
+            keystr = match.group(1)
+            for key in keystr.split(','):
+                bib_entry = db.search_key(key).fetchone()
+                if bib_entry:
+                    entries.append(bib_entry[0])
+                else:
+                    logging.warning("Entry '%s' not found", key)
         elif args.write_bibfile or args.overwrite_bibfile:
             match = bibdata_re.match(l)
             if match:
