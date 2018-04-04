@@ -42,15 +42,21 @@ except ImportError:
 # in which case the os.path.join() throws a TypeError. Using expanduser() is
 # a safe way to get the user's home folder.
 BIBSEARCHDIR = os.path.join(os.path.expanduser("~"), '.bibsearch')
+RESOURCEDIR = os.path.join(BIBSEARCHDIR, 'resources')
 DBFILE = os.path.join(BIBSEARCHDIR, 'bib.db')
 BIBSETPREFIX="bib://"
 OPENCOMMAND="open"  # TODO: Customize by OS
 TEMPDIR="/tmp/bibsearch"
 
-def download_file(url, fname_out=None) -> None:
-    """Downloads the specified bibfile and adds it to the database.
+DATABASES = {
+    'acl': 'https://github.com/mjpost/bibsearch/raw/master/resources/acl.yml',
+    'nips': 'http://github.com/mjpost/bibsearch/raw/master/resources/nips.yml',
+    'icml': 'http://github.com/mjpost/bibsearch/raw/master/resources/icml.yml',
+}
 
-    :param bibfile: the test set to download
+def download_file(url, fname_out=None) -> None:
+    """
+    Downloads a file to a location.
     """
 
     import ssl
@@ -60,9 +66,14 @@ def download_file(url, fname_out=None) -> None:
             if not fname_out:
                 return f.read().decode("utf-8")
             else:
-                with open(fname_out, "wb") as tmpfile:
-                    tmpfile.write(f.read())
+                fdir = os.path.dirname(fname_out)
+                if not os.path.exists(fdir):
+                    os.makedirs(fdir)
+
+                with open(fname_out, "wb") as outfile:
+                    outfile.write(f.read())
                 return fname_out
+
     except ssl.SSLError or urllib.error.URLError:
         print("WHAT!")
         # logging.warning('An SSL error was encountered in downloading the files. If you\'re on a Mac, '
@@ -334,9 +345,15 @@ def _add_file(event, fname, db, per_file_progress_bar):
     return added, skipped
 
 def get_fnames_from_bibset(raw_fname, override_event):
-    fields = raw_fname[len(BIBSETPREFIX):].strip().split('/')
-    currentSet = yaml.load(open("acl.yml"))
     bib_spec = raw_fname[len(BIBSETPREFIX):].strip()
+    fields = bib_spec.split('/')
+    resource = fields[0]
+    resource_file = os.path.join(RESOURCEDIR, resource + '.yml')
+    if not os.path.exists(resource_file):
+        if resource in DATABASES:
+            download_file(DATABASES[resource], resource_file)
+
+    currentSet = yaml.load(open(resource_file))
     event=None
     if bib_spec:
         fields = bib_spec.split('/')
@@ -396,7 +413,7 @@ def _print(args):
         print('Database has', len(db), 'entries')
     else:
         for entry in db:
-            print(entry + "\n")
+            print(entry.rstrip() + "\n")
 
 def _tex(args):
     citation_re = re.compile(r'\\citation{(.*)}')
