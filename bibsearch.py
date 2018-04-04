@@ -301,7 +301,7 @@ def _open(args):
         logging.error("No documents returned by query")
         sys.exit(1)
     elif len(results) > 1:
-        logging.error("%n results returned by query. Narrow down to only one results.", len(results))
+        logging.error("%d results returned by query. Narrow down to only one results.", len(results))
         sys.exit(1)
     entry = fulltext_to_single_entry(results[0][0])
     logging.info('Downloading "%s"', entry.fields["title"])
