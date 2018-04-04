@@ -3,27 +3,23 @@
 
 """
 Tool for downloading, maintaining, and search a BibTeX database.
+
+Authors:
+- Matt Post <post@cs.jhu.edu>
+- David Vilar <david.vilar@gmail.com>
 """
 
 import argparse
-# import gzip
 import logging
 import os
 import re
 import sys
-# import tarfile
 import urllib.request
 import sqlite3
 import stop_words
 import textwrap
 from tqdm import tqdm
 import yaml
-# from collections import Counter, namedtuple
-# from itertools import zip_longest
-# from typing import List, Iterable, Tuple
-
-# import math
-# import unicodedata
 
 import pybtex.database as pybtex
 import bibutils
