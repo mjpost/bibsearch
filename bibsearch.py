@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Tool for downloading, maintaining, and search a BibTeX database.
+Tool for downloading, maintaining, and searching a BibTeX database.
 
 Authors:
 - Matt Post <post@cs.jhu.edu>
@@ -25,7 +25,7 @@ import yaml
 import pybtex.database as pybtex
 import bibutils
 
-VERSION = '0.1.2'
+VERSION = '0.1.3'
 
 try:
     # SIGPIPE is not available on Windows machines, throwing an exception.

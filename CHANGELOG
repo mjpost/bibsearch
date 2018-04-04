@@ -1,3 +1,8 @@
+0.1.3 (2018-04-04)
+    - Added 'open' command for opening PDFs
+    - Caching of last search for working with 'open' and other commands
+    - Now downloads acl.yml file
+
 0.1.2 (2018-04-03)
     - Removed biblib dependency and go back to pybtex
     - Bugfixes in handling LaTeX files (multiple citations, generating the right keys)
