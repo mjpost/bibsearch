@@ -347,7 +347,8 @@ def _add_file(event, fname, db, per_file_progress_bar):
 def get_fnames_from_bibset(raw_fname, override_event):
     bib_spec = raw_fname[len(BIBSETPREFIX):].strip()
     fields = bib_spec.split('/')
-    resource = fields[0]
+#    resource = fields[0]
+    resource = 'acl'
     resource_file = os.path.join(RESOURCEDIR, resource + '.yml')
     if not os.path.exists(resource_file):
         if resource in DATABASES:
