@@ -1,4 +1,6 @@
-[unreleased]
+0.2.0 (in progress)
+    - Added arxiv searching and adding
+    - Added NIPS database
     - Added 'where' command for finer grained search (with SQL syntax)
     - FTS is not required. DB can be queried through the 'where' command
 
@@ -20,9 +22,9 @@
     - backend changed to biblib (probably to be changed back to pybtex)
 
 0.0.2 (2018-03-15)
-	- Added downloading of URLS if http:// prefix found
+    - Added downloading of URLS if http:// prefix found
 
 0.0.1 (2018-03-14)
-	- Initial release
-	- Supports adding a database and minimal searching
-	- Backend based on pybtex
+    - Initial release
+    - Supports adding a database and minimal searching
+    - Backend based on pybtex

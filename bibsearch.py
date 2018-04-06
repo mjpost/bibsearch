@@ -25,7 +25,7 @@ import yaml
 import pybtex.database as pybtex
 import bibutils
 
-VERSION = '0.1.3'
+VERSION = '0.2.0'
 
 try:
     # SIGPIPE is not available on Windows machines, throwing an exception.
@@ -81,12 +81,18 @@ def download_file(url, fname_out=None) -> None:
         #                 '"Python 3" folder, often found under /Applications')
         sys.exit(1)
 
-def single_entry_to_fulltext(entry: pybtex.Entry, overwrite_key: str = None):
+def single_entry_to_fulltext(entry: pybtex.Entry, overwrite_key: str = None) -> str:
+    """
+    Converts a pybtex.Entry to text.
+    """
     effective_key = entry.key if not overwrite_key else overwrite_key
     formatter = pybtex.BibliographyData(entries={effective_key: entry})
     return formatter.to_string(bib_format="bibtex")
 
-def fulltext_to_single_entry(fulltext) -> pybtex.Entry:
+def fulltext_to_single_entry(fulltext: str) -> pybtex.Entry:
+    """
+    Parses a BibTeX entry into a pybtex.Entry
+    """
     entry, = pybtex.parse_string(fulltext, bib_format="bibtex").entries.values()
     return entry
 
@@ -212,7 +218,7 @@ class BibDB:
         if where_args.year:
             query.append("(year LIKE ?)")
             query_args.append(where_args.year)
-            
+
         results = []
         last_results_fname = os.path.join(BIBSEARCHDIR, "lastSearch.yml")
         if not query:
@@ -322,7 +328,7 @@ class BibDB:
 
 custom_key_skip_chars = str.maketrans("", "", " `~!@#$%^&*()+=[]{}|\\'\":;,<.>/?")
 custom_key_skip_words = set(stop_words.get_stop_words("en"))
-def generate_custom_key(entry: pybtex.Entry, suffix_level):
+def generate_custom_key(entry: pybtex.Entry, suffix_level=0):
     # TODO: fault tolerance against missing fields!
     year = int(entry.fields["year"])
     author_surname = bibutils.parse_names(entry.fields["author"])[0]\
@@ -414,6 +420,7 @@ def _add_file(event, fname, force_redownload, db, per_file_progress_bar):
     else:
         new_entries = pybtex.parse_file(fname,
                                         bib_format="bibtex").entries
+
     added = 0
     skipped = 0
     if per_file_progress_bar:
@@ -457,6 +464,66 @@ def get_fnames_from_bibset(raw_fname, override_event):
                     result += rec_extract_bib(v, event)
         return result
     return rec_extract_bib(currentSet, event if not override_event else override_event)
+
+
+def _arxiv(args):
+    import feedparser
+
+    db = BibDB()
+
+    query = 'http://export.arxiv.org/api/query?{}'.format(urllib.parse.urlencode({ 'search_query': ' AND '.join(args.query)}))
+    response = download_file(query)
+
+    feedparser._FeedParserMixin.namespaces['http://a9.com/-/spec/opensearch/1.1/'] = 'opensearch'
+    feedparser._FeedParserMixin.namespaces['http://arxiv.org/schemas/atom'] = 'arxiv'
+    feed = feedparser.parse(response)
+
+    # print out feed information
+    # print('Feed title: %s' % feed.feed.title)
+    # print('Feed last updated: %s' % feed.feed.updated)
+
+    # # print opensearch metadata
+    # print('totalResults for this query: %s' % feed.feed.opensearch_totalresults)
+    # print('itemsPerPage for this query: %s' % feed.feed.opensearch_itemsperpage)
+    # print('startIndex for this query: %s'   % feed.feed.opensearch_startindex)
+
+    # Run through each entry, and print out information
+    for entry in feed.entries:
+
+        fields = { 'title': entry.title,
+                   'booktitle': '',
+                   'year': str(entry.published[:4]),
+                   'abstract': entry.summary,
+        }
+
+        try:
+            fields['comment'] = entry.arxiv_comment
+        except AttributeError:
+            pass
+
+        # get the links to the pdf
+        for link in entry.links:
+            try:
+                if link.title == 'pdf':
+                    fields['url'] = link.href
+            except:
+                pass
+
+        authors = {'author': [pybtex.Person(author.name) for author in entry.authors]}
+        bib_entry = pybtex.Entry('article', persons=authors, fields=fields)
+        bib_entry.key = generate_custom_key(bib_entry)
+
+        arxiv_id = re.sub(r'v\d+$', '', entry.id.split('/abs/')[-1])
+
+        format_search_results( [(single_entry_to_fulltext(bib_entry), 'arXiv', arxiv_id)], False, True)
+
+        if args.add:
+            db.add('arXiv', bib_entry)
+
+        continue
+
+    if args.add:
+        db.save()
 
 
 def _add(args):
@@ -569,6 +636,11 @@ def main():
     parser_add.add_argument("-e", "--event", help="Event for entries")
     parser_add.add_argument("-r", "--redownload", help="Re-download already downloaded files", action="store_true")
     parser_add.set_defaults(func=_add)
+
+    parser_arxiv = subparsers.add_parser('arxiv', help='Search the arXiv')
+    parser_arxiv.add_argument('query', type=str, nargs='+', default=None, help='Search query')
+    parser_arxiv.add_argument("-a", "--add", action='store_true', help="Add all results to the database (default: just print them to STDOUT)")
+    parser_arxiv.set_defaults(func=_arxiv)
 
     parser_dump = subparsers.add_parser('print', help='Print the BibTeX database')
     parser_dump.add_argument('--summary', action='store_true', help='Just print a summary')
