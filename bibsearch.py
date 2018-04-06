@@ -74,15 +74,12 @@ def download_file(url, fname_out=None) -> None:
                     outfile.write(f.read())
                 return fname_out
 
-    except ssl.SSLError or urllib.error.URLError:
+    except ssl.SSLError:
         print("WHAT!")
         # logging.warning('An SSL error was encountered in downloading the files. If you\'re on a Mac, '
         #                 'you may need to run the "Install Certificates.command" file located in the '
         #                 '"Python 3" folder, often found under /Applications')
         sys.exit(1)
-    except Exception as e:
-        logging.warning("Error downloading '%s' [%s]", url, str(e))
-        return ""
 
 def single_entry_to_fulltext(entry: pybtex.Entry, overwrite_key: str = None):
     effective_key = entry.key if not overwrite_key else overwrite_key
@@ -406,8 +403,13 @@ def _add_file(event, fname, force_redownload, db, per_file_progress_bar):
     if fname.startswith('http'):
         if not force_redownload and db.file_has_been_downloaded(fname): 
             return 0, 0, True
-        new_entries = pybtex.parse_string(download_file(fname),
-                                          bib_format="bibtex").entries
+        try:
+            new_entries = pybtex.parse_string(download_file(fname),
+                                              bib_format="bibtex").entries
+        except urllib.error.URLError as e:
+            logging.warning("Error downloading '%s' [%s]", fname, str(e))
+            # TODO: logging interferes with tqdm
+            return 0, 0, False
         db.register_file_downloaded(fname)
     else:
         new_entries = pybtex.parse_file(fname,
