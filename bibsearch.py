@@ -113,6 +113,9 @@ class BibDB:
                 year text,
                 fulltext text
                 )""")
+            self.cursor.execute("""CREATE TABLE downloaded_files (
+                file text UNIQUE
+                )""")
             try:
                 self.cursor.executescript(
                 """CREATE VIRTUAL TABLE bibindex USING fts5(
@@ -310,6 +313,16 @@ class BibDB:
         for e in self.cursor:
             yield e[0]
 
+    def file_has_been_downloaded(self, file):
+        return self.cursor.execute("""SELECT 1 FROM downloaded_files WHERE file = ? LIMIT 1""", [file]).fetchone() is not None
+
+    def register_file_downloaded(self, file):
+        try:
+            self.cursor.execute("""INSERT INTO downloaded_files(file) VALUES (?)""", [file])
+        except sqlite3.IntegrityError:
+            # File was already registered. No problem.
+            pass
+
 custom_key_skip_chars = str.maketrans("", "", " `~!@#$%^&*()+=[]{}|\\'\":;,<.>/?")
 custom_key_skip_words = set(stop_words.get_stop_words("en"))
 def generate_custom_key(entry: pybtex.Entry, suffix_level):
@@ -386,10 +399,16 @@ def _open(args):
     temp_fname = download_file(entry.fields["url"], os.path.join(TEMPDIR, entry.key + ".pdf"))
     subprocess.run([OPENCOMMAND, temp_fname])
 
-def _add_file(event, fname, db, per_file_progress_bar):
+def _add_file(event, fname, force_redownload, db, per_file_progress_bar):
+    """
+    Return #added, #skipped, file_skipped
+    """
     if fname.startswith('http'):
+        if not force_redownload and db.file_has_been_downloaded(fname): 
+            return 0, 0, True
         new_entries = pybtex.parse_string(download_file(fname),
                                           bib_format="bibtex").entries
+        db.register_file_downloaded(fname)
     else:
         new_entries = pybtex.parse_file(fname,
                                         bib_format="bibtex").entries
@@ -405,7 +424,7 @@ def _add_file(event, fname, db, per_file_progress_bar):
         else:
             skipped += 1
 
-    return added, skipped
+    return added, skipped, False
 
 def get_fnames_from_bibset(raw_fname, override_event):
     bib_spec = raw_fname[len(BIBSETPREFIX):].strip()
@@ -453,13 +472,15 @@ def _add(args):
         iterable = event_fnames
         per_file_progress_bar = True
     for event, f in iterable:
+        f_added, f_skipped, f_skipped = _add_file(event, f, args.redownload, db, per_file_progress_bar)
         if not per_file_progress_bar:
-            log_msg = "Adding entries from %s" % f
-            if event:
-                log_msg += " (%s)" % event.upper()
+            if not f_skipped:
+                log_msg = "Added %d entries from %s" % (f_added, f)
+                if event:
+                    log_msg += " (%s)" % event.upper()
+            else:
+                log_msg = "Skipped %s" % f
             tqdm.write(log_msg)
-
-        f_added, f_skipped = _add_file(event, f, db, per_file_progress_bar)
         added += f_added
         skipped += f_skipped
 
@@ -544,6 +565,7 @@ def main():
     parser_add = subparsers.add_parser('add', help='Add a BibTeX file')
     parser_add.add_argument('file', type=str, default=None, help='BibTeX file to add')
     parser_add.add_argument("-e", "--event", help="Event for entries")
+    parser_add.add_argument("-r", "--redownload", help="Re-download already downloaded files", action="store_true")
     parser_add.set_defaults(func=_add)
 
     parser_dump = subparsers.add_parser('print', help='Print the BibTeX database')
