@@ -113,44 +113,53 @@ class BibDB:
                 year text,
                 fulltext text
                 )""")
-            self.cursor.executescript(
-            """CREATE VIRTUAL TABLE bibindex USING fts5(
-                key,
-                custom_key,
-                author,
-                title,
-                event,
-                year,
-                fulltext UNINDEXED,
-                content='bib',
-                );
-            CREATE TRIGGER bib_ai AFTER INSERT ON bib BEGIN
-               INSERT INTO bibindex
-                   (rowid, key, custom_key, author, title, event, year, fulltext)
-                   VALUES 
-                   (new.rowid, new.key, new.custom_key, new.author, new.title, 
-                   new.event, new.year, new.fulltext);
-                END;
-            CREATE TRIGGER bib_ad AFTER DELETE ON bib BEGIN
-               INSERT INTO bibindex
-                   (bibindex, rowid, custom_key, author, title, event, year, fulltext)
-                   VALUES 
-                   ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
-                   old.event, old.year, old.fulltext);
-                END;
-            CREATE TRIGGER bibindex_au AFTER UPDATE ON bib BEGIN
-               INSERT INTO bibindex
-                   (bibindex, rowid, key, custom_key, author, title, event, year, fulltext)
-                   VALUES 
-                   ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
-                   old.event, old.year, old.fulltext);
-               INSERT INTO bibindex
-                   (rowid, key, custom_key, author, title, event, year, fulltext)
-                   VALUES 
-                   (new.rowid, new.key, new.custom_key, new.author, new.title, 
-                   new.event, new.year, new.fulltext);
-                END;
-            """)
+            try:
+                self.cursor.executescript(
+                """CREATE VIRTUAL TABLE bibindex USING fts5(
+                    key,
+                    custom_key,
+                    author,
+                    title,
+                    event,
+                    year,
+                    fulltext UNINDEXED,
+                    content='bib',
+                    );
+                CREATE TRIGGER bib_ai AFTER INSERT ON bib BEGIN
+                   INSERT INTO bibindex
+                       (rowid, key, custom_key, author, title, event, year, fulltext)
+                       VALUES 
+                       (new.rowid, new.key, new.custom_key, new.author, new.title, 
+                       new.event, new.year, new.fulltext);
+                    END;
+                CREATE TRIGGER bib_ad AFTER DELETE ON bib BEGIN
+                   INSERT INTO bibindex
+                       (bibindex, rowid, custom_key, author, title, event, year, fulltext)
+                       VALUES 
+                       ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
+                       old.event, old.year, old.fulltext);
+                    END;
+                CREATE TRIGGER bibindex_au AFTER UPDATE ON bib BEGIN
+                   INSERT INTO bibindex
+                       (bibindex, rowid, key, custom_key, author, title, event, year, fulltext)
+                       VALUES 
+                       ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
+                       old.event, old.year, old.fulltext);
+                   INSERT INTO bibindex
+                       (rowid, key, custom_key, author, title, event, year, fulltext)
+                       VALUES 
+                       (new.rowid, new.key, new.custom_key, new.author, new.title, 
+                       new.event, new.year, new.fulltext);
+                    END;
+                """)
+            except sqlite3.OperationalError as e:
+                error_msg = str(e)
+                if "no such module" in error_msg and "fts5" in error_msg:
+                    logging.warning("It seems your sqlite3 installation does not support fts5 indexing.")
+                    logging.warning("It is strongly encouraged to activate fts5 (see the README and the FAQ).")
+                    input("Press ENTER to continue...")
+                else:
+                    raise
 
     def __len__(self):
         self.cursor.execute('SELECT COUNT(*) FROM bib')
@@ -163,9 +172,56 @@ class BibDB:
             if os.path.exists(last_results_fname):
                 results = yaml.load(open(last_results_fname))
         else:
-            self.cursor.execute("SELECT fulltext, event, key FROM bibindex \
-                                WHERE bibindex MATCH ?",
-                                [" ".join(query)])
+            try:
+                self.cursor.execute("SELECT fulltext, event, key FROM bibindex \
+                                    WHERE bibindex MATCH ?",
+                                    [" ".join(query)])
+                results = list(self.cursor)
+                with open(last_results_fname, "w") as fp:
+                    yaml.dump(results, fp)
+            except sqlite3.OperationalError as e:
+                error_msg = str(e)
+                if "no such table" in error_msg and "bibindex" in error_msg:
+                    logging.error("The database was created without fts5 indexing, the 'search' command is not supported.")
+                    logging.error("Use command 'where' instead. See the README for more information.")
+                    sys.exit(1)
+                elif "no such module" in error_msg and "fts5" in error_msg:
+                    logging.error("It seems your sqlite3 installation does not support fts5 indexing.")
+                    logging.error("Use command 'where' instead. See the README for more information.")
+                    sys.exit(1)
+                else:
+                    raise
+        return results
+
+    def where(self, where_args):
+        query = [] 
+        query_args = []
+        if where_args.key:
+            query.append("(key LIKE ? OR custom_key LIKE ?)")
+            query_args.append(where_args.key)
+            query_args.append(where_args.key)
+        if where_args.author:
+            query.append("(author LIKE ?)")
+            query_args.append(where_args.author)
+        if where_args.title:
+            query.append("(title LIKE ?)")
+            query_args.append(where_args.title)
+        if where_args.event:
+            query.append("(event LIKE ?)")
+            query_args.append(where_args.event)
+        if where_args.year:
+            query.append("(year LIKE ?)")
+            query_args.append(where_args.year)
+            
+        results = []
+        last_results_fname = os.path.join(BIBSEARCHDIR, "lastSearch.yml")
+        if not query:
+            if os.path.exists(last_results_fname):
+                results = yaml.load(open(last_results_fname))
+        else:
+            self.cursor.execute("SELECT fulltext, event, key FROM bib \
+                                WHERE %s" % " AND ".join(query),
+                                query_args)
             results = list(self.cursor)
             with open(last_results_fname, "w") as fp:
                 yaml.dump(results, fp)
@@ -277,16 +333,15 @@ def generate_custom_key(entry: pybtex.Entry, suffix_level):
         suffix='' if suffix_level==0 else chr(ord('a') + suffix_level - 1),
         title=title_word)
 
-def _find(args):
-    db = BibDB()
-    if not args.bibtex:
+def format_search_results(results, bibtex_output, use_original_key):
+    if not bibtex_output:
         textwrapper = textwrap.TextWrapper(subsequent_indent="  ")
-    for (fulltext, event, original_key) in db.search(args.terms):
+    for (fulltext, event, original_key) in results:
         entry = fulltext_to_single_entry(fulltext)
-        if args.original_key:
+        if use_original_key:
             entry.key = original_key
             fulltext = single_entry_to_fulltext(entry)
-        if args.bibtex:
+        if bibtex_output:
             print(fulltext + "\n")
         else:
             author = [a.pretty() for a in bibutils.parse_names(entry.fields["author"])]
@@ -304,6 +359,14 @@ def _find(args):
                             event = event.upper() + " " if event else "",
                             year=entry.fields["year"]))
             print("\n".join(lines) + "\n")
+
+def _find(args):
+    db = BibDB()
+    format_search_results(db.search(args.terms), args.bibtex, args.original_key)
+
+def _where(args):
+    db = BibDB()
+    format_search_results(db.where(args), args.bibtex, args.original_key)
 
 def _open(args):
     db = BibDB()
@@ -475,7 +538,8 @@ def _set_custom_key(args):
     db.update_custom_key(original_key, args.new_key)
 
 def main():
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO,
+                        format="[%(levelname)s] %(message)s")
 
     parser = argparse.ArgumentParser(description='bibsearch: Download, manage, and search a BibTeX database.')
     parser.add_argument('--version', '-V', action='version', version='%(prog)s {}'.format(VERSION))
@@ -491,11 +555,22 @@ def main():
     parser_dump.add_argument('--summary', action='store_true', help='Just print a summary')
     parser_dump.set_defaults(func=_print)
 
-    parser_find = subparsers.add_parser('find', help='Search the database', aliases=['search'])
+    parser_find = subparsers.add_parser('find', help='Search the database using fuzzy syntax', aliases=['search'])
     parser_find.add_argument('-b', '--bibtex', help='Print entries in bibtex format', action='store_true')
     parser_find.add_argument('-o', "--original-key", help='Print the original key of the entries', action='store_true')
     parser_find.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
     parser_find.set_defaults(func=_find)
+
+    parser_where = subparsers.add_parser('where', help='Search the database using SQL-like syntax')
+    parser_where.add_argument('-k', '--key', help="Query for key field")
+    parser_where.add_argument('-a', '--author', help="Query for author field")
+    parser_where.add_argument('-t', '--title', help="Query for title field")
+    parser_where.add_argument('-e', '--event', help="Query for event field")
+    parser_where.add_argument('-y', '--year', help="Query for year field")
+    parser_where.add_argument('-b', '--bibtex', help='Print entries in bibtex format', action='store_true')
+    parser_where.add_argument('-o', "--original-key", help='Print the original key of the entries', action='store_true')
+    parser_where.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
+    parser_where.set_defaults(func=_where)
 
     parser_open = subparsers.add_parser('open', help='Open the article, if search returns only one result and url is available')
     parser_open.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
