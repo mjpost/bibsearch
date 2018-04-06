@@ -37,7 +37,7 @@ or to add all of ACL:
 
     bibsearch add bib://acl
 
-or add the entire [ACL Anthology](http://aclanthology.info/) (this takes about 20 minutes):
+or add the entire [ACL Anthology](http://aclanthology.info/) (this takes a bit longer than 5 minutes):
 
     bibsearch add bib://
 
