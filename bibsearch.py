@@ -412,12 +412,7 @@ def get_fnames_from_bibset(raw_fname, override_event):
     fields = bib_spec.split('/')
 #    resource = fields[0]
     resource = 'acl'
-    resource_file = os.path.join(RESOURCEDIR, resource + '.yml')
-    if not os.path.exists(resource_file):
-        if resource in DATABASES:
-            download_file(DATABASES[resource], resource_file)
-
-    currentSet = yaml.load(open(resource_file))
+    currentSet = yaml.load(download_file(DATABASES[resource]))
     event=None
     if bib_spec:
         fields = bib_spec.split('/')
