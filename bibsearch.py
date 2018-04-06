@@ -472,9 +472,9 @@ def _add(args):
         iterable = event_fnames
         per_file_progress_bar = True
     for event, f in iterable:
-        f_added, f_skipped, f_skipped = _add_file(event, f, args.redownload, db, per_file_progress_bar)
+        f_added, f_skipped, file_skipped = _add_file(event, f, args.redownload, db, per_file_progress_bar)
         if not per_file_progress_bar:
-            if not f_skipped:
+            if not file_skipped:
                 log_msg = "Added %d entries from %s" % (f_added, f)
                 if event:
                     log_msg += " (%s)" % event.upper()
