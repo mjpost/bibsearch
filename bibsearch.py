@@ -47,12 +47,7 @@ DBFILE = os.path.join(BIBSEARCHDIR, 'bib.db')
 BIBSETPREFIX="bib://"
 OPENCOMMAND="open"  # TODO: Customize by OS
 TEMPDIR="/tmp/bibsearch"
-
-DATABASES = {
-    'acl': 'https://github.com/mjpost/bibsearch/raw/master/resources/acl.yml',
-    'nips': 'http://github.com/mjpost/bibsearch/raw/master/resources/nips.yml',
-    'icml': 'http://github.com/mjpost/bibsearch/raw/master/resources/icml.yml',
-}
+DATABASE_URL = 'https://github.com/mjpost/bibsearch/raw/master/resources/'
 
 def download_file(url, fname_out=None) -> None:
     """
@@ -410,6 +405,9 @@ def _add_file(event, fname, force_redownload, db, per_file_progress_bar):
             logging.warning("Error downloading '%s' [%s]", fname, str(e))
             # TODO: logging interferes with tqdm
             return 0, 0, False
+        except pybtex.PybtexError:
+            logging.warning("Error parsing file %s", fname)
+            return 0, 0, False
         db.register_file_downloaded(fname)
     else:
         new_entries = pybtex.parse_file(fname,
@@ -430,33 +428,40 @@ def _add_file(event, fname, force_redownload, db, per_file_progress_bar):
 
 def get_fnames_from_bibset(raw_fname, override_event):
     bib_spec = raw_fname[len(BIBSETPREFIX):].strip()
-    fields = bib_spec.split('/')
-#    resource = fields[0]
-    resource = 'acl'
-    currentSet = yaml.load(download_file(DATABASES[resource]))
-    event=None
-    if bib_spec:
-        fields = bib_spec.split('/')
-        event = fields[0]
-        for f in fields:
+    spec_fields = bib_spec.split('/')
+    resource = spec_fields[0]
+    try:
+        currentSet = yaml.load(download_file(DATABASE_URL + resource + ".yml"))
+        #~ currentSet = yaml.load(open("resources/" + resource + ".yml")) # for local testing
+    except urllib.error.URLError:
+        logging.error("Could not find resource %s", resource)
+        sys.exit(1)
+    # TODO: Ugly logic for detecting events
+    prev_level = resource
+    prev_level_2 = None
+    if len(spec_fields) > 1:
+        for f in spec_fields[1:]:
             try:
                 currentSet = currentSet[f]
-            except:
+                prev_level_2 =  prev_level
+                prev_level = f
+            except KeyError:
                 logging.error("Invalid branch '%s' in bib specification '%s'",
                               f, raw_fname)
                 sys.exit(1)
-    def rec_extract_bib(dict_or_list, event):
+    def rec_extract_bib(dict_or_list, override_event,
+                        prev_level, prev_level_2=None):
         result = []
         if isinstance(dict_or_list, list):
+            event = override_event if override_event else prev_level_2
             result = [(event, fname) for fname in dict_or_list]
         else:
             for (k, v) in dict_or_list.items():
-                if not event: # We are at the first level, extract event
-                    result += rec_extract_bib(v, k)
-                else:
-                    result += rec_extract_bib(v, event)
+                result += rec_extract_bib(v, override_event, k, prev_level)
         return result
-    return rec_extract_bib(currentSet, event if not override_event else override_event)
+    return rec_extract_bib(currentSet,
+                           override_event if override_event else None,
+                           prev_level, prev_level_2)
 
 
 def _add(args):
@@ -480,6 +485,8 @@ def _add(args):
                 log_msg = "Added %d entries from %s" % (f_added, f)
                 if event:
                     log_msg += " (%s)" % event.upper()
+                else:
+                    log_msg += " (NO EVENT)"
             else:
                 log_msg = "Skipped %s" % f
             tqdm.write(log_msg)
