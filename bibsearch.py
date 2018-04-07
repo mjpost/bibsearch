@@ -27,6 +27,9 @@ import bibutils
 
 VERSION = '0.2.0'
 
+class BibsearchError(Exception):
+    pass
+
 try:
     # SIGPIPE is not available on Windows machines, throwing an exception.
     from signal import SIGPIPE
@@ -397,6 +400,9 @@ def _open(args):
     temp_fname = download_file(entry.fields["url"], os.path.join(TEMPDIR, entry.key + ".pdf"))
     subprocess.run([OPENCOMMAND, temp_fname])
 
+class AddFileError(BibsearchError):
+    pass
+
 def _add_file(event, fname, force_redownload, db, per_file_progress_bar):
     """
     Return #added, #skipped, file_skipped
@@ -408,12 +414,9 @@ def _add_file(event, fname, force_redownload, db, per_file_progress_bar):
             new_entries = pybtex.parse_string(download_file(fname),
                                               bib_format="bibtex").entries
         except urllib.error.URLError as e:
-            logging.warning("Error downloading '%s' [%s]", fname, str(e))
-            # TODO: logging interferes with tqdm
-            return 0, 0, False
+            raise AddFileError("Error downloading '%s' [%s]" % (fname, str(e)))
         except pybtex.PybtexError:
-            logging.warning("Error parsing file %s", fname)
-            return 0, 0, False
+            raise AddFileError("Error parsing file %s" % fname)
         db.register_file_downloaded(fname)
     else:
         new_entries = pybtex.parse_file(fname,
@@ -539,28 +542,42 @@ def _add(args):
                          else get_fnames_from_bibset(raw_fname, args.event)
     added = 0
     skipped = 0
+    n_files_skipped = 0
     if len(event_fnames) > 1:
-        iterable = tqdm(event_fnames, ncols=80, bar_format="{l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]")
+        iterable = tqdm(event_fnames, ncols=100, bar_format="Adding %s {l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]" % raw_fname)
         per_file_progress_bar = False
     else:
         iterable = event_fnames
         per_file_progress_bar = True
+    error_msgs = []
     for event, f in iterable:
-        f_added, f_skipped, file_skipped = _add_file(event, f, args.redownload, db, per_file_progress_bar)
-        if not per_file_progress_bar:
-            if not file_skipped:
-                log_msg = "Added %d entries from %s" % (f_added, f)
-                if event:
-                    log_msg += " (%s)" % event.upper()
+        try:
+            f_added, f_skipped, file_skipped = _add_file(event, f, args.redownload, db, per_file_progress_bar)
+            if args.verbose and not per_file_progress_bar:
+                if not file_skipped:
+                    log_msg = "Added %d entries from %s" % (f_added, f)
+                    if event:
+                        log_msg += " (%s)" % event.upper()
+                    else:
+                        log_msg += " (NO EVENT)"
                 else:
-                    log_msg += " (NO EVENT)"
-            else:
-                log_msg = "Skipped %s" % f
-            tqdm.write(log_msg)
+                    log_msg = "Skipped %s" % f
+                tqdm.write(log_msg)
+        except AddFileError as e:
+            f_added = 0
+            f_skipped = 0
+            file_skipped = False
+            error_msgs.append(str(e))
         added += f_added
         skipped += f_skipped
+        if file_skipped:
+            n_files_skipped += 1
 
-    print('Added', added, 'entries, skipped', skipped, 'duplicates')
+    print('Added', added, 'entries, skipped', skipped, 'duplicates. Skipped', n_files_skipped, 'files')
+    if error_msgs:
+        print("During operation followint errors occured:")
+        for m in error_msgs:
+            logging.error(m)
     db.save()
 
 def _print(args):
@@ -642,6 +659,7 @@ def main():
     parser_add.add_argument('file', type=str, default=None, help='BibTeX file to add')
     parser_add.add_argument("-e", "--event", help="Event for entries")
     parser_add.add_argument("-r", "--redownload", help="Re-download already downloaded files", action="store_true")
+    parser_add.add_argument("-v", "--verbose", help="Be verbose about which files are being downloaded", action="store_true")
     parser_add.set_defaults(func=_add)
 
     parser_arxiv = subparsers.add_parser('arxiv', help='Search the arXiv')
