@@ -454,7 +454,6 @@ def get_fnames_from_bibset(raw_fname, override_event):
     if len(spec_fields) > 1:
         for f in spec_fields[1:]:
             # some keys are integers (years)
-            f = int(f) if re.match(r'\d+', f) else f
             try:
                 currentSet = currentSet[f]
                 prev_level_2 =  prev_level
@@ -462,6 +461,7 @@ def get_fnames_from_bibset(raw_fname, override_event):
             except KeyError:
                 logging.error("Invalid branch '%s' in bib specification '%s'",
                               f, raw_fname)
+                logging.error("Options at this level are:", ', '.join(currentSet.keys()))
                 sys.exit(1)
     def rec_extract_bib(dict_or_list, override_event,
                         prev_level, prev_level_2=None):
