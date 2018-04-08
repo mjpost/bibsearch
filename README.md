@@ -39,17 +39,19 @@ If you are on a Mac and have [brew](https://brew.sh/) installed, you can get thi
 ## Usage
 
 Create your database by importing BibTeX files.
-There are lots of shortcuts, e.g., to add [ACL 2017](http://acl2017.org), type:
+There are lots of shortcuts defined in the form of collections.
+For example, there is a collection for the entire [ACL Anthology](http://aclanthology.info/).
+To add papers from [NAACL 2017](http://naacl.org/2017), you can type:
 
-    bibsearch add bib://acl/17
+    bibsearch add bib://acl/naacl/2017
 
-or to add all of ACL:
+or to add all of NAACL:
+
+    bibsearch add bib://acl/naacl
+
+Or even the entire anthology:
 
     bibsearch add bib://acl
-
-or add the entire [ACL Anthology](http://aclanthology.info/) (this takes a bit longer than 5 minutes):
-
-    bibsearch add bib://
 
 You can also add your own files, either locally or via URL.
 
@@ -59,7 +61,9 @@ You can also add your own files, either locally or via URL.
     # Add a bibtex file from a local database
     bibsearch add main.bib
 
-(Duplicate keys are successfully ignored).
+Multiple arguments are permitted at once.
+Duplicate keys are successfully ignored.
+
 Now, search across all fields to find your entries:
 
     bibsearch search AMR
