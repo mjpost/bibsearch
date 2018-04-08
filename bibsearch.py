@@ -537,41 +537,41 @@ def _arxiv(args):
 def _add(args):
     db = BibDB()
 
-    raw_fname = args.file
-    event_fnames = [(args.event, raw_fname)] if not raw_fname.startswith(BIBSETPREFIX) \
-                         else get_fnames_from_bibset(raw_fname, args.event)
     added = 0
     skipped = 0
     n_files_skipped = 0
-    if len(event_fnames) > 1:
-        iterable = tqdm(event_fnames, ncols=100, bar_format="Adding %s {l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]" % raw_fname)
-        per_file_progress_bar = False
-    else:
-        iterable = event_fnames
-        per_file_progress_bar = True
-    error_msgs = []
-    for event, f in iterable:
-        try:
-            f_added, f_skipped, file_skipped = _add_file(event, f, args.redownload, db, per_file_progress_bar)
-            if args.verbose and not per_file_progress_bar:
-                if not file_skipped:
-                    log_msg = "Added %d entries from %s" % (f_added, f)
-                    if event:
-                        log_msg += " (%s)" % event.upper()
+    for raw_fname in args.files:
+        event_fnames = [(args.event, raw_fname)] if not raw_fname.startswith(BIBSETPREFIX) \
+                             else get_fnames_from_bibset(raw_fname, args.event)
+        if len(event_fnames) > 1:
+            iterable = tqdm(event_fnames, ncols=80, bar_format="Adding %s {l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]" % raw_fname)
+            per_file_progress_bar = False
+        else:
+            iterable = event_fnames
+            per_file_progress_bar = True
+        error_msgs = []
+        for event, f in iterable:
+            try:
+                f_added, f_skipped, file_skipped = _add_file(event, f, args.redownload, db, per_file_progress_bar)
+                if args.verbose and not per_file_progress_bar:
+                    if not file_skipped:
+                        log_msg = "Added %d entries from %s" % (f_added, f)
+                        if event:
+                            log_msg += " (%s)" % event.upper()
+                        else:
+                            log_msg += " (NO EVENT)"
                     else:
-                        log_msg += " (NO EVENT)"
-                else:
-                    log_msg = "Skipped %s" % f
-                tqdm.write(log_msg)
-        except AddFileError as e:
-            f_added = 0
-            f_skipped = 0
-            file_skipped = False
-            error_msgs.append(str(e))
-        added += f_added
-        skipped += f_skipped
-        if file_skipped:
-            n_files_skipped += 1
+                        log_msg = "Skipped %s" % f
+                    tqdm.write(log_msg)
+            except AddFileError as e:
+                f_added = 0
+                f_skipped = 0
+                file_skipped = False
+                error_msgs.append(str(e))
+            added += f_added
+            skipped += f_skipped
+            if file_skipped:
+                n_files_skipped += 1
 
     print('Added', added, 'entries, skipped', skipped, 'duplicates. Skipped', n_files_skipped, 'files')
     if error_msgs:
@@ -656,7 +656,7 @@ def main():
     subparsers = parser.add_subparsers()
 
     parser_add = subparsers.add_parser('add', help='Add a BibTeX file')
-    parser_add.add_argument('file', type=str, default=None, help='BibTeX file to add')
+    parser_add.add_argument('files', type=str, default=None, help='BibTeX files to add', nargs='+')
     parser_add.add_argument("-e", "--event", help="Event for entries")
     parser_add.add_argument("-r", "--redownload", help="Re-download already downloaded files", action="store_true")
     parser_add.add_argument("-v", "--verbose", help="Be verbose about which files are being downloaded", action="store_true")
