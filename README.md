@@ -1,5 +1,7 @@
 # bibsearch
 
+bibsearch makes it easy
+
 The process of searching for BibTeX entries is cumbersome and annoying.
 Authors are inconsistent in providing them, and they are optional on the arXiv.
 Google Scholar is useful, but yielding BibTeX entries requires drilling down into entries.
@@ -13,6 +15,14 @@ It provides the following services:
 - Automatic downloading of citations from their official repositories
 - Keyword-based search agianst entire entries
 - Automatic generation of a BibTeX file from LaTeX source
+
+Why you should use `bibsearch`:
+
+- You can stick to the command line where life is best
+- Get the official and most up-to-date citations
+- Easily open the PDFs by typing a single command
+- Integration with LaTeX builds means you never have to manually manage a paper's bibliography again
+- Bibsearch does not currently track your browsing history to sell you to advertisers
 
 ## Installation
 

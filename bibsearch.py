@@ -59,6 +59,8 @@ def download_file(url, fname_out=None) -> None:
 
     import ssl
 
+    logging.info('Downloading {} to {}'.format(url, fname_out if fname_out is not None else 'STR'))
+
     try:
         with urllib.request.urlopen(url) as f:
             if not fname_out:
@@ -451,6 +453,8 @@ def get_fnames_from_bibset(raw_fname, override_event):
     prev_level_2 = None
     if len(spec_fields) > 1:
         for f in spec_fields[1:]:
+            # some keys are integers (years)
+            f = int(f) if re.match(r'\d+', f) else f
             try:
                 currentSet = currentSet[f]
                 prev_level_2 =  prev_level
