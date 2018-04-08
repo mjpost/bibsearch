@@ -52,6 +52,21 @@ OPENCOMMAND="open"  # TODO: Customize by OS
 TEMPDIR="/tmp/bibsearch"
 DATABASE_URL = 'https://github.com/mjpost/bibsearch/raw/master/resources/'
 
+# TODO: Read this info from some external file
+macros = {
+    "@acl": "Annual Meeting of the Association for Computational Linguistics",
+    "@emnlp": "Conference on Empirical Methods in Natural Language Processing"
+}
+
+def replace_macros(string):
+    substituted = []
+    for w in string.strip().split():
+        if w in macros:
+            substituted += macros[w].split()
+        else:
+            substituted.append(w)
+    return " ".join(substituted)
+
 def download_file(url, fname_out=None) -> None:
     """
     Downloads a file to a location.
@@ -110,7 +125,7 @@ class BibDB:
                 custom_key text UNIQUE,
                 author text,
                 title text,
-                event text,
+                booktitle text,
                 year text,
                 fulltext text
                 )""")
@@ -124,36 +139,36 @@ class BibDB:
                     custom_key,
                     author,
                     title,
-                    event,
+                    booktitle,
                     year,
                     fulltext UNINDEXED,
                     content='bib',
                     );
                 CREATE TRIGGER bib_ai AFTER INSERT ON bib BEGIN
                    INSERT INTO bibindex
-                       (rowid, key, custom_key, author, title, event, year, fulltext)
+                       (rowid, key, custom_key, author, title, booktitle, year, fulltext)
                        VALUES 
                        (new.rowid, new.key, new.custom_key, new.author, new.title, 
-                       new.event, new.year, new.fulltext);
+                       new.booktitle, new.year, new.fulltext);
                     END;
                 CREATE TRIGGER bib_ad AFTER DELETE ON bib BEGIN
                    INSERT INTO bibindex
-                       (bibindex, rowid, custom_key, author, title, event, year, fulltext)
+                       (bibindex, rowid, custom_key, author, title, booktitle, year, fulltext)
                        VALUES 
                        ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
-                       old.event, old.year, old.fulltext);
+                       old.booktitle, old.year, old.fulltext);
                     END;
                 CREATE TRIGGER bibindex_au AFTER UPDATE ON bib BEGIN
                    INSERT INTO bibindex
-                       (bibindex, rowid, key, custom_key, author, title, event, year, fulltext)
+                       (bibindex, rowid, key, custom_key, author, title, booktitle, year, fulltext)
                        VALUES 
                        ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
-                       old.event, old.year, old.fulltext);
+                       old.booktitle, old.year, old.fulltext);
                    INSERT INTO bibindex
-                       (rowid, key, custom_key, author, title, event, year, fulltext)
+                       (rowid, key, custom_key, author, title, booktitle, year, fulltext)
                        VALUES 
                        (new.rowid, new.key, new.custom_key, new.author, new.title, 
-                       new.event, new.year, new.fulltext);
+                       new.booktitle, new.year, new.fulltext);
                     END;
                 """)
             except sqlite3.OperationalError as e:
@@ -177,9 +192,9 @@ class BibDB:
                 results = yaml.load(open(last_results_fname))
         else:
             try:
-                self.cursor.execute("SELECT fulltext, event, key FROM bibindex \
+                self.cursor.execute("SELECT fulltext, key FROM bibindex \
                                     WHERE bibindex MATCH ?",
-                                    [" ".join(query)])
+                                    [replace_macros(" ".join(query))])
                 results = list(self.cursor)
                 with open(last_results_fname, "w") as fp:
                     yaml.dump(results, fp)
@@ -206,13 +221,13 @@ class BibDB:
             query_args.append(where_args.key)
         if where_args.author:
             query.append("(author LIKE ?)")
-            query_args.append(where_args.author)
+            query_args.append(replace_macros(where_args.author))
         if where_args.title:
             query.append("(title LIKE ?)")
-            query_args.append(where_args.title)
-        if where_args.event:
-            query.append("(event LIKE ?)")
-            query_args.append(where_args.event)
+            query_args.append(replace_macros(where_args.title))
+        if where_args.booktitle:
+            query.append("(booktitle LIKE ?)")
+            query_args.append(replace_macros(where_args.booktitle))
         if where_args.year:
             query.append("(year LIKE ?)")
             query_args.append(where_args.year)
@@ -223,7 +238,7 @@ class BibDB:
             if os.path.exists(last_results_fname):
                 results = yaml.load(open(last_results_fname))
         else:
-            self.cursor.execute("SELECT fulltext, event, key FROM bib \
+            self.cursor.execute("SELECT fulltext, key FROM bib \
                                 WHERE %s" % " AND ".join(query),
                                 query_args)
             results = list(self.cursor)
@@ -247,15 +262,18 @@ class BibDB:
     def save(self):
         self.connection.commit()
 
-    def add(self, event, entry: pybtex.Entry):
+    def add(self, entry: pybtex.Entry):
         """ Returns if the entry was added or if it was a duplicate"""
         original_key = entry.key
+        # TODO: "outsource" the try: excpet conversion into a separate function for more granularity in error caching
         try:
             utf_author = bibutils.tex_to_unicode(entry.fields.get("author"))
             utf_title = bibutils.tex_to_unicode(entry.fields.get("title"))
+            utf_booktitle = bibutils.tex_to_unicode(entry.fields.get("booktitle"))
         except:
             utf_author = entry.fields.get("author")
             utf_title = entry.fields.get("title")
+            utf_booktitle = entry.fields.get("booktitle")
         custom_key_tries = 0
         added = False
         while not added:
@@ -269,12 +287,12 @@ class BibDB:
                 print(custom_key, custom_key_tries)
                 logging.warning("Could not generate a unique custom key for entry %s", original_key)
             try:
-                self.cursor.execute('INSERT INTO bib(key, custom_key, author, title, event, year, fulltext) VALUES (?,?,?,?,?,?,?)',
+                self.cursor.execute('INSERT INTO bib(key, custom_key, author, title, booktitle, year, fulltext) VALUES (?,?,?,?,?,?,?)',
                                     (original_key,
                                      custom_key,
                                      utf_author,
                                      utf_title,
-                                     event,
+                                     utf_booktitle,
                                      str(entry.fields.get("year")),
                                      single_entry_to_fulltext(entry, custom_key)
                                     )
@@ -350,7 +368,7 @@ def generate_custom_key(entry: pybtex.Entry, suffix_level=0):
 def format_search_results(results, bibtex_output, use_original_key):
     if not bibtex_output:
         textwrapper = textwrap.TextWrapper(subsequent_indent="  ")
-    for (fulltext, event, original_key) in results:
+    for (fulltext, original_key) in results:
         entry = fulltext_to_single_entry(fulltext)
         if use_original_key:
             entry.key = original_key
@@ -361,16 +379,19 @@ def format_search_results(results, bibtex_output, use_original_key):
             author = [a.pretty() for a in bibutils.parse_names(entry.fields["author"])]
             author = ", ".join(author[:-2] + [" and ".join(author[-2:])])
             try:
+                # TODO: see above about outsourcing these functions
                 utf_author = bibutils.tex_to_unicode(entry.fields.get("author"))
                 utf_title = bibutils.tex_to_unicode(entry.fields.get("title"))
+                utf_booktitle = bibutils.tex_to_uniced(entry.fields.get("booktitle"))
             except:
                 utf_author = entry.fields.get("author")
                 utf_title = entry.fields.get("title")
-            lines = textwrapper.wrap('[{key}] {author} "{title}", {event}{year}'.format(
+                utf_booktitle = entry.fields.get("booktitle")
+            lines = textwrapper.wrap('[{key}] {author} "{title}", {booktitle}{year}'.format(
                             key=entry.key,
                             author=utf_author,
                             title=utf_title,
-                            event = event.upper() + " " if event else "",
+                            booktitle=utf_booktitle + ", ",
                             year=entry.fields["year"]))
             print("\n".join(lines) + "\n")
 
@@ -403,7 +424,7 @@ def _open(args):
 class AddFileError(BibsearchError):
     pass
 
-def _add_file(event, fname, force_redownload, db, per_file_progress_bar):
+def _add_file(fname, force_redownload, db, per_file_progress_bar):
     """
     Return #added, #skipped, file_skipped
     """
@@ -429,14 +450,14 @@ def _add_file(event, fname, force_redownload, db, per_file_progress_bar):
     else:
         iterable = new_entries.values()
     for entry in iterable:
-        if db.add(event, entry):
+        if db.add(entry):
             added += 1
         else:
             skipped += 1
 
     return added, skipped, False
 
-def get_fnames_from_bibset(raw_fname, override_event):
+def get_fnames_from_bibset(raw_fname):
     bib_spec = raw_fname[len(BIBSETPREFIX):].strip()
     spec_fields = bib_spec.split('/')
     resource = spec_fields[0]
@@ -446,32 +467,23 @@ def get_fnames_from_bibset(raw_fname, override_event):
     except urllib.error.URLError:
         logging.error("Could not find resource %s", resource)
         sys.exit(1)
-    # TODO: Ugly logic for detecting events
-    prev_level = resource
-    prev_level_2 = None
     if len(spec_fields) > 1:
         for f in spec_fields[1:]:
             try:
                 currentSet = currentSet[f]
-                prev_level_2 =  prev_level
-                prev_level = f
             except KeyError:
                 logging.error("Invalid branch '%s' in bib specification '%s'",
                               f, raw_fname)
                 sys.exit(1)
-    def rec_extract_bib(dict_or_list, override_event,
-                        prev_level, prev_level_2=None):
+    def rec_extract_bib(dict_or_list):
         result = []
         if isinstance(dict_or_list, list):
-            event = override_event if override_event else prev_level_2
-            result = [(event, fname) for fname in dict_or_list]
+            result = [fname for fname in dict_or_list]
         else:
-            for (k, v) in dict_or_list.items():
-                result += rec_extract_bib(v, override_event, k, prev_level)
+            for v in dict_or_list.values():
+                result += rec_extract_bib(v)
         return result
-    return rec_extract_bib(currentSet,
-                           override_event if override_event else None,
-                           prev_level, prev_level_2)
+    return rec_extract_bib(currentSet)
 
 
 def _arxiv(args):
@@ -526,7 +538,7 @@ def _arxiv(args):
         format_search_results( [(single_entry_to_fulltext(bib_entry), 'arXiv', arxiv_id)], False, True)
 
         if args.add:
-            db.add('arXiv', bib_entry)
+            db.add(bib_entry)
 
         continue
 
@@ -538,28 +550,24 @@ def _add(args):
     db = BibDB()
 
     raw_fname = args.file
-    event_fnames = [(args.event, raw_fname)] if not raw_fname.startswith(BIBSETPREFIX) \
-                         else get_fnames_from_bibset(raw_fname, args.event)
+    fnames = [raw_fname] if not raw_fname.startswith(BIBSETPREFIX) \
+                         else get_fnames_from_bibset(raw_fname)
     added = 0
     skipped = 0
     n_files_skipped = 0
-    if len(event_fnames) > 1:
-        iterable = tqdm(event_fnames, ncols=100, bar_format="Adding %s {l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]" % raw_fname)
+    if len(fnames) > 1:
+        iterable = tqdm(fnames, ncols=80, bar_format="Adding %s {l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]" % raw_fname)
         per_file_progress_bar = False
     else:
-        iterable = event_fnames
+        iterable = fnames
         per_file_progress_bar = True
     error_msgs = []
-    for event, f in iterable:
+    for f in iterable:
         try:
-            f_added, f_skipped, file_skipped = _add_file(event, f, args.redownload, db, per_file_progress_bar)
+            f_added, f_skipped, file_skipped = _add_file(f, args.redownload, db, per_file_progress_bar)
             if args.verbose and not per_file_progress_bar:
                 if not file_skipped:
                     log_msg = "Added %d entries from %s" % (f_added, f)
-                    if event:
-                        log_msg += " (%s)" % event.upper()
-                    else:
-                        log_msg += " (NO EVENT)"
                 else:
                     log_msg = "Skipped %s" % f
                 tqdm.write(log_msg)
@@ -657,7 +665,6 @@ def main():
 
     parser_add = subparsers.add_parser('add', help='Add a BibTeX file')
     parser_add.add_argument('file', type=str, default=None, help='BibTeX file to add')
-    parser_add.add_argument("-e", "--event", help="Event for entries")
     parser_add.add_argument("-r", "--redownload", help="Re-download already downloaded files", action="store_true")
     parser_add.add_argument("-v", "--verbose", help="Be verbose about which files are being downloaded", action="store_true")
     parser_add.set_defaults(func=_add)
@@ -681,7 +688,7 @@ def main():
     parser_where.add_argument('-k', '--key', help="Query for key field")
     parser_where.add_argument('-a', '--author', help="Query for author field")
     parser_where.add_argument('-t', '--title', help="Query for title field")
-    parser_where.add_argument('-e', '--event', help="Query for event field")
+    parser_where.add_argument('-e', '--booktitle', help="Query for booktitle field")
     parser_where.add_argument('-y', '--year', help="Query for year field")
     parser_where.add_argument('-b', '--bibtex', help='Print entries in bibtex format', action='store_true')
     parser_where.add_argument('-o', "--original-key", help='Print the original key of the entries', action='store_true')
