@@ -54,8 +54,9 @@ DATABASE_URL = 'https://github.com/mjpost/bibsearch/raw/master/resources/'
 
 # TODO: Read this info from some external file
 macros = {
-    "@acl": "Annual Meeting of the Association for Computational Linguistics",
-    "@emnlp": "Conference on Empirical Methods in Natural Language Processing"
+    '@acl': 'booktitle: "Annual Meeting of the Association for Computational Linguistics"',
+    '@emnlp': 'booktitle: "Conference on Empirical Methods in Natural Language Processing"',
+    '@wmt': 'booktitle: "Workshop on Statistical Machine Translation" OR booktitle: "Conference on Machine Translation"'
 }
 
 def replace_macros(string):
@@ -264,6 +265,18 @@ class BibDB:
 
     def add(self, entry: pybtex.Entry):
         """ Returns if the entry was added or if it was a duplicate"""
+
+        # TODO: make this a better sanity checking and perhaps report errors
+        if not entry.key:
+            return False
+        # TODO: Strange thing. If I don't add the following check for author,
+        # pybtex aborts with an error when searching. Adding it everything
+        # works, but I do not find any entry with "unknown" in the author
+        # field. Note also that "author in key.fields" does not seem to work,
+        # as the entry may get it from "persons"
+        if not entry.fields.get("author"):
+            entry.fields["author"] = "UNKNWON"
+
         original_key = entry.key
         # TODO: "outsource" the try: excpet conversion into a separate function for more granularity in error caching
         try:
@@ -654,6 +667,10 @@ def _set_custom_key(args):
     logging.info("Updating custom key of %s to %s", original_key, args.new_key)
     db.update_custom_key(original_key, args.new_key)
 
+def _macros(args):
+    for macro, expansion in macros.items():
+        print("%s:\t%s" % (macro, expansion))
+
 def main():
     logging.basicConfig(level=logging.INFO,
                         format="[%(levelname)s] %(message)s")
@@ -709,6 +726,9 @@ def main():
     parser_key.add_argument('-k', '--new-key', help='New key')
     parser_key.add_argument('terms', nargs='+', help='One or more search terms which uniquely identify an entry')
     parser_key.set_defaults(func=_set_custom_key)
+
+    parser_macros = subparsers.add_parser('macros', help='Show defined macros')
+    parser_macros.set_defaults(func=_macros)
 
     args = parser.parse_args()
     args.func(args)
