@@ -53,6 +53,8 @@ def download_file(url, fname_out=None) -> None:
 
     import ssl
 
+    logging.info('Downloading {} to {}'.format(url, fname_out if fname_out is not None else 'STR'))
+
     try:
         with urllib.request.urlopen(url) as f:
             if not fname_out:
@@ -449,6 +451,7 @@ def get_fnames_from_bibset(raw_fname, override_event):
     prev_level_2 = None
     if len(spec_fields) > 1:
         for f in spec_fields[1:]:
+            # some keys are integers (years)
             try:
                 currentSet = currentSet[f]
                 prev_level_2 =  prev_level
@@ -456,6 +459,7 @@ def get_fnames_from_bibset(raw_fname, override_event):
             except KeyError:
                 logging.error("Invalid branch '%s' in bib specification '%s'",
                               f, raw_fname)
+                logging.error("Options at this level are:", ', '.join(currentSet.keys()))
                 sys.exit(1)
     def rec_extract_bib(dict_or_list, override_event,
                         prev_level, prev_level_2=None):
