@@ -22,10 +22,13 @@ import textwrap
 from tqdm import tqdm
 import yaml
 
-import pybtex.database as pybtex
 import bibutils
+from config import Config
+import pybtex.database as pybtex
 
 VERSION = '0.2.0'
+
+config = Config()
 
 class BibsearchError(Exception):
     pass
@@ -41,16 +44,7 @@ try:
 except ImportError:
     logging.warning('Could not import signal.SIGPIPE (this is expected on Windows machines)')
 
-# Querying for a HOME environment variable can result in None (e.g., on Windows)
-# in which case the os.path.join() throws a TypeError. Using expanduser() is
-# a safe way to get the user's home folder.
-BIBSEARCHDIR = os.path.join(os.path.expanduser("~"), '.bibsearch')
-RESOURCEDIR = os.path.join(BIBSEARCHDIR, 'resources')
-DBFILE = os.path.join(BIBSEARCHDIR, 'bib.db')
 BIBSETPREFIX="bib://"
-OPENCOMMAND="open"  # TODO: Customize by OS
-TEMPDIR="/tmp/bibsearch"
-DATABASE_URL = 'https://github.com/mjpost/bibsearch/raw/master/resources/'
 
 def download_file(url, fname_out=None) -> None:
     """
@@ -95,8 +89,8 @@ def fulltext_to_single_entry(fulltext: str) -> pybtex.Entry:
     return entry
 
 class BibDB:
-    def __init__(self, fname=DBFILE):
-        self.fname = fname
+    def __init__(self):
+        self.fname = os.path.join(config.bibsearch_dir, "bib.db")
         createDB = False
         if not os.path.exists(self.fname):
             if not os.path.exists(os.path.dirname(self.fname)):
@@ -171,7 +165,7 @@ class BibDB:
 
     def search(self, query):
         results = []
-        last_results_fname = os.path.join(BIBSEARCHDIR, "lastSearch.yml")
+        last_results_fname = os.path.join(config.bibsearch_dir, "lastSearch.yml")
         if not query:
             if os.path.exists(last_results_fname):
                 results = yaml.load(open(last_results_fname))
@@ -218,7 +212,7 @@ class BibDB:
             query_args.append(where_args.year)
 
         results = []
-        last_results_fname = os.path.join(BIBSEARCHDIR, "lastSearch.yml")
+        last_results_fname = os.path.join(config.bibsearch_dir, "lastSearch.yml")
         if not query:
             if os.path.exists(last_results_fname):
                 results = yaml.load(open(last_results_fname))
@@ -329,10 +323,12 @@ custom_key_skip_words = set(stop_words.get_stop_words("en"))
 def generate_custom_key(entry: pybtex.Entry, suffix_level=0):
     # TODO: fault tolerance against missing fields!
     year = int(entry.fields["year"])
-    author_surname = bibutils.parse_names(entry.fields["author"])[0]\
+    all_authors = bibutils.parse_names(entry.fields["author"])
+    author_surname = all_authors[0]\
         .pretty(template="{last}")\
         .lower()\
         .translate(custom_key_skip_chars)
+    et_al = "_etAl" if len(all_authors) > 1 else ""
 
     filtered_title = [w for w in [t.lower() for t in entry.fields["title"].split()] if w not in custom_key_skip_words]
     if filtered_title:
@@ -341,9 +337,11 @@ def generate_custom_key(entry: pybtex.Entry, suffix_level=0):
         title_word = entry.fields["title"][0]
     title_word = title_word.translate(custom_key_skip_chars)
 
-    return "{surname}{year:02}{suffix}_{title}".format(
+    return config.custom_key_format.format(
         surname=author_surname,
-        year=year%100,
+        et_al=et_al,
+        year=year,
+        short_year=year%100,
         suffix='' if suffix_level==0 else chr(ord('a') + suffix_level - 1),
         title=title_word)
 
@@ -395,10 +393,10 @@ def _open(args):
     logging.info('Downloading "%s"', entry.fields["title"])
     if "url" not in entry.fields:
         logging.error("Entry does not contain an URL field")
-    if not os.path.exists(TEMPDIR):
-        os.makedirs(TEMPDIR)
-    temp_fname = download_file(entry.fields["url"], os.path.join(TEMPDIR, entry.key + ".pdf"))
-    subprocess.run([OPENCOMMAND, temp_fname])
+    if not os.path.exists(config.tempdir):
+        os.makedirs(config.tempdir)
+    temp_fname = download_file(entry.fields["url"], os.path.join(config.tempdir, entry.key + ".pdf"))
+    subprocess.run([config.opencommand, temp_fname])
 
 class AddFileError(BibsearchError):
     pass
@@ -441,7 +439,7 @@ def get_fnames_from_bibset(raw_fname, override_event):
     spec_fields = bib_spec.split('/')
     resource = spec_fields[0]
     try:
-        currentSet = yaml.load(download_file(DATABASE_URL + resource + ".yml"))
+        currentSet = yaml.load(download_file(config.database_url + resource + ".yml"))
         #~ currentSet = yaml.load(open("resources/" + resource + ".yml")) # for local testing
     except urllib.error.URLError:
         logging.error("Could not find resource %s", resource)
@@ -652,6 +650,11 @@ def main():
 
     parser = argparse.ArgumentParser(description='bibsearch: Download, manage, and search a BibTeX database.')
     parser.add_argument('--version', '-V', action='version', version='%(prog)s {}'.format(VERSION))
+    parser.add_argument('-c', '--config_file', help="use this config file",
+                        default=os.path.join(os.path.expanduser("~"),
+                                             '.bibsearch',
+                                             "bibsearch.config")
+                        )
     parser.set_defaults(func=lambda _ : parser.print_help())
     subparsers = parser.add_subparsers()
 
@@ -704,8 +707,8 @@ def main():
     parser_key.set_defaults(func=_set_custom_key)
 
     args = parser.parse_args()
+    config.initialize(args.config_file)
     args.func(args)
-
 
 if __name__ == '__main__':
     main()
