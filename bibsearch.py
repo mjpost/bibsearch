@@ -237,7 +237,9 @@ class BibDB:
         """
         self.cursor.execute("SELECT fulltext FROM bib WHERE key=? OR custom_key=?",
                             [key, key])
-        entry = single_entry_to_fulltext(fulltext_to_single_entry(self.cursor.fetchone()[0]), overwrite_key=key)
+        entry = self.cursor.fetchone()
+        if entry is not None:
+            entry = single_entry_to_fulltext(fulltext_to_single_entry(entry[0]), overwrite_key=key)
         return entry
 
     def save(self):
@@ -259,7 +261,7 @@ class BibDB:
             if custom_key_tries < 10:
                 try:
                     custom_key = generate_custom_key(entry, custom_key_tries)
-                except:
+                except Exception as e:
                     pass
             else:
                 print(custom_key, custom_key_tries)
