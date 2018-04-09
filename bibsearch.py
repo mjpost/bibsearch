@@ -53,7 +53,7 @@ def download_file(url, fname_out=None) -> None:
 
     import ssl
 
-    logging.info('Downloading {} to {}'.format(url, fname_out if fname_out is not None else 'STR'))
+    #~ logging.info('Downloading {} to {}'.format(url, fname_out if fname_out is not None else 'STR'))
 
     try:
         with urllib.request.urlopen(url) as f:
