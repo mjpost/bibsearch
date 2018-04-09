@@ -237,7 +237,9 @@ class BibDB:
         """
         self.cursor.execute("SELECT fulltext FROM bib WHERE key=? OR custom_key=?",
                             [key, key])
-        entry = single_entry_to_fulltext(fulltext_to_single_entry(self.cursor.fetchone()[0]), overwrite_key=key)
+        entry = self.cursor.fetchone()
+        if entry is not None:
+            entry = single_entry_to_fulltext(fulltext_to_single_entry(entry[0]), overwrite_key=key)
         return entry
 
     def save(self):
@@ -259,7 +261,7 @@ class BibDB:
             if custom_key_tries < 10:
                 try:
                     custom_key = generate_custom_key(entry, custom_key_tries)
-                except:
+                except Exception as e:
                     pass
             else:
                 print(custom_key, custom_key_tries)
@@ -500,10 +502,15 @@ def _arxiv(args):
     # Run through each entry, and print out information
     for entry in feed.entries:
 
+        arxiv_id = re.sub(r'v\d+$', '', entry.id.split('/abs/')[-1])
+
         fields = { 'title': entry.title,
-                   'booktitle': '',
+                   'journal': 'CoRR',
                    'year': str(entry.published[:4]),
                    'abstract': entry.summary,
+                   'volume': 'abs/{}'.format(arxiv_id),
+                   'archivePrefix': 'arXiv',
+                   'eprint': arxiv_id,
         }
 
         try:
@@ -522,8 +529,6 @@ def _arxiv(args):
         authors = {'author': [pybtex.Person(author.name) for author in entry.authors]}
         bib_entry = pybtex.Entry('article', persons=authors, fields=fields)
         bib_entry.key = generate_custom_key(bib_entry)
-
-        arxiv_id = re.sub(r'v\d+$', '', entry.id.split('/abs/')[-1])
 
         format_search_results( [(single_entry_to_fulltext(bib_entry), 'arXiv', arxiv_id)], False, True)
 
