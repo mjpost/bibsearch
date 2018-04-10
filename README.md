@@ -1,9 +1,7 @@
 # bibsearch
 
-bibsearch makes it easy
-
 The process of searching for BibTeX entries is cumbersome and annoying.
-Authors are inconsistent in providing them, and they are optional on the arXiv.
+Authors are inconsistent in providing them, and they are optional on [the arXiv](http://arxiv.org/).
 Google Scholar is useful, but yielding BibTeX entries requires drilling down into entries.
 What's worse, for some research fields (such as citations from the [ACL Anthology](http://aclanthology.info/)), the correct citations are not the first search result.
 And anyway, why should you have to open a web browser to do something that is inherently text-based?
@@ -12,17 +10,13 @@ Ideally one should have to do these tasks only once per paper, but the reality i
 If this problem statement strikes a chord, `bibsearch` is the tool for you.
 It provides the following services:
 
-- Automatic downloading of citations from their official repositories
-- Keyword-based search agianst entire entries
-- Automatic generation of a BibTeX file from LaTeX source
+- Keyword-based search against a private collection of entries (`bibsearch search`)
+- Automatic downloading of citations from predefined collections (`bibsearch add bib://`) or arbitrary URI's (`bibsearch add`)
+- Searching and downloading from the arXiv (`bibsearch arxiv`)
+- Automatic generation of a project BibTeX file from LaTeX source (`bibsearch tex`)
+- Keyword-based downloading and opening of PDF files (`bibsearch open`)
 
-Why you should use `bibsearch`:
-
-- You can stick to the command line where life is best
-- Get the official and most up-to-date citations
-- Easily open the PDFs by typing a single command
-- Integration with LaTeX builds means you never have to manually manage a paper's bibliography again
-- Bibsearch does not currently track your browsing history to sell you to advertisers
+Stick to the command line where life is best!
 
 ## Installation
 
@@ -53,6 +47,8 @@ Or even the entire anthology:
 
     bibsearch add bib://acl
 
+Other collections available include ICML and NIPS.
+
 You can also add your own files, either locally or via URL.
 
     # Import from a URL
@@ -66,24 +62,58 @@ Duplicate keys are successfully ignored.
 
 Now, search across all fields to find your entries:
 
-    bibsearch search AMR
+    bibsearch search brown 1993 statistical
 
 (`find` also works)
 Get the outputs in BibTeX format:
 
-    bibsearch search AMR -b
+    bibsearch search brown 1993 statistical
 
-Generate the BibTeX file based on citations found in a LaTeX source (requires the .aux file):
+If there is only one match, you can also open the corresponding PDF:
+
+    bibsearch open brown 1993 statistical
+
+`open` will work implicitly on the results of the last search, so you could also have typed:
+
+    bibsearch open
+
+Generate the BibTeX file based on citations found in a LaTeX source (requires that `LATEX_FILE.aux` exists):
 
     bibsearch tex LATEX_FILE
+
+and write it to the bibliography file specified in the LaTeX:
+
+    bibsearch tex LATEX_FILE -B
 
 Print a summary of your database:
 
     bibsearch print --summary
 
+Search the arXiv:
+
+    bibsearch arxiv vaswani attention is all you need
+
+Add the results to your database:
+
+    bibsearch arxiv vaswani attention is all you need -a
+
+Open the PDF:
+
+    bibsearch open
+
+Get the key to use with `\cite`:
+
+    $ bibsearch search vaswani attention
+    [vaswani:2017:attention] Vaswani, Ashish and Shazeer, Noam and Parmar,
+      Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N. and
+      Kaiser, Lukasz and Polosukhin, Illia "Attention Is All You Need",
+      ARXIV 2017
+
+
 ## Incorporate in a LaTeX workflow
 
-Use this:
+If you use the following in a Makefile, you can use bibsearch to find paper keys, and avoid creating the bibliography file entirely.
+`bibsearch` will generate it for you!
 
     pdflatex PAPER
     bibsearch tex PAPER -B
@@ -91,5 +121,5 @@ Use this:
     pdflatex PAPER
     pdflatex PAPER
 
-This generates whatever bib file is references in PAPER.tex.
-You don't ever need to manually manage it again!
+This generates whatever bib file is referenced in PAPER.tex.
+
