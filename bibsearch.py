@@ -26,6 +26,8 @@ import bibutils
 from config import Config
 import pybtex.database as pybtex
 
+from typing import Tuple
+
 VERSION = '0.2.0'
 
 config = Config()
@@ -165,20 +167,34 @@ class BibDB:
         self.cursor.execute('SELECT COUNT(*) FROM bib')
         return int(self.cursor.fetchone()[0])
 
+    def save_to_search_cache(self, search: Tuple[str,str,str]) -> None:
+        """
+        Saves the result of a search, which is represented as a tuple: (full bibtex, collection, key).
+        This can then be used by subcommands that support implicit arguments, like 'open'.
+        """
+        last_results_fname = os.path.join(config.bibsearch_dir, "lastSearch.yml")
+        with open(last_results_fname, "w") as fp:
+            yaml.dump(search, fp)
+
+    def load_search_cache(self) -> Tuple[str,str,str]:
+        """
+        Returns the result of a cached search.
+        """
+        last_results_fname = os.path.join(config.bibsearch_dir, "lastSearch.yml")
+        if os.path.exists(last_results_fname):
+            return yaml.load(open(last_results_fname))
+
     def search(self, query):
         results = []
-        last_results_fname = os.path.join(config.bibsearch_dir, "lastSearch.yml")
         if not query:
-            if os.path.exists(last_results_fname):
-                results = yaml.load(open(last_results_fname))
+            results = self.load_search_cache()
         else:
             try:
                 self.cursor.execute("SELECT fulltext, event, key FROM bibindex \
                                     WHERE bibindex MATCH ?",
                                     [" ".join(query)])
                 results = list(self.cursor)
-                with open(last_results_fname, "w") as fp:
-                    yaml.dump(results, fp)
+                self.save_to_search_cache(results)
             except sqlite3.OperationalError as e:
                 error_msg = str(e)
                 if "no such table" in error_msg and "bibindex" in error_msg:
@@ -500,6 +516,7 @@ def _arxiv(args):
     # print('startIndex for this query: %s'   % feed.feed.opensearch_startindex)
 
     # Run through each entry, and print out information
+    results_to_save = []
     for entry in feed.entries:
 
         arxiv_id = re.sub(r'v\d+$', '', entry.id.split('/abs/')[-1])
@@ -534,8 +551,11 @@ def _arxiv(args):
 
         if args.add:
             db.add('arXiv', bib_entry)
+            results_to_save.append((single_entry_to_fulltext(bib_entry), 'arXiv', bib_entry.key))
+        else:
+            results_to_save.append((single_entry_to_fulltext(bib_entry), 'arXiv', arxiv_id))
 
-        continue
+        db.save_to_search_cache(results_to_save)
 
     if args.add:
         db.save()
