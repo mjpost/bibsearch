@@ -467,10 +467,10 @@ def _open(args):
     logging.info('Downloading "%s"', entry.fields["title"])
     if "url" not in entry.fields:
         logging.error("Entry does not contain an URL field")
-    if not os.path.exists(config.tempdir):
-        os.makedirs(config.tempdir)
-    temp_fname = download_file(entry.fields["url"], os.path.join(config.tempdir, entry.key + ".pdf"))
-    subprocess.run([config.opencommand, temp_fname])
+    if not os.path.exists(config.temp_dir):
+        os.makedirs(config.temp_dir)
+    temp_fname = download_file(entry.fields["url"], os.path.join(config.temp_dir, entry.key + ".pdf"))
+    subprocess.run([config.open_command, temp_fname])
 
 class AddFileError(BibsearchError):
     pass
