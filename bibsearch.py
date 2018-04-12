@@ -48,14 +48,6 @@ except ImportError:
 
 BIBSETPREFIX="bib://"
 
-# TODO: Read this info from some external file
-macros = {
-      '@acl': 'booktitle:"Annual Meeting of the Association for Computational Linguistics"'
-    , '@emnlp': 'booktitle:"Conference on Empirical Methods in Natural Language Processing"'
-    , '@wmt': '(booktitle:"Workshop on Statistical Machine Translation" OR booktitle:"Conference on Machine Translation")'
-    , '@naacl': 'booktitle:"Conference of the North American Chapter of the Association for Computational Linguistics"'
-}
-
 def download_file(url, fname_out=None) -> None:
     """
     Downloads a file to a location.
@@ -196,8 +188,8 @@ class BibDB:
         processed_query_terms = []
         for t in query_terms:
             current_term = t
-            if t in macros:
-                current_term = macros[t]
+            if t in config.macros:
+                current_term = config.macros[t]
                 # TODO: for now we trust macros blindly
             else:
                 if not (current_term.startswith("author:") or
@@ -254,13 +246,13 @@ class BibDB:
             query_args.append(where_args.key)
         if where_args.author:
             query.append("(author LIKE ?)")
-            query_args.append(replace_macros(where_args.author))
+            query_args.append(where_args.author)
         if where_args.title:
             query.append("(title LIKE ?)")
-            query_args.append(replace_macros(where_args.title))
+            query_args.append(where_args.title)
         if where_args.booktitle:
             query.append("(booktitle LIKE ?)")
-            query_args.append(replace_macros(where_args.booktitle))
+            query_args.append(where_args.booktitle)
         if where_args.year:
             query.append("(year LIKE ?)")
             query_args.append(where_args.year)
@@ -715,7 +707,7 @@ def _set_custom_key(args):
     db.update_custom_key(original_key, args.new_key)
 
 def _macros(args):
-    for macro, expansion in macros.items():
+    for macro, expansion in config.macros.items():
         print("%s:\t%s" % (macro, expansion))
 
 def main():
