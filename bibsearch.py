@@ -237,34 +237,45 @@ class BibDB:
                     raise
         return results
 
-    def where(self, where_args):
-        query = [] 
+    def where(self, query_terms):
+        query_columns = [] 
         query_args = []
-        if where_args.key:
-            query.append("(key LIKE ? OR custom_key LIKE ?)")
-            query_args.append(where_args.key)
-            query_args.append(where_args.key)
-        if where_args.author:
-            query.append("(author LIKE ?)")
-            query_args.append(where_args.author)
-        if where_args.title:
-            query.append("(title LIKE ?)")
-            query_args.append(where_args.title)
-        if where_args.booktitle:
-            query.append("(booktitle LIKE ?)")
-            query_args.append(where_args.booktitle)
-        if where_args.year:
-            query.append("(year LIKE ?)")
-            query_args.append(where_args.year)
+        wildcard_trans = str.maketrans("*", "%")
+        for term in query_terms:
+            column_query = term.split(":", 1)
+            if len(column_query) != 2:
+                logging.error("Malformed query term '%s'", term)
+                sys.exit(1)
+            column, query = column_query
+            query = query.translate(wildcard_trans)
+            if column == "key":
+                query_columns.append("(key LIKE ? OR custom_key LIKE ?)")
+                query_args.append(query)
+                query_args.append(query)
+            elif column == "author":
+                query_columns.append("(author LIKE ?)")
+                query_args.append(query)
+            elif column == "title":
+                query_columns.append("(title LIKE ?)")
+                query_args.append(query)
+            elif column == "booktitle":
+                query_columns.append("(booktitle LIKE ?)")
+                query_args.append(query)
+            elif column == "year":
+                query_columns.append("(year LIKE ?)")
+                query_args.append(query)
+            else:
+                logging.error("Unknown search field '%s'", column)
+                sys.exit(1)
 
         results = []
         last_results_fname = os.path.join(config.bibsearch_dir, "lastSearch.yml")
-        if not query:
+        if not query_columns:
             if os.path.exists(last_results_fname):
                 results = yaml.load(open(last_results_fname))
         else:
             self.cursor.execute("SELECT fulltext, key FROM bib \
-                                WHERE %s" % " AND ".join(query),
+                                WHERE %s" % " AND ".join(query_columns),
                                 query_args)
             results = list(self.cursor)
             with open(last_results_fname, "w") as fp:
@@ -444,7 +455,7 @@ def _find(args):
 
 def _where(args):
     db = BibDB()
-    format_search_results(db.where(args), args.bibtex, args.original_key)
+    format_search_results(db.where(args.terms), args.bibtex, args.original_key)
 
 def _open(args):
     db = BibDB()
@@ -746,11 +757,6 @@ def main():
     parser_find.set_defaults(func=_find)
 
     parser_where = subparsers.add_parser('where', help='Search the database using SQL-like syntax')
-    parser_where.add_argument('-k', '--key', help="Query for key field")
-    parser_where.add_argument('-a', '--author', help="Query for author field")
-    parser_where.add_argument('-t', '--title', help="Query for title field")
-    parser_where.add_argument('-e', '--booktitle', help="Query for booktitle field")
-    parser_where.add_argument('-y', '--year', help="Query for year field")
     parser_where.add_argument('-b', '--bibtex', help='Print entries in bibtex format', action='store_true')
     parser_where.add_argument('-o', "--original-key", help='Print the original key of the entries', action='store_true')
     parser_where.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
