@@ -249,7 +249,6 @@ class BibDB:
                 try:
                     custom_key = bibutils.generate_custom_key(entry, self.config.custom_key_format, custom_key_tries)
                 except Exception as e:
-                    raise
                     pass
             else:
                 print(custom_key, custom_key_tries)
