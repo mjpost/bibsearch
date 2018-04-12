@@ -4,7 +4,8 @@ This module implements various algorithms supplied by BibTeX to style
 files, as well as some algorithms to make BibTeX data more accessible
 to Python.
 
-This file is originally part of biblib (https://github.com/aclements/biblib)
+Most of this file is originally part of biblib
+(https://github.com/aclements/biblib)
 
 Copyright (c) 2013 Austin Clements
 
@@ -35,7 +36,9 @@ __all__ = ('Name parse_names ' +
 import re
 import collections
 import unicodedata
+import pybtex.database as pybtex
 import string
+import stop_words
 
 # Control sequences (defined as "control_seq_ilk" in bibtex) and their
 # Unicode translations.  This is similar to, but slightly different
@@ -45,6 +48,49 @@ _CONTROL_SEQS = {
     '\\ae': 'æ', '\\AE': 'Æ', '\\aa': 'å', '\\AA': 'Å',
     '\\o': 'ø', '\\O': 'Ø', '\\l': 'ł', '\\L': 'Ł', '\\ss': 'ß'
 }
+
+def single_entry_to_fulltext(entry: pybtex.Entry, overwrite_key: str = None) -> str:
+    """
+    Converts a pybtex.Entry to text.
+    """
+    effective_key = entry.key if not overwrite_key else overwrite_key
+    formatter = pybtex.BibliographyData(entries={effective_key: entry})
+    return formatter.to_string(bib_format="bibtex")
+
+def fulltext_to_single_entry(fulltext: str) -> pybtex.Entry:
+    """
+    Parses a BibTeX entry into a pybtex.Entry
+    """
+    entry, = pybtex.parse_string(fulltext, bib_format="bibtex").entries.values()
+    return entry
+
+custom_key_skip_chars = str.maketrans("", "", " `~!@#$%^&*()+=[]{}|\\'\":;,<.>/?")
+custom_key_skip_words = set(stop_words.get_stop_words("en"))
+def generate_custom_key(entry: pybtex.Entry, key_format, suffix_level=0):
+    # TODO: fault tolerance against missing fields!
+    year = int(entry.fields["year"])
+    all_authors = parse_names(entry.fields["author"])
+    author_surname = all_authors[0]\
+        .pretty(template="{last}")\
+        .lower()\
+        .translate(custom_key_skip_chars)
+    et_al = "_etAl" if len(all_authors) > 1 else ""
+
+    filtered_title = [w for w in [t.lower() for t in entry.fields["title"].split()] if w not in custom_key_skip_words]
+    if filtered_title:
+        title_word = filtered_title[0]
+    else:
+        title_word = entry.fields["title"][0]
+    title_word = title_word.translate(custom_key_skip_chars)
+
+    return key_format.format(
+        surname=author_surname,
+        et_al=et_al,
+        year=year,
+        short_year=year%100,
+        suffix='' if suffix_level==0 else chr(ord('a') + suffix_level - 1),
+        title=title_word)
+
 
 class NameParser:
     def __init__(self):

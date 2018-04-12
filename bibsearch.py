@@ -15,22 +15,17 @@ import os
 import re
 import sys
 import urllib.request
-import sqlite3
-import stop_words
+import pybtex.database as pybtex
 import subprocess
 import textwrap
 from tqdm import tqdm
 import yaml
 
+from bibdb import BibDB
 import bibutils
 from config import Config
-import pybtex.database as pybtex
-
-from typing import Tuple
 
 VERSION = '0.2.0'
-
-config = Config()
 
 class BibsearchError(Exception):
     pass
@@ -77,356 +72,14 @@ def download_file(url, fname_out=None) -> None:
         #                 '"Python 3" folder, often found under /Applications')
         sys.exit(1)
 
-def single_entry_to_fulltext(entry: pybtex.Entry, overwrite_key: str = None) -> str:
-    """
-    Converts a pybtex.Entry to text.
-    """
-    effective_key = entry.key if not overwrite_key else overwrite_key
-    formatter = pybtex.BibliographyData(entries={effective_key: entry})
-    return formatter.to_string(bib_format="bibtex")
-
-def fulltext_to_single_entry(fulltext: str) -> pybtex.Entry:
-    """
-    Parses a BibTeX entry into a pybtex.Entry
-    """
-    entry, = pybtex.parse_string(fulltext, bib_format="bibtex").entries.values()
-    return entry
-
-class BibDB:
-    def __init__(self):
-        self.fname = os.path.join(config.bibsearch_dir, "bib.db")
-        createDB = False
-        if not os.path.exists(self.fname):
-            if not os.path.exists(os.path.dirname(self.fname)):
-                os.makedirs(os.path.dirname(self.fname))
-            createDB = True
-        self.connection = sqlite3.connect(self.fname)
-        self.cursor = self.connection.cursor()
-        if createDB:
-            self.cursor.execute("""CREATE TABLE bib (
-                key text UNIQUE,
-                custom_key text UNIQUE,
-                author text,
-                title text,
-                booktitle text,
-                year text,
-                fulltext text
-                )""")
-            self.cursor.execute("""CREATE TABLE downloaded_files (
-                file text UNIQUE
-                )""")
-            try:
-                self.cursor.executescript(
-                """CREATE VIRTUAL TABLE bibindex USING fts5(
-                    key,
-                    custom_key,
-                    author,
-                    title,
-                    booktitle,
-                    year,
-                    fulltext UNINDEXED,
-                    content='bib',
-                    );
-                CREATE TRIGGER bib_ai AFTER INSERT ON bib BEGIN
-                   INSERT INTO bibindex
-                       (rowid, key, custom_key, author, title, booktitle, year, fulltext)
-                       VALUES 
-                       (new.rowid, new.key, new.custom_key, new.author, new.title, 
-                       new.booktitle, new.year, new.fulltext);
-                    END;
-                CREATE TRIGGER bib_ad AFTER DELETE ON bib BEGIN
-                   INSERT INTO bibindex
-                       (bibindex, rowid, custom_key, author, title, booktitle, year, fulltext)
-                       VALUES 
-                       ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
-                       old.booktitle, old.year, old.fulltext);
-                    END;
-                CREATE TRIGGER bibindex_au AFTER UPDATE ON bib BEGIN
-                   INSERT INTO bibindex
-                       (bibindex, rowid, key, custom_key, author, title, booktitle, year, fulltext)
-                       VALUES 
-                       ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
-                       old.booktitle, old.year, old.fulltext);
-                   INSERT INTO bibindex
-                       (rowid, key, custom_key, author, title, booktitle, year, fulltext)
-                       VALUES 
-                       (new.rowid, new.key, new.custom_key, new.author, new.title, 
-                       new.booktitle, new.year, new.fulltext);
-                    END;
-                """)
-            except sqlite3.OperationalError as e:
-                error_msg = str(e)
-                if "no such module" in error_msg and "fts5" in error_msg:
-                    logging.warning("It seems your sqlite3 installation does not support fts5 indexing.")
-                    logging.warning("It is strongly encouraged to activate fts5 (see the README and the FAQ).")
-                    input("Press ENTER to continue...")
-                else:
-                    raise
-
-    def __len__(self):
-        self.cursor.execute('SELECT COUNT(*) FROM bib')
-        return int(self.cursor.fetchone()[0])
-
-    def save_to_search_cache(self, search: Tuple[str,str,str]) -> None:
-        """
-        Saves the result of a search, which is represented as a tuple: (full bibtex, collection, key).
-        This can then be used by subcommands that support implicit arguments, like 'open'.
-        """
-        last_results_fname = os.path.join(config.bibsearch_dir, "lastSearch.yml")
-        with open(last_results_fname, "w") as fp:
-            yaml.dump(search, fp)
-
-    def load_search_cache(self) -> Tuple[str,str,str]:
-        """
-        Returns the result of a cached search.
-        """
-        last_results_fname = os.path.join(config.bibsearch_dir, "lastSearch.yml")
-        if os.path.exists(last_results_fname):
-            return yaml.load(open(last_results_fname))
-
-    def _format_query(self, query_terms):
-        processed_query_terms = []
-        for t in query_terms:
-            current_term = t
-            if t in config.macros:
-                current_term = config.macros[t]
-                # TODO: for now we trust macros blindly
-            else:
-                if not (current_term.startswith("author:") or
-                        current_term.startswith("key:") or
-                        current_term.startswith("title:") or
-                        current_term.startswith("booktitle:") or
-                        current_term.startswith("year")):
-                    # Protect the whole sequence
-                    if current_term[0] != '"' and current_term[-1] != '"':
-                        current_term = '"%s"' % current_term
-                else:
-                    specifier, query = current_term.split(":", 1)
-                    quoted_query = query if (query[0] == '"' and query[-1] == '"') \
-                                         else '"%s"' % query
-                    if specifier == "key":
-                        current_term = '(key:%s OR custom_key:%s)' % (quoted_query, quoted_query)
-                    else:
-                        current_term = '%s:%s' % (specifier, quoted_query)
-            processed_query_terms.append(current_term)
-        return " AND ".join(processed_query_terms)
-
-
-    def search(self, query):
-        results = []
-        if not query:
-            results = self.load_search_cache()
-        else:
-            try:
-                self.cursor.execute("SELECT fulltext, key FROM bibindex \
-                                    WHERE bibindex MATCH ?",
-                                    [self._format_query(query)])
-                results = list(self.cursor)
-                self.save_to_search_cache(results)
-            except sqlite3.OperationalError as e:
-                error_msg = str(e)
-                if "no such table" in error_msg and "bibindex" in error_msg:
-                    logging.error("The database was created without fts5 indexing, the 'search' command is not supported.")
-                    logging.error("Use command 'where' instead. See the README for more information.")
-                    sys.exit(1)
-                elif "no such module" in error_msg and "fts5" in error_msg:
-                    logging.error("It seems your sqlite3 installation does not support fts5 indexing.")
-                    logging.error("Use command 'where' instead. See the README for more information.")
-                    sys.exit(1)
-                else:
-                    raise
-        return results
-
-    def where(self, query_terms):
-        query_columns = [] 
-        query_args = []
-        wildcard_trans = str.maketrans("*", "%")
-        for term in query_terms:
-            column_query = term.split(":", 1)
-            if len(column_query) != 2:
-                logging.error("Malformed query term '%s'", term)
-                sys.exit(1)
-            column, query = column_query
-            query = query.translate(wildcard_trans)
-            if column == "key":
-                query_columns.append("(key LIKE ? OR custom_key LIKE ?)")
-                query_args.append(query)
-                query_args.append(query)
-            elif column == "author":
-                query_columns.append("(author LIKE ?)")
-                query_args.append(query)
-            elif column == "title":
-                query_columns.append("(title LIKE ?)")
-                query_args.append(query)
-            elif column == "booktitle":
-                query_columns.append("(booktitle LIKE ?)")
-                query_args.append(query)
-            elif column == "year":
-                query_columns.append("(year LIKE ?)")
-                query_args.append(query)
-            else:
-                logging.error("Unknown search field '%s'", column)
-                sys.exit(1)
-
-        results = []
-        last_results_fname = os.path.join(config.bibsearch_dir, "lastSearch.yml")
-        if not query_columns:
-            if os.path.exists(last_results_fname):
-                results = yaml.load(open(last_results_fname))
-        else:
-            self.cursor.execute("SELECT fulltext, key FROM bib \
-                                WHERE %s" % " AND ".join(query_columns),
-                                query_args)
-            results = list(self.cursor)
-            with open(last_results_fname, "w") as fp:
-                yaml.dump(results, fp)
-        return results
-
-    def search_key(self, key) -> str:
-        """
-        Searches the database on the specified key or custom key.
-        Returns the fulltext entry with the queried key as the entry key.
-
-        :param key: The key to search on (key or custom key)
-        :return: The full-text entry.
-        """
-        self.cursor.execute("SELECT fulltext FROM bib WHERE key=? OR custom_key=?",
-                            [key, key])
-        entry = self.cursor.fetchone()
-        if entry is not None:
-            entry = single_entry_to_fulltext(fulltext_to_single_entry(entry[0]), overwrite_key=key)
-        return entry
-
-    def save(self):
-        self.connection.commit()
-
-    def add(self, entry: pybtex.Entry):
-        """ Returns if the entry was added or if it was a duplicate"""
-
-        # TODO: make this a better sanity checking and perhaps report errors
-        if not entry.key:
-            return False
-        # TODO: Strange thing. If I don't add the following check for author,
-        # pybtex aborts with an error when searching. Adding it everything
-        # works, but I do not find any entry with "unknown" in the author
-        # field. Note also that "author in key.fields" does not seem to work,
-        # as the entry may get it from "persons"
-        if not entry.fields.get("author"):
-            entry.fields["author"] = "UNKNWON"
-
-        original_key = entry.key
-        # TODO: "outsource" the try: excpet conversion into a separate function for more granularity in error caching
-        try:
-            utf_author = bibutils.tex_to_unicode(entry.fields.get("author"))
-            utf_title = bibutils.tex_to_unicode(entry.fields.get("title"))
-            utf_booktitle = bibutils.tex_to_unicode(entry.fields.get("booktitle"))
-        except:
-            utf_author = entry.fields.get("author")
-            utf_title = entry.fields.get("title")
-            utf_booktitle = entry.fields.get("booktitle")
-        custom_key_tries = 0
-        added = False
-        while not added:
-            custom_key = None
-            if custom_key_tries < 10:
-                try:
-                    custom_key = generate_custom_key(entry, custom_key_tries)
-                except Exception as e:
-                    pass
-            else:
-                print(custom_key, custom_key_tries)
-                logging.warning("Could not generate a unique custom key for entry %s", original_key)
-            try:
-                self.cursor.execute('INSERT INTO bib(key, custom_key, author, title, booktitle, year, fulltext) VALUES (?,?,?,?,?,?,?)',
-                                    (original_key,
-                                     custom_key,
-                                     utf_author,
-                                     utf_title,
-                                     utf_booktitle,
-                                     str(entry.fields.get("year")),
-                                     single_entry_to_fulltext(entry, custom_key)
-                                    )
-                                   )
-                added = True
-            except sqlite3.IntegrityError as e:
-                error_message = str(e)
-                if "UNIQUE" in error_message:
-                    if "bib.custom_key" in error_message:
-                        # custom_key was already in the DB
-                        custom_key_tries += 1
-                    elif "bib.key" in error_message:
-                        # duplicate entry
-                        break
-                    else:
-                        raise
-                else:
-                    raise
-        return added
-
-    def update_custom_key(self, original_key, new_custom_key):
-        self.cursor.execute("SELECT fulltext FROM bib WHERE key=? LIMIT 1", (original_key,))
-        entry = fulltext_to_single_entry(self.cursor.fetchone()[0])
-        entry.key = new_custom_key
-        try:
-            self.cursor.execute("UPDATE bib SET custom_key=?, fulltext=? WHERE key=?",
-                                [new_custom_key,
-                                 single_entry_to_fulltext(entry),
-                                 original_key])
-            self.save()
-        except:
-            logging.error("Key %s already exists in the database", new_custom_key)
-            sys.exit(1)
-
-    def __iter__(self):
-        self.cursor.execute("SELECT fulltext FROM bib")
-        for e in self.cursor:
-            yield e[0]
-
-    def file_has_been_downloaded(self, file):
-        return self.cursor.execute("""SELECT 1 FROM downloaded_files WHERE file = ? LIMIT 1""", [file]).fetchone() is not None
-
-    def register_file_downloaded(self, file):
-        try:
-            self.cursor.execute("""INSERT INTO downloaded_files(file) VALUES (?)""", [file])
-        except sqlite3.IntegrityError:
-            # File was already registered. No problem.
-            pass
-
-custom_key_skip_chars = str.maketrans("", "", " `~!@#$%^&*()+=[]{}|\\'\":;,<.>/?")
-custom_key_skip_words = set(stop_words.get_stop_words("en"))
-def generate_custom_key(entry: pybtex.Entry, suffix_level=0):
-    # TODO: fault tolerance against missing fields!
-    year = int(entry.fields["year"])
-    all_authors = bibutils.parse_names(entry.fields["author"])
-    author_surname = all_authors[0]\
-        .pretty(template="{last}")\
-        .lower()\
-        .translate(custom_key_skip_chars)
-    et_al = "_etAl" if len(all_authors) > 1 else ""
-
-    filtered_title = [w for w in [t.lower() for t in entry.fields["title"].split()] if w not in custom_key_skip_words]
-    if filtered_title:
-        title_word = filtered_title[0]
-    else:
-        title_word = entry.fields["title"][0]
-    title_word = title_word.translate(custom_key_skip_chars)
-
-    return config.custom_key_format.format(
-        surname=author_surname,
-        et_al=et_al,
-        year=year,
-        short_year=year%100,
-        suffix='' if suffix_level==0 else chr(ord('a') + suffix_level - 1),
-        title=title_word)
-
 def format_search_results(results, bibtex_output, use_original_key):
     if not bibtex_output:
         textwrapper = textwrap.TextWrapper(subsequent_indent="  ")
     for (fulltext, original_key) in results:
-        entry = fulltext_to_single_entry(fulltext)
+        entry = bibutils.fulltext_to_single_entry(fulltext)
         if use_original_key:
             entry.key = original_key
-            fulltext = single_entry_to_fulltext(entry)
+            fulltext = bibutils.single_entry_to_fulltext(entry)
         if bibtex_output:
             print(fulltext + "\n")
         else:
@@ -434,13 +87,13 @@ def format_search_results(results, bibtex_output, use_original_key):
             author = ", ".join(author[:-2] + [" and ".join(author[-2:])])
             try:
                 # TODO: see above about outsourcing these functions
-                utf_author = bibutils.tex_to_unicode(entry.fields.get("author"))
-                utf_title = bibutils.tex_to_unicode(entry.fields.get("title"))
-                utf_booktitle = bibutils.tex_to_unicode(entry.fields.get("booktitle"))
+                utf_author = bibutils.tex_to_unicode(entry.fields.get("author", ""))
+                utf_title = bibutils.tex_to_unicode(entry.fields.get("title", ""))
+                utf_booktitle = bibutils.tex_to_unicode(entry.fields.get("booktitle", ""))
             except:
-                utf_author = entry.fields.get("author")
-                utf_title = entry.fields.get("title")
-                utf_booktitle = entry.fields.get("booktitle")
+                utf_author = entry.fields.get("author", "")
+                utf_title = entry.fields.get("title", "")
+                utf_booktitle = entry.fields.get("booktitle", "")
             lines = textwrapper.wrap('[{key}] {author} "{title}", {booktitle}{year}'.format(
                             key=entry.key,
                             author=utf_author,
@@ -449,16 +102,16 @@ def format_search_results(results, bibtex_output, use_original_key):
                             year=entry.fields["year"]))
             print("\n".join(lines) + "\n")
 
-def _find(args):
-    db = BibDB()
+def _find(args, config):
+    db = BibDB(config)
     format_search_results(db.search(args.terms), args.bibtex, args.original_key)
 
-def _where(args):
-    db = BibDB()
+def _where(args, config):
+    db = BibDB(config)
     format_search_results(db.where(args.terms), args.bibtex, args.original_key)
 
-def _open(args):
-    db = BibDB()
+def _open(args, config):
+    db = BibDB(config)
     results = db.search(args.terms)
     if not results:
         logging.error("No documents returned by query")
@@ -466,7 +119,7 @@ def _open(args):
     elif len(results) > 1:
         logging.error("%d results returned by query. Narrow down to only one results.", len(results))
         sys.exit(1)
-    entry = fulltext_to_single_entry(results[0][0])
+    entry = bibutils.fulltext_to_single_entry(results[0][0])
     logging.info('Downloading "%s"', entry.fields["title"])
     if "url" not in entry.fields:
         logging.error("Entry does not contain an URL field")
@@ -511,12 +164,12 @@ def _add_file(fname, force_redownload, db, per_file_progress_bar):
 
     return added, skipped, False
 
-def get_fnames_from_bibset(raw_fname):
+def get_fnames_from_bibset(raw_fname, database_url):
     bib_spec = raw_fname[len(BIBSETPREFIX):].strip()
     spec_fields = bib_spec.split('/')
     resource = spec_fields[0]
     try:
-        currentSet = yaml.load(download_file(config.database_url + resource + ".yml"))
+        currentSet = yaml.load(download_file(database_url + resource + ".yml"))
         #~ currentSet = yaml.load(open("resources/" + resource + ".yml")) # for local testing
     except urllib.error.URLError:
         logging.error("Could not find resource %s", resource)
@@ -542,10 +195,10 @@ def get_fnames_from_bibset(raw_fname):
     return rec_extract_bib(currentSet)
 
 
-def _arxiv(args):
+def _arxiv(args, config):
     import feedparser
 
-    db = BibDB()
+    db = BibDB(config)
 
     query = 'http://export.arxiv.org/api/query?{}'.format(urllib.parse.urlencode({ 'search_query': ' AND '.join(args.query)}))
     response = download_file(query)
@@ -593,15 +246,15 @@ def _arxiv(args):
 
         authors = {'author': [pybtex.Person(author.name) for author in entry.authors]}
         bib_entry = pybtex.Entry('article', persons=authors, fields=fields)
-        bib_entry.key = generate_custom_key(bib_entry)
+        bib_entry.key = bibutils.generate_custom_key(bib_entry, config.custom_key_format)
 
-        format_search_results( [(single_entry_to_fulltext(bib_entry), 'arXiv', arxiv_id)], False, True)
+        format_search_results( [(bibutils.single_entry_to_fulltext(bib_entry), arxiv_id)], False, True)
 
         if args.add:
             db.add(bib_entry)
-            results_to_save.append((single_entry_to_fulltext(bib_entry), 'arXiv', bib_entry.key))
+            results_to_save.append((bibutils.single_entry_to_fulltext(bib_entry), bib_entry.key))
         else:
-            results_to_save.append((single_entry_to_fulltext(bib_entry), 'arXiv', arxiv_id))
+            results_to_save.append((bibutils.single_entry_to_fulltext(bib_entry), arxiv_id))
 
         db.save_to_search_cache(results_to_save)
 
@@ -609,12 +262,12 @@ def _arxiv(args):
         db.save()
 
 
-def _add(args):
-    db = BibDB()
+def _add(args, config):
+    db = BibDB(config)
 
     for raw_fname in args.files:
         fnames = [raw_fname] if not raw_fname.startswith(BIBSETPREFIX) \
-                             else get_fnames_from_bibset(raw_fname)
+                             else get_fnames_from_bibset(raw_fname, config.database_url)
         added = 0
         skipped = 0
         n_files_skipped = 0
@@ -651,18 +304,18 @@ def _add(args):
             logging.error(m)
     db.save()
 
-def _print(args):
-    db = BibDB()
+def _print(args, config):
+    db = BibDB(config)
     if args.summary:
         print('Database has', len(db), 'entries')
     else:
         for entry in db:
             print(entry.rstrip() + "\n")
 
-def _tex(args):
+def _tex(args, config):
     citation_re = re.compile(r'\\citation{(.*)}')
     bibdata_re = re.compile(r'\\bibdata{(.*)}')
-    db = BibDB()
+    db = BibDB(config)
     aux_fname = args.file
     if not aux_fname.endswith(".aux"):
         if aux_fname.endswith(".tex"):
@@ -701,8 +354,8 @@ def _tex(args):
     for e in entries:
         print(e + "\n", file=fp_out)
 
-def _set_custom_key(args):
-    db = BibDB()
+def _set_custom_key(args, config):
+    db = BibDB(config)
     n_entries = 0
     for (_, original_key) in db.search(args.terms):
         n_entries += 1
@@ -717,7 +370,7 @@ def _set_custom_key(args):
     logging.info("Updating custom key of %s to %s", original_key, args.new_key)
     db.update_custom_key(original_key, args.new_key)
 
-def _macros(args):
+def _macros(args, config):
     for macro, expansion in config.macros.items():
         print("%s:\t%s" % (macro, expansion))
 
@@ -781,8 +434,9 @@ def main():
     parser_macros.set_defaults(func=_macros)
 
     args = parser.parse_args()
+    config = Config()
     config.initialize(args.config_file)
-    args.func(args)
+    args.func(args, config)
 
 if __name__ == '__main__':
     main()
