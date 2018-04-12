@@ -1,12 +1,13 @@
 import configparser
 import logging
 import os.path
+import platform
 
 class Config():
     defaults = {
         "bibsearch" : {
               "bibsearch_dir": os.path.join(os.path.expanduser("~"), '.bibsearch')
-            , "open_command": "open"  # TODO: Customize by OS
+            , "open_command": "xdg-open" if platform.system() == "Linux" else "open"
             , "temp_dir": "/tmp/bibsearch"
             , "database_url": "https://github.com/mjpost/bibsearch/raw/master/resources/"
             , "custom_key_format": "{surname}{short_year:02}{suffix}_{title}"
