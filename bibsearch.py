@@ -50,19 +50,11 @@ BIBSETPREFIX="bib://"
 
 # TODO: Read this info from some external file
 macros = {
-    '@acl': 'booktitle: "Annual Meeting of the Association for Computational Linguistics"',
-    '@emnlp': 'booktitle: "Conference on Empirical Methods in Natural Language Processing"',
-    '@wmt': 'booktitle: "Workshop on Statistical Machine Translation" OR booktitle: "Conference on Machine Translation"'
+      '@acl': 'booktitle:"Annual Meeting of the Association for Computational Linguistics"'
+    , '@emnlp': 'booktitle:"Conference on Empirical Methods in Natural Language Processing"'
+    , '@wmt': '(booktitle:"Workshop on Statistical Machine Translation" OR booktitle:"Conference on Machine Translation")'
+    , '@naacl': 'booktitle:"Conference of the North American Chapter of the Association for Computational Linguistics"'
 }
-
-def replace_macros(string):
-    substituted = []
-    for w in string.strip().split():
-        if w in macros:
-            substituted += macros[w].split()
-        else:
-            substituted.append(w)
-    return " ".join(substituted)
 
 def download_file(url, fname_out=None) -> None:
     """
@@ -200,6 +192,34 @@ class BibDB:
         if os.path.exists(last_results_fname):
             return yaml.load(open(last_results_fname))
 
+    def _format_query(self, query_terms):
+        processed_query_terms = []
+        for t in query_terms:
+            current_term = t
+            if t in macros:
+                current_term = macros[t]
+                # TODO: for now we trust macros blindly
+            else:
+                if not (current_term.startswith("author:") or
+                        current_term.startswith("key:") or
+                        current_term.startswith("title:") or
+                        current_term.startswith("booktitle:") or
+                        current_term.startswith("year")):
+                    # Protect the whole sequence
+                    if current_term[0] != '"' and current_term[-1] != '"':
+                        current_term = '"%s"' % current_term
+                else:
+                    specifier, query = current_term.split(":", 1)
+                    quoted_query = query if (query[0] == '"' and query[-1] == '"') \
+                                         else '"%s"' % query
+                    if specifier == "key":
+                        current_term = '(key:%s OR custom_key:%s)' % (quoted_query, quoted_query)
+                    else:
+                        current_term = '%s:%s' % (specifier, quoted_query)
+            processed_query_terms.append(current_term)
+        return " AND ".join(processed_query_terms)
+
+
     def search(self, query):
         results = []
         if not query:
@@ -208,7 +228,7 @@ class BibDB:
             try:
                 self.cursor.execute("SELECT fulltext, key FROM bibindex \
                                     WHERE bibindex MATCH ?",
-                                    [replace_macros(" ".join(query))])
+                                    [self._format_query(query)])
                 results = list(self.cursor)
                 self.save_to_search_cache(results)
             except sqlite3.OperationalError as e:
@@ -413,7 +433,7 @@ def format_search_results(results, bibtex_output, use_original_key):
                 # TODO: see above about outsourcing these functions
                 utf_author = bibutils.tex_to_unicode(entry.fields.get("author"))
                 utf_title = bibutils.tex_to_unicode(entry.fields.get("title"))
-                utf_booktitle = bibutils.tex_to_uniced(entry.fields.get("booktitle"))
+                utf_booktitle = bibutils.tex_to_unicode(entry.fields.get("booktitle"))
             except:
                 utf_author = entry.fields.get("author")
                 utf_title = entry.fields.get("title")
@@ -681,7 +701,7 @@ def _tex(args):
 def _set_custom_key(args):
     db = BibDB()
     n_entries = 0
-    for (_, _, original_key) in db.search(args.terms):
+    for (_, original_key) in db.search(args.terms):
         n_entries += 1
         if n_entries > 1:
             break
