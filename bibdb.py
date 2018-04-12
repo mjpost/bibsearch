@@ -1,3 +1,4 @@
+import logging
 import os.path
 import pybtex.database as pybtex
 import sqlite3
@@ -251,7 +252,6 @@ class BibDB:
                 except Exception as e:
                     pass
             else:
-                print(custom_key, custom_key_tries)
                 logging.warning("Could not generate a unique custom key for entry %s", original_key)
             try:
                 self.cursor.execute('INSERT INTO bib(key, custom_key, author, title, booktitle, year, fulltext) VALUES (?,?,?,?,?,?,?)',
