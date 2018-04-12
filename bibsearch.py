@@ -22,10 +22,15 @@ import textwrap
 from tqdm import tqdm
 import yaml
 
-import pybtex.database as pybtex
 import bibutils
+from config import Config
+import pybtex.database as pybtex
+
+from typing import Tuple
 
 VERSION = '0.2.0'
+
+config = Config()
 
 class BibsearchError(Exception):
     pass
@@ -41,16 +46,7 @@ try:
 except ImportError:
     logging.warning('Could not import signal.SIGPIPE (this is expected on Windows machines)')
 
-# Querying for a HOME environment variable can result in None (e.g., on Windows)
-# in which case the os.path.join() throws a TypeError. Using expanduser() is
-# a safe way to get the user's home folder.
-BIBSEARCHDIR = os.path.join(os.path.expanduser("~"), '.bibsearch')
-RESOURCEDIR = os.path.join(BIBSEARCHDIR, 'resources')
-DBFILE = os.path.join(BIBSEARCHDIR, 'bib.db')
 BIBSETPREFIX="bib://"
-OPENCOMMAND="open"  # TODO: Customize by OS
-TEMPDIR="/tmp/bibsearch"
-DATABASE_URL = 'https://github.com/mjpost/bibsearch/raw/master/resources/'
 
 # TODO: Read this info from some external file
 macros = {
@@ -74,6 +70,8 @@ def download_file(url, fname_out=None) -> None:
     """
 
     import ssl
+
+    #~ logging.info('Downloading {} to {}'.format(url, fname_out if fname_out is not None else 'STR'))
 
     try:
         with urllib.request.urlopen(url) as f:
@@ -111,8 +109,8 @@ def fulltext_to_single_entry(fulltext: str) -> pybtex.Entry:
     return entry
 
 class BibDB:
-    def __init__(self, fname=DBFILE):
-        self.fname = fname
+    def __init__(self):
+        self.fname = os.path.join(config.bibsearch_dir, "bib.db")
         createDB = False
         if not os.path.exists(self.fname):
             if not os.path.exists(os.path.dirname(self.fname)):
@@ -185,20 +183,34 @@ class BibDB:
         self.cursor.execute('SELECT COUNT(*) FROM bib')
         return int(self.cursor.fetchone()[0])
 
+    def save_to_search_cache(self, search: Tuple[str,str,str]) -> None:
+        """
+        Saves the result of a search, which is represented as a tuple: (full bibtex, collection, key).
+        This can then be used by subcommands that support implicit arguments, like 'open'.
+        """
+        last_results_fname = os.path.join(config.bibsearch_dir, "lastSearch.yml")
+        with open(last_results_fname, "w") as fp:
+            yaml.dump(search, fp)
+
+    def load_search_cache(self) -> Tuple[str,str,str]:
+        """
+        Returns the result of a cached search.
+        """
+        last_results_fname = os.path.join(config.bibsearch_dir, "lastSearch.yml")
+        if os.path.exists(last_results_fname):
+            return yaml.load(open(last_results_fname))
+
     def search(self, query):
         results = []
-        last_results_fname = os.path.join(BIBSEARCHDIR, "lastSearch.yml")
         if not query:
-            if os.path.exists(last_results_fname):
-                results = yaml.load(open(last_results_fname))
+            results = self.load_search_cache()
         else:
             try:
                 self.cursor.execute("SELECT fulltext, key FROM bibindex \
                                     WHERE bibindex MATCH ?",
                                     [replace_macros(" ".join(query))])
                 results = list(self.cursor)
-                with open(last_results_fname, "w") as fp:
-                    yaml.dump(results, fp)
+                self.save_to_search_cache(results)
             except sqlite3.OperationalError as e:
                 error_msg = str(e)
                 if "no such table" in error_msg and "bibindex" in error_msg:
@@ -234,7 +246,7 @@ class BibDB:
             query_args.append(where_args.year)
 
         results = []
-        last_results_fname = os.path.join(BIBSEARCHDIR, "lastSearch.yml")
+        last_results_fname = os.path.join(config.bibsearch_dir, "lastSearch.yml")
         if not query:
             if os.path.exists(last_results_fname):
                 results = yaml.load(open(last_results_fname))
@@ -257,7 +269,9 @@ class BibDB:
         """
         self.cursor.execute("SELECT fulltext FROM bib WHERE key=? OR custom_key=?",
                             [key, key])
-        entry = single_entry_to_fulltext(fulltext_to_single_entry(self.cursor.fetchone()[0]), overwrite_key=key)
+        entry = self.cursor.fetchone()
+        if entry is not None:
+            entry = single_entry_to_fulltext(fulltext_to_single_entry(entry[0]), overwrite_key=key)
         return entry
 
     def save(self):
@@ -294,7 +308,7 @@ class BibDB:
             if custom_key_tries < 10:
                 try:
                     custom_key = generate_custom_key(entry, custom_key_tries)
-                except:
+                except Exception as e:
                     pass
             else:
                 print(custom_key, custom_key_tries)
@@ -360,10 +374,12 @@ custom_key_skip_words = set(stop_words.get_stop_words("en"))
 def generate_custom_key(entry: pybtex.Entry, suffix_level=0):
     # TODO: fault tolerance against missing fields!
     year = int(entry.fields["year"])
-    author_surname = bibutils.parse_names(entry.fields["author"])[0]\
+    all_authors = bibutils.parse_names(entry.fields["author"])
+    author_surname = all_authors[0]\
         .pretty(template="{last}")\
         .lower()\
         .translate(custom_key_skip_chars)
+    et_al = "_etAl" if len(all_authors) > 1 else ""
 
     filtered_title = [w for w in [t.lower() for t in entry.fields["title"].split()] if w not in custom_key_skip_words]
     if filtered_title:
@@ -372,9 +388,11 @@ def generate_custom_key(entry: pybtex.Entry, suffix_level=0):
         title_word = entry.fields["title"][0]
     title_word = title_word.translate(custom_key_skip_chars)
 
-    return "{surname}{year:02}{suffix}_{title}".format(
+    return config.custom_key_format.format(
         surname=author_surname,
-        year=year%100,
+        et_al=et_al,
+        year=year,
+        short_year=year%100,
         suffix='' if suffix_level==0 else chr(ord('a') + suffix_level - 1),
         title=title_word)
 
@@ -429,10 +447,10 @@ def _open(args):
     logging.info('Downloading "%s"', entry.fields["title"])
     if "url" not in entry.fields:
         logging.error("Entry does not contain an URL field")
-    if not os.path.exists(TEMPDIR):
-        os.makedirs(TEMPDIR)
-    temp_fname = download_file(entry.fields["url"], os.path.join(TEMPDIR, entry.key + ".pdf"))
-    subprocess.run([OPENCOMMAND, temp_fname])
+    if not os.path.exists(config.tempdir):
+        os.makedirs(config.tempdir)
+    temp_fname = download_file(entry.fields["url"], os.path.join(config.tempdir, entry.key + ".pdf"))
+    subprocess.run([config.opencommand, temp_fname])
 
 class AddFileError(BibsearchError):
     pass
@@ -475,18 +493,20 @@ def get_fnames_from_bibset(raw_fname):
     spec_fields = bib_spec.split('/')
     resource = spec_fields[0]
     try:
-        currentSet = yaml.load(download_file(DATABASE_URL + resource + ".yml"))
+        currentSet = yaml.load(download_file(config.database_url + resource + ".yml"))
         #~ currentSet = yaml.load(open("resources/" + resource + ".yml")) # for local testing
     except urllib.error.URLError:
         logging.error("Could not find resource %s", resource)
         sys.exit(1)
     if len(spec_fields) > 1:
         for f in spec_fields[1:]:
+            # some keys are integers (years)
             try:
                 currentSet = currentSet[f]
             except KeyError:
                 logging.error("Invalid branch '%s' in bib specification '%s'",
                               f, raw_fname)
+                logging.error("Options at this level are:", ', '.join(currentSet.keys()))
                 sys.exit(1)
     def rec_extract_bib(dict_or_list):
         result = []
@@ -521,12 +541,18 @@ def _arxiv(args):
     # print('startIndex for this query: %s'   % feed.feed.opensearch_startindex)
 
     # Run through each entry, and print out information
+    results_to_save = []
     for entry in feed.entries:
 
+        arxiv_id = re.sub(r'v\d+$', '', entry.id.split('/abs/')[-1])
+
         fields = { 'title': entry.title,
-                   'booktitle': '',
+                   'journal': 'CoRR',
                    'year': str(entry.published[:4]),
                    'abstract': entry.summary,
+                   'volume': 'abs/{}'.format(arxiv_id),
+                   'archivePrefix': 'arXiv',
+                   'eprint': arxiv_id,
         }
 
         try:
@@ -546,14 +572,15 @@ def _arxiv(args):
         bib_entry = pybtex.Entry('article', persons=authors, fields=fields)
         bib_entry.key = generate_custom_key(bib_entry)
 
-        arxiv_id = re.sub(r'v\d+$', '', entry.id.split('/abs/')[-1])
-
         format_search_results( [(single_entry_to_fulltext(bib_entry), 'arXiv', arxiv_id)], False, True)
 
         if args.add:
             db.add(bib_entry)
+            results_to_save.append((single_entry_to_fulltext(bib_entry), 'arXiv', bib_entry.key))
+        else:
+            results_to_save.append((single_entry_to_fulltext(bib_entry), 'arXiv', arxiv_id))
 
-        continue
+        db.save_to_search_cache(results_to_save)
 
     if args.add:
         db.save()
@@ -562,37 +589,37 @@ def _arxiv(args):
 def _add(args):
     db = BibDB()
 
-    raw_fname = args.file
-    fnames = [raw_fname] if not raw_fname.startswith(BIBSETPREFIX) \
-                         else get_fnames_from_bibset(raw_fname)
-    added = 0
-    skipped = 0
-    n_files_skipped = 0
-    if len(fnames) > 1:
-        iterable = tqdm(fnames, ncols=80, bar_format="Adding %s {l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]" % raw_fname)
-        per_file_progress_bar = False
-    else:
-        iterable = fnames
-        per_file_progress_bar = True
-    error_msgs = []
-    for f in iterable:
-        try:
-            f_added, f_skipped, file_skipped = _add_file(f, args.redownload, db, per_file_progress_bar)
-            if args.verbose and not per_file_progress_bar:
-                if not file_skipped:
-                    log_msg = "Added %d entries from %s" % (f_added, f)
-                else:
-                    log_msg = "Skipped %s" % f
-                tqdm.write(log_msg)
-        except AddFileError as e:
-            f_added = 0
-            f_skipped = 0
-            file_skipped = False
-            error_msgs.append(str(e))
-        added += f_added
-        skipped += f_skipped
-        if file_skipped:
-            n_files_skipped += 1
+    for raw_fname in args.files:
+        fnames = [raw_fname] if not raw_fname.startswith(BIBSETPREFIX) \
+                             else get_fnames_from_bibset(raw_fname)
+        added = 0
+        skipped = 0
+        n_files_skipped = 0
+        if len(fnames) > 1:
+            iterable = tqdm(fnames, ncols=80, bar_format="Adding %s {l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]" % raw_fname)
+            per_file_progress_bar = False
+        else:
+            iterable = fnames
+            per_file_progress_bar = True
+        error_msgs = []
+        for f in iterable:
+            try:
+                f_added, f_skipped, file_skipped = _add_file(f, args.redownload, db, per_file_progress_bar)
+                if args.verbose and not per_file_progress_bar:
+                    if not file_skipped:
+                        log_msg = "Added %d entries from %s" % (f_added, f)
+                    else:
+                        log_msg = "Skipped %s" % f
+                    tqdm.write(log_msg)
+            except AddFileError as e:
+                f_added = 0
+                f_skipped = 0
+                file_skipped = False
+                error_msgs.append(str(e))
+            added += f_added
+            skipped += f_skipped
+            if file_skipped:
+                n_files_skipped += 1
 
     print('Added', added, 'entries, skipped', skipped, 'duplicates. Skipped', n_files_skipped, 'files')
     if error_msgs:
@@ -677,11 +704,16 @@ def main():
 
     parser = argparse.ArgumentParser(description='bibsearch: Download, manage, and search a BibTeX database.')
     parser.add_argument('--version', '-V', action='version', version='%(prog)s {}'.format(VERSION))
+    parser.add_argument('-c', '--config_file', help="use this config file",
+                        default=os.path.join(os.path.expanduser("~"),
+                                             '.bibsearch',
+                                             "bibsearch.config")
+                        )
     parser.set_defaults(func=lambda _ : parser.print_help())
     subparsers = parser.add_subparsers()
 
     parser_add = subparsers.add_parser('add', help='Add a BibTeX file')
-    parser_add.add_argument('file', type=str, default=None, help='BibTeX file to add')
+    parser_add.add_argument('files', type=str, default=None, help='BibTeX files to add', nargs='+')
     parser_add.add_argument("-r", "--redownload", help="Re-download already downloaded files", action="store_true")
     parser_add.add_argument("-v", "--verbose", help="Be verbose about which files are being downloaded", action="store_true")
     parser_add.set_defaults(func=_add)
@@ -731,8 +763,8 @@ def main():
     parser_macros.set_defaults(func=_macros)
 
     args = parser.parse_args()
+    config.initialize(args.config_file)
     args.func(args)
-
 
 if __name__ == '__main__':
     main()
