@@ -218,6 +218,11 @@ class BibDB:
     def save(self):
         self.connection.commit()
 
+    def remove(self, key: str):
+        """Removes the entry"""
+
+        self.cursor.execute('DELETE FROM bib WHERE key=? or custom_key=?', [key, key])
+
     def add(self, entry: pybtex.Entry):
         """ Returns if the entry was added or if it was a duplicate"""
 

@@ -259,6 +259,11 @@ def _arxiv(args, config):
         db.save()
 
 
+def _remove(args, config):
+    db = BibDB(config)
+    db.remove(args.key)
+
+
 def _add(args, config):
     db = BibDB(config)
 
@@ -426,6 +431,10 @@ def main():
     parser_key.add_argument('-k', '--new-key', help='New key')
     parser_key.add_argument('terms', nargs='+', help='One or more search terms which uniquely identify an entry')
     parser_key.set_defaults(func=_set_custom_key)
+
+    parser_tex = subparsers.add_parser('rm', help='Remove an entry')
+    parser_tex.add_argument('key', help='The key of the entry to remove')
+    parser_tex.set_defaults(func=_remove)
 
     parser_macros = subparsers.add_parser('macros', help='Show defined macros')
     parser_macros.set_defaults(func=_macros)
