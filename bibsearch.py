@@ -382,7 +382,7 @@ def main():
                                              '.bibsearch',
                                              "bibsearch.config")
                         )
-    parser.set_defaults(func=lambda _ : parser.print_help())
+    parser.set_defaults(func=lambda *_ : parser.print_help())
     subparsers = parser.add_subparsers()
 
     parser_add = subparsers.add_parser('add', help='Add a BibTeX file')
