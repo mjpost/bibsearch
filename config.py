@@ -13,10 +13,13 @@ class Config():
             , "custom_key_format": "{surname}{year}{suffix}:{title}"
         }
         , "macros" : {
-              '@acl': 'booktitle:"Annual Meeting of the Association for Computational Linguistics"'
-            , '@emnlp': 'booktitle:"Conference on Empirical Methods in Natural Language Processing"'
-            , '@wmt': '(booktitle:"Workshop on Statistical Machine Translation" OR booktitle:"Conference on Machine Translation")'
-            , '@naacl': 'booktitle:"Conference of the North American Chapter of the Association for Computational Linguistics"'
+              '@acl': 'venue:"Annual Meeting of the Association for Computational Linguistics"'
+            , '@emnlp': 'venue:"Conference on Empirical Methods in Natural Language Processing"'
+            , '@wmt': '(venue:"Workshop on Statistical Machine Translation" OR venue:"Conference on Machine Translation")'
+            , '@naacl': 'venue:"Conference of the North American Chapter of the Association for Computational Linguistics"'
+            , '@cl': 'venue:"Computational Linguistics"'  # Probably useless because the terms comes up in several conferences as well
+            , '@arxiv': 'venue:"Computing Research Repository"'
+            , '@corr': 'venue:"Computing Research Repository"'
         }
     }
 

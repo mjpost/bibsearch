@@ -83,22 +83,19 @@ def format_search_results(results, bibtex_output, use_original_key):
         if bibtex_output:
             print(fulltext + "\n")
         else:
-            author = [a.pretty() for a in bibutils.parse_names(entry.fields["author"])]
-            author = ", ".join(author[:-2] + [" and ".join(author[-2:])])
-            try:
-                # TODO: see above about outsourcing these functions
-                utf_author = bibutils.tex_to_unicode(entry.fields.get("author", ""))
-                utf_title = bibutils.tex_to_unicode(entry.fields.get("title", ""))
-                utf_booktitle = bibutils.tex_to_unicode(entry.fields.get("booktitle", ""))
-            except:
-                utf_author = entry.fields.get("author", "")
-                utf_title = entry.fields.get("title", "")
-                utf_booktitle = entry.fields.get("booktitle", "")
-            lines = textwrapper.wrap('[{key}] {author} "{title}", {booktitle}{year}'.format(
+            utf_author = bibutils.field_to_unicode(entry, "author", "")
+            utf_author = [a.pretty() for a in bibutils.parse_names(utf_author)]
+            utf_author = ", ".join(utf_author[:-2] + [" and ".join(utf_author[-2:])])
+
+            utf_title = bibutils.field_to_unicode(entry, "title", "")
+            utf_venue = bibutils.field_to_unicode(entry, "journal", "")
+            if not utf_venue:
+                utf_venue = bibutils.field_to_unicode(entry, "booktitle", "")
+            lines = textwrapper.wrap('[{key}] {author} "{title}", {venue}{year}'.format(
                             key=entry.key,
                             author=utf_author,
                             title=utf_title,
-                            booktitle=utf_booktitle + ", ",
+                            venue=utf_venue + ", ",
                             year=entry.fields["year"]))
             print("\n".join(lines) + "\n")
 
@@ -223,7 +220,7 @@ def _arxiv(args, config):
         arxiv_id = re.sub(r'v\d+$', '', entry.id.split('/abs/')[-1])
 
         fields = { 'title': entry.title,
-                   'journal': 'CoRR',
+                   'journal': 'Computing Research Repository',
                    'year': str(entry.published[:4]),
                    'abstract': entry.summary,
                    'volume': 'abs/{}'.format(arxiv_id),

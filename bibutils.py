@@ -91,6 +91,13 @@ def generate_custom_key(entry: pybtex.Entry, key_format, suffix_level=0):
         suffix='' if suffix_level==0 else chr(ord('a') + suffix_level - 1),
         title=title_word)
 
+def field_to_unicode(entry, field, default_value=None):
+    utf_field = entry.fields.get(field, default_value)
+    try:
+        utf_field = tex_to_unicode(utf_field)
+    except:  # TODO: Limit the type of exceptions we catch
+        pass
+    return utf_field
 
 class NameParser:
     def __init__(self):

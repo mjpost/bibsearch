@@ -26,7 +26,7 @@ class BibDB:
                 custom_key text UNIQUE,
                 author text,
                 title text,
-                booktitle text,
+                venue text,
                 year text,
                 fulltext text
                 )""")
@@ -40,36 +40,36 @@ class BibDB:
                     custom_key,
                     author,
                     title,
-                    booktitle,
+                    venue,
                     year,
                     fulltext UNINDEXED,
                     content='bib',
                     );
                 CREATE TRIGGER bib_ai AFTER INSERT ON bib BEGIN
                    INSERT INTO bibindex
-                       (rowid, key, custom_key, author, title, booktitle, year, fulltext)
+                       (rowid, key, custom_key, author, title, venue, year, fulltext)
                        VALUES 
                        (new.rowid, new.key, new.custom_key, new.author, new.title, 
-                       new.booktitle, new.year, new.fulltext);
+                       new.venue, new.year, new.fulltext);
                     END;
                 CREATE TRIGGER bib_ad AFTER DELETE ON bib BEGIN
                    INSERT INTO bibindex
-                       (bibindex, rowid, custom_key, author, title, booktitle, year, fulltext)
+                       (bibindex, rowid, custom_key, author, title, venue, year, fulltext)
                        VALUES 
                        ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
-                       old.booktitle, old.year, old.fulltext);
+                       old.venue, old.year, old.fulltext);
                     END;
                 CREATE TRIGGER bibindex_au AFTER UPDATE ON bib BEGIN
                    INSERT INTO bibindex
-                       (bibindex, rowid, key, custom_key, author, title, booktitle, year, fulltext)
+                       (bibindex, rowid, key, custom_key, author, title, venue, year, fulltext)
                        VALUES 
                        ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
-                       old.booktitle, old.year, old.fulltext);
+                       old.venue, old.year, old.fulltext);
                    INSERT INTO bibindex
-                       (rowid, key, custom_key, author, title, booktitle, year, fulltext)
+                       (rowid, key, custom_key, author, title, venue, year, fulltext)
                        VALUES 
                        (new.rowid, new.key, new.custom_key, new.author, new.title, 
-                       new.booktitle, new.year, new.fulltext);
+                       new.venue, new.year, new.fulltext);
                     END;
                 """)
             except sqlite3.OperationalError as e:
@@ -113,7 +113,7 @@ class BibDB:
                 if not (current_term.startswith("author:") or
                         current_term.startswith("key:") or
                         current_term.startswith("title:") or
-                        current_term.startswith("booktitle:") or
+                        current_term.startswith("venue:") or
                         current_term.startswith("year")):
                     # Protect the whole sequence
                     if current_term[0] != '"' and current_term[-1] != '"':
@@ -176,8 +176,8 @@ class BibDB:
             elif column == "title":
                 query_columns.append("(title LIKE ?)")
                 query_args.append(query)
-            elif column == "booktitle":
-                query_columns.append("(booktitle LIKE ?)")
+            elif column == "venue":
+                query_columns.append("(venue LIKE ?)")
                 query_args.append(query)
             elif column == "year":
                 query_columns.append("(year LIKE ?)")
@@ -234,19 +234,16 @@ class BibDB:
 
         original_key = entry.key
         # TODO: "outsource" the try: excpet conversion into a separate function for more granularity in error caching
-        try:
-            utf_author = bibutils.tex_to_unicode(entry.fields.get("author"))
-            utf_title = bibutils.tex_to_unicode(entry.fields.get("title"))
-            utf_booktitle = bibutils.tex_to_unicode(entry.fields.get("booktitle"))
-        except:
-            utf_author = entry.fields.get("author")
-            utf_title = entry.fields.get("title")
-            utf_booktitle = entry.fields.get("booktitle")
+        utf_author = bibutils.field_to_unicode(entry, "author")
+        utf_title = bibutils.field_to_unicode(entry, "title")
+        utf_venue = bibutils.field_to_unicode(entry, "journal")
+        if not utf_venue:
+            utf_venue = bibutils.field_to_unicode(entry, "booktitle")
         custom_key_tries = 0
         added = False
         while not added:
             custom_key = None
-            if custom_key_tries < 10:
+            if custom_key_tries < 26:
                 try:
                     custom_key = bibutils.generate_custom_key(entry, self.config.custom_key_format, custom_key_tries)
                 except Exception as e:
@@ -254,12 +251,12 @@ class BibDB:
             else:
                 logging.warning("Could not generate a unique custom key for entry %s", original_key)
             try:
-                self.cursor.execute('INSERT INTO bib(key, custom_key, author, title, booktitle, year, fulltext) VALUES (?,?,?,?,?,?,?)',
+                self.cursor.execute('INSERT INTO bib(key, custom_key, author, title, venue, year, fulltext) VALUES (?,?,?,?,?,?,?)',
                                     (original_key,
                                      custom_key,
                                      utf_author,
                                      utf_title,
-                                     utf_booktitle,
+                                     utf_venue,
                                      str(entry.fields.get("year")),
                                      bibutils.single_entry_to_fulltext(entry, custom_key)
                                     )
