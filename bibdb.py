@@ -243,13 +243,14 @@ class BibDB:
         added = False
         while not added:
             custom_key = None
-            if custom_key_tries < 26:
+            if custom_key_tries < 27:
                 try:
                     custom_key = bibutils.generate_custom_key(entry, self.config.custom_key_format, custom_key_tries)
                 except Exception as e:
                     pass
             else:
                 logging.warning("Could not generate a unique custom key for entry %s", original_key)
+                custom_key = original_key
             try:
                 self.cursor.execute('INSERT INTO bib(key, custom_key, author, title, venue, year, fulltext) VALUES (?,?,?,?,?,?,?)',
                                     (original_key,
