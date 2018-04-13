@@ -10,7 +10,7 @@ class Config():
             , "open_command": "xdg-open" if platform.system() == "Linux" else "open"
             , "temp_dir": "/tmp/bibsearch"
             , "database_url": "https://github.com/mjpost/bibsearch/raw/master/resources/"
-            , "custom_key_format": "{surname}{short_year:02}{suffix}_{title}"
+            , "custom_key_format": "{surname}{year}{suffix}:{title}"
         }
         , "macros" : {
               '@acl': 'booktitle:"Annual Meeting of the Association for Computational Linguistics"'
