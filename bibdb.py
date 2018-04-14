@@ -54,7 +54,7 @@ class BibDB:
                     END;
                 CREATE TRIGGER bib_ad AFTER DELETE ON bib BEGIN
                    INSERT INTO bibindex
-                       (bibindex, rowid, custom_key, author, title, venue, year, fulltext)
+                       (bibindex, rowid, key, custom_key, author, title, venue, year, fulltext)
                        VALUES 
                        ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
                        old.venue, old.year, old.fulltext);
