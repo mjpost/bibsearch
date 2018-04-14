@@ -212,7 +212,7 @@ class BibDB:
                             [key, key])
         entry = self.cursor.fetchone()
         if entry is not None:
-            entry = bibutils.single_entry_to_fulltext(bibtex.fulltext_to_single_entry(entry[0]), overwrite_key=key)
+            entry = bibutils.single_entry_to_fulltext(bibutils.fulltext_to_single_entry(entry[0]), overwrite_key=key)
         return entry
 
     def save(self):
@@ -233,7 +233,7 @@ class BibDB:
             entry.fields["author"] = "UNKNWON"
 
         original_key = entry.key
-        # TODO: "outsource" the try: excpet conversion into a separate function for more granularity in error caching
+        entry.fields["original_key"] = original_key
         utf_author = bibutils.field_to_unicode(entry, "author")
         utf_title = bibutils.field_to_unicode(entry, "title")
         utf_venue = bibutils.field_to_unicode(entry, "journal")
@@ -291,6 +291,40 @@ class BibDB:
         except:
             logging.error("Key %s already exists in the database", new_custom_key)
             sys.exit(1)
+
+    def update(self, entry: pybtex.Entry):
+        """ Returns if the entry was added or if it was a duplicate"""
+
+        # TODO: make this a better sanity checking and perhaps report errors
+        if not entry.key:
+            return False
+
+        original_key = entry.fields["original_key"]
+        utf_author = bibutils.field_to_unicode(entry, "author")
+        utf_title = bibutils.field_to_unicode(entry, "title")
+        utf_venue = bibutils.field_to_unicode(entry, "journal")
+        if not utf_venue:
+            utf_venue = bibutils.field_to_unicode(entry, "booktitle")
+        try:
+            self.cursor.execute('UPDATE bib SET custom_key=?, author=?, title=?, venue=?, year=?, fulltext=? WHERE key=?',
+                                (entry.key,
+                                 utf_author,
+                                 utf_title,
+                                 utf_venue,
+                                 str(entry.fields.get("year")),
+                                 bibutils.single_entry_to_fulltext(entry),
+                                 original_key
+                                )
+                               )
+        except sqlite3.IntegrityError as e:
+            error_message = str(e)
+            if "UNIQUE" in error_message:
+                if "bib.custom_key" in error_message:
+                    logging.error("Key %s already exists in the database")
+                else:
+                    raise
+            else:
+                raise
 
     def __iter__(self):
         self.cursor.execute("SELECT fulltext FROM bib")

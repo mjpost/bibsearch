@@ -1,5 +1,6 @@
 import configparser
 import logging
+import os
 import os.path
 import platform
 
@@ -11,6 +12,7 @@ class Config():
             , "temp_dir": "/tmp/bibsearch"
             , "database_url": "https://github.com/mjpost/bibsearch/raw/master/resources/"
             , "custom_key_format": "{surname}{year}{suffix}:{title}"
+            , "editor": os.environ.get("EDITOR", "nano")
         }
         , "macros" : {
               '@acl': 'venue:"Annual Meeting of the Association for Computational Linguistics"'

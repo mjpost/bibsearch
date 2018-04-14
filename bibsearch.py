@@ -17,6 +17,7 @@ import sys
 import urllib.request
 import pybtex.database as pybtex
 import subprocess
+import tempfile
 import textwrap
 from tqdm import tqdm
 import yaml
@@ -72,16 +73,19 @@ def download_file(url, fname_out=None) -> None:
         #                 '"Python 3" folder, often found under /Applications')
         sys.exit(1)
 
-def format_search_results(results, bibtex_output, use_original_key):
+def format_search_results(results,
+                          bibtex_output,
+                          use_original_key) -> str:
     if not bibtex_output:
         textwrapper = textwrap.TextWrapper(subsequent_indent="  ")
+    output = ""
     for (fulltext, original_key) in results:
         entry = bibutils.fulltext_to_single_entry(fulltext)
         if use_original_key:
             entry.key = original_key
             fulltext = bibutils.single_entry_to_fulltext(entry)
         if bibtex_output:
-            print(fulltext + "\n")
+            output += fulltext + "\n"
         else:
             utf_author = bibutils.field_to_unicode(entry, "author", "")
             utf_author = [a.pretty() for a in bibutils.parse_names(utf_author)]
@@ -97,15 +101,16 @@ def format_search_results(results, bibtex_output, use_original_key):
                             title=utf_title,
                             venue=utf_venue + ", ",
                             year=entry.fields["year"]))
-            print("\n".join(lines) + "\n")
+            output += "\n".join(lines) + "\n\n"
+    return output[:-1] # Remove the last empty line
 
 def _find(args, config):
     db = BibDB(config)
-    format_search_results(db.search(args.terms), args.bibtex, args.original_key)
+    print(format_search_results(db.search(args.terms), args.bibtex, args.original_key), end='')
 
 def _where(args, config):
     db = BibDB(config)
-    format_search_results(db.where(args.terms), args.bibtex, args.original_key)
+    print(format_search_results(db.where(args.terms), args.bibtex, args.original_key), end='')
 
 def _open(args, config):
     db = BibDB(config)
@@ -351,6 +356,81 @@ def _tex(args, config):
     for e in entries:
         print(e + "\n", file=fp_out)
 
+def find_entry(entries_iter, field, value):
+    for e in entries_iter:
+        if e.fields.get(field) == value:
+            return e
+    return None
+
+def compare_entries(old, new):
+    added = set()
+    deleted = set()
+    edited = set()
+    if old.key != new.key:
+        edited.add("key")
+    for old_field, old_value in old.fields.items():
+        if not old_field in new.fields:
+            deleted.add(old_field)
+        else:
+            if old_value != new.fields[old_field]:
+                edited.add(old_field)
+    added = set(new.fields.keys()) - set(old.fields.keys())
+    return added, deleted, edited
+
+def _edit(args, config):
+    db = BibDB(config)
+    
+    search_results = db.search(args.terms)
+    if not search_results:
+        logging.error("Search returned no results. Aborting.")
+        sys.exit(1)
+
+    with tempfile.NamedTemporaryFile("w") as temp_file:
+        temp_fname = temp_file.name
+        with open(temp_fname, "wt") as fp:
+            original_entries_text = format_search_results(search_results,
+                                       bibtex_output=True,
+                                       use_original_key=False)
+            fp.write(original_entries_text)
+            original_entries = pybtex.parse_string(original_entries_text,
+                                                   bib_format="bibtex").entries.values()
+        subprocess.run([config.editor, temp_file.name])
+
+        with open(temp_fname, "rt"):
+            new_entries = pybtex.parse_file(temp_fname,
+                                               bib_format="bibtex").entries.values()
+    deleted_entries = []
+    edited_entries = []
+    seen_original_keys = set()
+    for new in new_entries:
+        original_key = new.fields["original_key"]
+        seen_original_keys.add(original_key)
+        old = find_entry(original_entries,
+                         "original_key",
+                         original_key)
+        added, deleted, edited = compare_entries(old, new)
+        if added or deleted or edited:
+            db.update(new)
+            # Report changes
+            edited_entries.append(new)
+            print("\nEntry %s" % old.key)
+            for field in added:
+                print('\tAdded %s with value "%s"' % (field, new.fields[field]))
+            for field in deleted:
+                print("\tDeleted %s" % field)
+            for field in edited:
+                print('\tChanged %s to "%s"' %
+                      (field,
+                       new.key if field=="key" else new.fields[field]))
+    for old in original_entries:
+        if not old.fields["original_key"] in seen_original_keys:
+            deleted_entries.append(old)
+    if deleted_entries:
+        print("\nDeleted entries:")
+        for e in deleted_entries:
+            print("\t%s" % e.key)
+    db.save()
+
 def _set_custom_key(args, config):
     db = BibDB(config)
     n_entries = 0
@@ -421,6 +501,10 @@ def main():
     parser_tex.add_argument('-b', '--write-bibfile', help='Autodetect and write bibfile', action='store_true')
     parser_tex.add_argument('-B', '--overwrite-bibfile', help='Autodetect and write bibfile', action='store_true')
     parser_tex.set_defaults(func=_tex)
+
+    parser_edit = subparsers.add_parser('edit', help='Edit entries')
+    parser_edit.add_argument('terms', nargs='*', help='One or more search terms')
+    parser_edit.set_defaults(func=_edit)
 
     parser_key = subparsers.add_parser('key', help='Change key of entry')
     parser_key.add_argument('-k', '--new-key', help='New key')
