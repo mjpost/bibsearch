@@ -14,6 +14,7 @@ import logging
 import os
 import re
 import sys
+from typing import List
 import urllib.request
 import pybtex.database as pybtex
 import subprocess
@@ -43,6 +44,31 @@ except ImportError:
     logging.warning('Could not import signal.SIGPIPE (this is expected on Windows machines)')
 
 BIBSETPREFIX="bib://"
+
+def prompt(message: str, *answers_in: List[str], default=0, case_insensitive=True):
+    valid_answers = [a.lower() for a in answers_in] if case_insensitive else answers_in
+    single_letter_answers = [a[0] for a in valid_answers]
+    assert len(valid_answers) == len(set(valid_answers)), "Answers are not unique"
+    assert len(single_letter_answers) == len(set(single_letter_answers)), "Single letter answers are not unique"
+    answer = input("%s [%s] " % (message, "/".join(answers_in)))
+    answer_index = -1
+    while answer_index < 0:
+        if not answer and default >= 0:
+            answer_index = default
+        else:
+            if case_insensitive:
+                answer = answer.lower()
+            try:
+                answer_index = valid_answers.index(answer)
+            except ValueError:
+                try:
+                    answer_index = single_letter_answers.index(answer)
+                except ValueError:
+                    answer = input("Please answer one of %s: " % "/".join(answers_in))
+    return answers_in[answer_index]
+
+
+
 
 def download_file(url, fname_out=None) -> None:
     """
@@ -74,8 +100,8 @@ def download_file(url, fname_out=None) -> None:
         sys.exit(1)
 
 def format_search_results(results,
-                          bibtex_output,
-                          use_original_key) -> str:
+                          bibtex_output=False,
+                          use_original_key=False) -> str:
     if not bibtex_output:
         textwrapper = textwrap.TextWrapper(subsequent_indent="  ")
     output = ""
@@ -266,8 +292,22 @@ def _arxiv(args, config):
 
 def _remove(args, config):
     db = BibDB(config)
-    db.remove(args.key)
-    db.save()
+    search_results = db.search(args.terms)
+    if not search_results:
+        logging.error("Search returned no results. Aborting.")
+        sys.exit(1)
+    print("You are about to delete these entries:")
+    print("")
+    print(format_search_results(search_results))
+    confirmation = prompt("Do you want to proced with the deletion?", "yes", "NO",
+                          default=1)
+    if confirmation == "yes":
+        for (_, original_key) in search_results:
+            db.remove(original_key)
+        db.save()
+        print("Removed %d entries." % len(search_results))
+    else:
+        print("Aborted.")
 
 
 def _add(args, config):
@@ -408,6 +448,7 @@ def _edit(args, config):
     deleted_entries = []
     edited_entries = []
     seen_original_keys = set()
+    changelog = []
     for new in new_entries:
         original_key = new.fields["original_key"]
         seen_original_keys.add(original_key)
@@ -416,27 +457,43 @@ def _edit(args, config):
                          original_key)
         added, deleted, edited = compare_entries(old, new)
         if added or deleted or edited:
-            db.update(new)
+            edited_entries.append(new)
             # Report changes
             edited_entries.append(new)
-            print("\nEntry %s" % old.key)
+            changelog.append("\nEntry %s" % old.key)
             for field in added:
-                print('\tAdded %s with value "%s"' % (field, new.fields[field]))
+                changelog.append('\tAdded %s with value "%s"' % (field, new.fields[field]))
             for field in deleted:
-                print("\tDeleted %s" % field)
+                changelog.append("\tDeleted %s" % field)
             for field in edited:
-                print('\tChanged %s to "%s"' %
+                changelog.append('\tChanged %s to "%s"' %
                       (field,
                        new.key if field=="key" else new.fields[field]))
     for old in original_entries:
         if not old.fields["original_key"] in seen_original_keys:
             deleted_entries.append(old)
     if deleted_entries:
-        print("\nDeleted entries:")
+        changelog.append("\nDeleted entries:")
+        for e in deleted_entries:
+            changelog.append("\t%s" % e.key)
+
+    if not edited_entries and not deleted_entries:
+        logging.warning("There were not changes in the entries.")
+        sys.exit(0)
+
+    print("Summary of changes:")
+    print("\n".join(changelog) + "\n")
+
+    confirmation = prompt("Do you want to perform these changes?", "YES", "no")
+    if confirmation == "YES":
+        for e in edited_entries:
+            db.update(e)
         for e in deleted_entries:
             db.remove(e.key)
-            print("\t%s" % e.key)
-    db.save()
+        db.save()
+        print("Updated database.")
+    else:
+        print("Aborted.")
 
 def _set_custom_key(args, config):
     db = BibDB(config)
@@ -519,7 +576,7 @@ def main():
     parser_key.set_defaults(func=_set_custom_key)
 
     parser_rm = subparsers.add_parser('remove', help='Remove an entry', aliases=['rm'])
-    parser_rm.add_argument('key', help='The key of the entry to remove')
+    parser_rm.add_argument('terms', nargs='*', help='One or more search terms')
     parser_rm.set_defaults(func=_remove)
 
     parser_macros = subparsers.add_parser('macros', help='Show defined macros')
