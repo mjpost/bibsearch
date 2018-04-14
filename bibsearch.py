@@ -495,22 +495,6 @@ def _edit(args, config):
     else:
         print("Aborted.")
 
-def _set_custom_key(args, config):
-    db = BibDB(config)
-    n_entries = 0
-    for (_, original_key) in db.search(args.terms):
-        n_entries += 1
-        if n_entries > 1:
-            break
-    if n_entries == 0:
-        logging.error("Search returned no results. Aborting.")
-        sys.exit(1)
-    elif n_entries > 1:
-        logging.error("Search returned several entries. Aborting.")
-        sys.exit(1)
-    logging.info("Updating custom key of %s to %s", original_key, args.new_key)
-    db.update_custom_key(original_key, args.new_key)
-
 def _macros(args, config):
     for macro, expansion in config.macros.items():
         print("%s:\t%s" % (macro, expansion))
@@ -569,11 +553,6 @@ def main():
     parser_edit = subparsers.add_parser('edit', help='Edit entries')
     parser_edit.add_argument('terms', nargs='*', help='One or more search terms')
     parser_edit.set_defaults(func=_edit)
-
-    parser_key = subparsers.add_parser('key', help='Change key of entry')
-    parser_key.add_argument('-k', '--new-key', help='New key')
-    parser_key.add_argument('terms', nargs='+', help='One or more search terms which uniquely identify an entry')
-    parser_key.set_defaults(func=_set_custom_key)
 
     parser_rm = subparsers.add_parser('remove', help='Remove an entry', aliases=['rm'])
     parser_rm.add_argument('terms', nargs='*', help='One or more search terms')
