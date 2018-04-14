@@ -434,6 +434,7 @@ def _edit(args, config):
     if deleted_entries:
         print("\nDeleted entries:")
         for e in deleted_entries:
+            db.remove(e.key)
             print("\t%s" % e.key)
     db.save()
 
