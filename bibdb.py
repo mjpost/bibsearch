@@ -229,13 +229,8 @@ class BibDB:
         # TODO: make this a better sanity checking and perhaps report errors
         if not entry.key:
             return False
-        # TODO: Strange thing. If I don't add the following check for author,
-        # pybtex aborts with an error when searching. Adding it everything
-        # works, but I do not find any entry with "unknown" in the author
-        # field. Note also that "author in key.fields" does not seem to work,
-        # as the entry may get it from "persons"
         if not entry.fields.get("author"):
-            entry.fields["author"] = "UNKNWON"
+            entry.fields["author"] = "UNKNOWN"
 
         original_key = entry.key
         entry.fields["original_key"] = original_key
