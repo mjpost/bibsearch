@@ -134,10 +134,6 @@ def _find(args, config):
     db = BibDB(config)
     print(format_search_results(db.search(args.terms), args.bibtex, args.original_key), end='')
 
-def _where(args, config):
-    db = BibDB(config)
-    print(format_search_results(db.where(args.terms), args.bibtex, args.original_key), end='')
-
 def _open(args, config):
     db = BibDB(config)
     results = db.search(args.terms)
@@ -533,12 +529,6 @@ def main():
     parser_find.add_argument('-o', "--original-key", help='Print the original key of the entries', action='store_true')
     parser_find.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
     parser_find.set_defaults(func=_find)
-
-    parser_where = subparsers.add_parser('where', help='Search the database using SQL-like syntax')
-    parser_where.add_argument('-b', '--bibtex', help='Print entries in bibtex format', action='store_true')
-    parser_where.add_argument('-o', "--original-key", help='Print the original key of the entries', action='store_true')
-    parser_where.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
-    parser_where.set_defaults(func=_where)
 
     parser_open = subparsers.add_parser('open', help='Open the article, if search returns only one result and url is available')
     parser_open.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")

@@ -3,6 +3,7 @@ import logging
 import os.path
 import pybtex.database as pybtex
 import sqlite3
+import sys
 import yaml
 
 from typing import Tuple
@@ -24,65 +25,71 @@ class BibDB:
         self.connection = sqlite3.connect(self.fname)
         self.cursor = self.connection.cursor()
         if createDB:
-            self.cursor.execute("""CREATE TABLE bib (
-                key text UNIQUE,
-                custom_key text UNIQUE,
-                author text,
-                title text,
-                venue text,
-                year text,
-                fulltext text
-                )""")
-            self.cursor.execute("""CREATE TABLE downloaded_files (
-                file text UNIQUE
-                )""")
-            try:
-                self.cursor.executescript(
-                """CREATE VIRTUAL TABLE bibindex USING fts5(
-                    key,
-                    custom_key,
-                    author,
-                    title,
-                    venue,
-                    year,
-                    fulltext UNINDEXED,
-                    content='bib',
-                    );
-                CREATE TRIGGER bib_ai AFTER INSERT ON bib BEGIN
-                   INSERT INTO bibindex
-                       (rowid, key, custom_key, author, title, venue, year, fulltext)
-                       VALUES 
-                       (new.rowid, new.key, new.custom_key, new.author, new.title, 
-                       new.venue, new.year, new.fulltext);
-                    END;
-                CREATE TRIGGER bib_ad AFTER DELETE ON bib BEGIN
-                   INSERT INTO bibindex
-                       (bibindex, rowid, key, custom_key, author, title, venue, year, fulltext)
-                       VALUES 
-                       ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
-                       old.venue, old.year, old.fulltext);
-                    END;
-                CREATE TRIGGER bibindex_au AFTER UPDATE ON bib BEGIN
-                   INSERT INTO bibindex
-                       (bibindex, rowid, key, custom_key, author, title, venue, year, fulltext)
-                       VALUES 
-                       ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
-                       old.venue, old.year, old.fulltext);
-                   INSERT INTO bibindex
-                       (rowid, key, custom_key, author, title, venue, year, fulltext)
-                       VALUES 
-                       (new.rowid, new.key, new.custom_key, new.author, new.title, 
-                       new.venue, new.year, new.fulltext);
-                    END;
-                """)
-            except sqlite3.OperationalError as e:
-                error_msg = str(e)
-                if "no such module" in error_msg and "fts5" in error_msg:
-                    logging.warning("It seems your sqlite3 installation does not support fts5 indexing.")
-                    logging.warning("It is strongly encouraged to activate fts5 (see the README and the FAQ).")
-                    input("Press ENTER to continue...")
-                else:
-                    raise
+            self._create_db()
+        # Find out if we have FTS
+        self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='bibindex'")
+        self.has_fts = bool(self.cursor.fetchone())
+
+    def _create_db(self):
+        self.cursor.execute("""CREATE TABLE bib (
+            key text UNIQUE,
+            custom_key text UNIQUE,
+            author text,
+            title text,
+            venue text,
+            year text,
+            fulltext text
+            )""")
+        self.cursor.execute("""CREATE TABLE downloaded_files (
+            file text UNIQUE
+            )""")
+        try:
+            self.cursor.executescript(
+            """CREATE VIRTUAL TABLE bibindex USING fts5(
+                key,
+                custom_key,
+                author,
+                title,
+                venue,
+                year,
+                fulltext UNINDEXED,
+                content='bib',
+                );
+            CREATE TRIGGER bib_ai AFTER INSERT ON bib BEGIN
+               INSERT INTO bibindex
+                   (rowid, key, custom_key, author, title, venue, year, fulltext)
+                   VALUES 
+                   (new.rowid, new.key, new.custom_key, new.author, new.title, 
+                   new.venue, new.year, new.fulltext);
+                END;
+            CREATE TRIGGER bib_ad AFTER DELETE ON bib BEGIN
+               INSERT INTO bibindex
+                   (bibindex, rowid, key, custom_key, author, title, venue, year, fulltext)
+                   VALUES 
+                   ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
+                   old.venue, old.year, old.fulltext);
+                END;
+            CREATE TRIGGER bibindex_au AFTER UPDATE ON bib BEGIN
+               INSERT INTO bibindex
+                   (bibindex, rowid, key, custom_key, author, title, venue, year, fulltext)
+                   VALUES 
+                   ('delete', old.rowid, old.key, old.custom_key, old.author, old.title, 
+                   old.venue, old.year, old.fulltext);
+               INSERT INTO bibindex
+                   (rowid, key, custom_key, author, title, venue, year, fulltext)
+                   VALUES 
+                   (new.rowid, new.key, new.custom_key, new.author, new.title, 
+                   new.venue, new.year, new.fulltext);
+                END;
+            """)
+        except sqlite3.OperationalError as e:
+            error_msg = str(e)
+            if "no such module" in error_msg and "fts5" in error_msg:
+                logging.warning("It seems your sqlite3 installation does not support fts5 indexing.")
+                logging.warning("It is strongly encouraged to activate fts5 (see the README and the FAQ).")
+                input("Press ENTER to continue...")
+            else:
+                raise
 
     def __len__(self):
         self.cursor.execute('SELECT COUNT(*) FROM bib')
@@ -105,7 +112,7 @@ class BibDB:
         if os.path.exists(last_results_fname):
             return yaml.load(open(last_results_fname))
 
-    def _format_query(self, query_terms):
+    def _format_query_fts(self, query_terms):
         processed_query_terms = []
         for t in query_terms:
             current_term = t
@@ -132,32 +139,6 @@ class BibDB:
             processed_query_terms.append(current_term)
         return " AND ".join(processed_query_terms)
 
-
-    def search(self, query):
-        results = []
-        if not query:
-            results = self.load_search_cache()
-        else:
-            try:
-                self.cursor.execute("SELECT fulltext, key FROM bibindex \
-                                    WHERE bibindex MATCH ?",
-                                    [self._format_query(query)])
-                results = list(self.cursor)
-                self.save_to_search_cache(results)
-            except sqlite3.OperationalError as e:
-                error_msg = str(e)
-                if "no such table" in error_msg and "bibindex" in error_msg:
-                    logging.error("The database was created without fts5 indexing, the 'search' command is not supported.")
-                    logging.error("Use command 'where' instead. See the README for more information.")
-                    sys.exit(1)
-                elif "no such module" in error_msg and "fts5" in error_msg:
-                    logging.error("It seems your sqlite3 installation does not support fts5 indexing.")
-                    logging.error("Use command 'where' instead. See the README for more information.")
-                    sys.exit(1)
-                else:
-                    raise
-        return results
-
     def _format_query_no_fts(self, input_terms):
         query_terms = []
         query_values = []
@@ -182,65 +163,22 @@ class BibDB:
                     query_values.append(wildquery)
         return " AND ".join(query_terms), query_values
 
-
-    def where(self, query):
+    def search(self, query):
         results = []
         if not query:
             results = self.load_search_cache()
         else:
-            where_clause, query_values = self._format_query_no_fts(query)
-            print(where_clause)
-            print(query_values)
-            self.cursor.execute("SELECT fulltext, key FROM bib \
-                                    WHERE %s" % where_clause,
-                                query_values)
+            if self.has_fts:
+                self.cursor.execute("SELECT fulltext, key FROM bibindex \
+                                    WHERE bibindex MATCH ?",
+                                    [self._format_query_fts(query)])
+            else:
+                where_clause, query_values = self._format_query_no_fts(query)
+                self.cursor.execute("SELECT fulltext, key FROM bib \
+                                        WHERE %s" % where_clause,
+                                    query_values)
             results = list(self.cursor)
             self.save_to_search_cache(results)
-        return results
-
-    def old_where(self, query_terms):
-        query_columns = [] 
-        query_args = []
-        wildcard_trans = str.maketrans("*", "%")
-        for term in query_terms:
-            column_query = term.split(":", 1)
-            if len(column_query) != 2:
-                logging.error("Malformed query term '%s'", term)
-                sys.exit(1)
-            column, query = column_query
-            query = query.translate(wildcard_trans)
-            if column == "key":
-                query_columns.append("(key LIKE ? OR custom_key LIKE ?)")
-                query_args.append(query)
-                query_args.append(query)
-            elif column == "author":
-                query_columns.append("(author LIKE ?)")
-                query_args.append(query)
-            elif column == "title":
-                query_columns.append("(title LIKE ?)")
-                query_args.append(query)
-            elif column == "venue":
-                query_columns.append("(venue LIKE ?)")
-                query_args.append(query)
-            elif column == "year":
-                query_columns.append("(year LIKE ?)")
-                query_args.append(query)
-            else:
-                logging.error("Unknown search field '%s'", column)
-                sys.exit(1)
-
-        results = []
-        last_results_fname = os.path.join(self.config.bibsearch_dir, "lastSearch.yml")
-        if not query_columns:
-            if os.path.exists(last_results_fname):
-                results = yaml.load(open(last_results_fname))
-        else:
-            self.cursor.execute("SELECT fulltext, key FROM bib \
-                                WHERE %s" % " AND ".join(query_columns),
-                                query_args)
-            results = list(self.cursor)
-            with open(last_results_fname, "w") as fp:
-                yaml.dump(results, fp)
         return results
 
     def search_key(self, key) -> str:
