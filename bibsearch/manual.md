@@ -46,7 +46,7 @@ provides the following services:
 Bibsearch operation is guided by commands. Each command accepts the `-h`,
 `--help` option to list additional options.
 
-* `add` <files or URLs or bibspecs>:
+* `add` <files> or <URLs> or <bibspecs>:
     Adds entries to the BibTeX database. Three types of inputs are supported:
     <files>, <URLs> and <bibspecs>.
     <files> are local files present in the filesystem.

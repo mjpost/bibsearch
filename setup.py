@@ -27,12 +27,14 @@ See:
 from setuptools import setup, find_packages
 import re
 import os
+import subprocess
 
 def get_version():
     VERSION_RE = re.compile(r'''VERSION\s+=\s+['"]([0-9.]+)['"]''')
     init = open(os.path.join(os.path.dirname(__file__), 'bibsearch', 'bibsearch.py'), encoding='utf-8').read()
     return VERSION_RE.search(init).group(1)
 
+subprocess.run(["ronn", "bibsearch/manual.md"])
 setup(
     name = 'bibsearch',
 
