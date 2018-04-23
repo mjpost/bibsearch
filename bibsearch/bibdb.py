@@ -8,7 +8,7 @@ import yaml
 
 from typing import Tuple
 
-import bibutils
+from . import bibutils
 
 class BibDB:
     def __init__(self, config):

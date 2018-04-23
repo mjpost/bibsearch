@@ -23,9 +23,9 @@ import textwrap
 from tqdm import tqdm
 import yaml
 
-from bibdb import BibDB
-import bibutils
-from config import Config
+from .bibdb import BibDB
+from . import bibutils
+from .config import Config
 
 VERSION = '0.2.0'
 
@@ -505,6 +505,11 @@ def _macros(args, config):
     for macro, expansion in config.macros.items():
         print("%s:\t%s" % (macro, expansion))
 
+def _man(args, config):
+    subprocess.run(["man", 
+                    os.path.join(os.path.dirname(__file__), "manual.1")])
+
+
 def main():
     logging.basicConfig(level=logging.INFO,
                         format="[%(levelname)s] %(message)s")
@@ -560,6 +565,9 @@ def main():
 
     parser_macros = subparsers.add_parser('macros', help='Show defined macros')
     parser_macros.set_defaults(func=_macros)
+
+    parser_man = subparsers.add_parser('man', help='Shows documentation in form of a man page')
+    parser_man.set_defaults(func=_man)
 
     args = parser.parse_args()
     config = Config()

@@ -24,13 +24,13 @@ See:
 """
 
 # Always prefer setuptools over distutils
-from setuptools import setup
+from setuptools import setup, find_packages
 import re
 import os
 
 def get_version():
     VERSION_RE = re.compile(r'''VERSION\s+=\s+['"]([0-9.]+)['"]''')
-    init = open(os.path.join(os.path.dirname(__file__), 'bibsearch.py'), encoding='utf-8').read()
+    init = open(os.path.join(os.path.dirname(__file__), 'bibsearch', 'bibsearch.py'), encoding='utf-8').read()
     return VERSION_RE.search(init).group(1)
 
 setup(
@@ -81,7 +81,13 @@ setup(
     keywords = ['computer science, LaTeX, BibTeX'],
 
     # Alternatively, if you want to distribute just a my_module.py, uncomment this:
-    py_modules = ["bibsearch", "bibdb", "bibutils", "config"],
+    # py_modules = ["bibsearch", "bibdb", "bibutils", "config"],
+    packages = find_packages(),
+
+    # Additional data
+    package_data={
+        'bibsearch': ['manual.1'],
+    },
 
     # List run-time dependencies here.  These will be installed by pip when
     # your project is installed. For an analysis of "install_requires" vs pip's
@@ -100,7 +106,7 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
         'console_scripts': [
-            'bibsearch = bibsearch:main',
+            'bibsearch = bibsearch.bibsearch:main',
         ],
     },
 )

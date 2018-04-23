@@ -96,6 +96,9 @@ Bibsearch operation is guided by commands. Each command accepts the `-h`,
 * `macros`:
     Lists the macros known by bibsearch that can be used in search queries.
 
+* `man`:
+    Shows this man page.
+
 ## SEARCH QUERIES
 
 TODO
