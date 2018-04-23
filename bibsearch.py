@@ -192,6 +192,16 @@ def get_fnames_from_bibset(raw_fname, database_url):
     bib_spec = raw_fname[len(BIBSETPREFIX):].strip()
     spec_fields = bib_spec.split('/')
     resource = spec_fields[0]
+    if resource == "list":
+        # Special case, list know resources
+        textwrapper = textwrap.TextWrapper(subsequent_indent=10*" ")
+        known_resources = download_file(database_url + "list.txt")
+        for l in known_resources.split("\n"):
+            line = l.strip()
+            if line:
+                name, description = line.split("\t")
+                print("\n".join(textwrapper.wrap("%-10s%s" % (name, description))))
+        return []
     try:
         currentSet = yaml.load(download_file(database_url + resource + ".yml"))
         #~ currentSet = yaml.load(open("resources/" + resource + ".yml")) # for local testing
