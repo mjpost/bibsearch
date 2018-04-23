@@ -1,3 +1,4 @@
+import functools
 import logging
 import os.path
 import pybtex.database as pybtex
@@ -12,6 +13,8 @@ class BibDB:
     def __init__(self, config):
         self.config = config
         self.fname = os.path.join(self.config.bibsearch_dir, "bib.db")
+
+        self.column_names_no_key = ["author", "title", "venue", "year"]
 
         createDB = False
         if not os.path.exists(self.fname):
@@ -155,7 +158,47 @@ class BibDB:
                     raise
         return results
 
-    def where(self, query_terms):
+    def _format_query_no_fts(self, input_terms):
+        query_terms = []
+        query_values = []
+        for t in input_terms:
+            if not functools.reduce(lambda x, y: x or y,
+                                    [t.startswith(c + ":")
+                                     for c in self.column_names_no_key + ["key"]]):
+                current_terms = []
+                for c in self.column_names_no_key + ["key", "custom_key"]:
+                    current_terms.append('(%s LIKE ?)' % c)
+                    query_values.append('%%%s%%' % t)
+                query_terms.append("(%s)" % " OR ".join(current_terms))
+            else:
+                specifier, query = t.split(":", 1)
+                wildquery = '%%%s%%' % query
+                if specifier == "key":
+                    query_terms.append('((key LIKE ?) OR (custom_key LIKE ?))')
+                    query_values.append(wildquery)
+                    query_values.append(wildquery)
+                else:
+                    query_terms.append('(%s LIKE ?)' % specifier)
+                    query_values.append(wildquery)
+        return " AND ".join(query_terms), query_values
+
+
+    def where(self, query):
+        results = []
+        if not query:
+            results = self.load_search_cache()
+        else:
+            where_clause, query_values = self._format_query_no_fts(query)
+            print(where_clause)
+            print(query_values)
+            self.cursor.execute("SELECT fulltext, key FROM bib \
+                                    WHERE %s" % where_clause,
+                                query_values)
+            results = list(self.cursor)
+            self.save_to_search_cache(results)
+        return results
+
+    def old_where(self, query_terms):
         query_columns = [] 
         query_args = []
         wildcard_trans = str.maketrans("*", "%")
