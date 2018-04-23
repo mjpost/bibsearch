@@ -1,0 +1,4 @@
+acl	The ACL Anthology [https://aclanthology.coli.uni-saarland.de/]
+nips	The NIPS conference [https://nips.cc/]
+pmlr	Proceddings of machine learning research (includes ICML) [http://proceedings.mlr.press/]
+
