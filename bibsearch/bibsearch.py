@@ -253,7 +253,6 @@ def _arxiv(args, config):
     # Run through each entry, and print out information
     results_to_save = []
     for entry in feed.entries:
-
         arxiv_id = re.sub(r'v\d+$', '', entry.id.split('/abs/')[-1])
 
         fields = { 'title': entry.title,
@@ -282,7 +281,9 @@ def _arxiv(args, config):
         bib_entry = pybtex.Entry('article', persons=authors, fields=fields)
         bib_entry.key = bibutils.generate_custom_key(bib_entry, config.custom_key_format)
 
-        format_search_results( [(bibutils.single_entry_to_fulltext(bib_entry), arxiv_id)], False, True)
+        print(format_search_results( [(bibutils.single_entry_to_fulltext(bib_entry), arxiv_id)],
+                                     bibtex_output=False,
+                                     use_original_key=True))
 
         if args.add:
             db.add(bib_entry)
