@@ -69,10 +69,32 @@ Bibsearch operation is guided by commands. Each command accepts the `-h`,
     QUERIES][] section. By default the search results are listed in a
     human-readable format. Use the `-b` option to show them in BibTeX format.
 
+* `arxiv` [<query>]:
+    TODO
+
 * `open` [<query>]:
     Opens the corresponding paper if the <query> returns only one result.
     Requires the BibTeX entry to specify an <URL> field. See the [SEARCH
     QUERIES][] section for the syntax of the <query>.
+
+* `tex` <file>:
+    Generates the BibTeX file corresponding to a .tex file. The information is
+    read from the .aux file, i.e. LaTeX needs to have been run at least once.
+    By default the BibTeX entries are printed to stdout. With the `-b` option
+    the bib file specified in the .tex file is generated, although it will not
+    be overwritten if it already exists. Use `-B` if you want to overwrite the
+    file.
+
+* `edit` [<query>]:
+    Opens an external editor to edit the BibTeX entries returned by the
+    <query>. Please do not modify the `original_key` field, as this is used
+    internally by `bibsearch` to identify the entries.
+
+* `remove` [<query>]:
+    Removes the entries returned by <query>.
+
+* `macros`:
+    Lists the macros known by bibsearch that can be used in search queries.
 
 ## SEARCH QUERIES
 
