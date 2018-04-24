@@ -529,7 +529,7 @@ def main():
     parser.add_argument('-c', '--config_file', help="use this config file",
                         default=os.path.join(os.path.expanduser("~"),
                                              '.bibsearch',
-                                             "bibsearch.config")
+                                             "config")
                         )
     parser.set_defaults(func=lambda *_ : parser.print_help())
     subparsers = parser.add_subparsers(title="commands",
