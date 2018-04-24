@@ -510,12 +510,21 @@ def _man(args, config):
     subprocess.run(["man", 
                     os.path.join(os.path.dirname(__file__), "manual.1")])
 
+# From https://stackoverflow.com/questions/13423540/argparse-subparser-hide-metavar-in-command-listing
+class SubcommandHelpFormatter(argparse.RawDescriptionHelpFormatter):
+    def _format_action(self, action):
+        #parts = super(argparse.RawDescriptionHelpFormatter, self)._format_action(action)
+        parts = super()._format_action(action)
+        if action.nargs == argparse.PARSER:
+            parts = "\n".join(parts.split("\n")[1:])
+        return parts
 
 def main():
     logging.basicConfig(level=logging.INFO,
                         format="[%(levelname)s] %(message)s")
 
-    parser = argparse.ArgumentParser(description='bibsearch: Download, manage, and search a BibTeX database.')
+    parser = argparse.ArgumentParser(description="bibsearch: Download, manage, and search a BibTeX database.\nUse '%(prog)s man' to get complete help.",
+                                     formatter_class=SubcommandHelpFormatter)
     parser.add_argument('--version', '-V', action='version', version='%(prog)s {}'.format(VERSION))
     parser.add_argument('-c', '--config_file', help="use this config file",
                         default=os.path.join(os.path.expanduser("~"),
@@ -523,7 +532,9 @@ def main():
                                              "bibsearch.config")
                         )
     parser.set_defaults(func=lambda *_ : parser.print_help())
-    subparsers = parser.add_subparsers()
+    subparsers = parser.add_subparsers(title="commands",
+                                       description="Use '%(prog)s <command> -h' to obtain additional help.",
+                                       metavar="<command>")
 
     parser_add = subparsers.add_parser('add', help='Add a BibTeX file')
     parser_add.add_argument('files', type=str, default=None, help='BibTeX files to add', nargs='+')
@@ -567,7 +578,7 @@ def main():
     parser_macros = subparsers.add_parser('macros', help='Show defined macros')
     parser_macros.set_defaults(func=_macros)
 
-    parser_man = subparsers.add_parser('man', help='Shows documentation in form of a man page')
+    parser_man = subparsers.add_parser('man', help='Shows documentation in form of a man page', aliases=['help'])
     parser_man.set_defaults(func=_man)
 
     args = parser.parse_args()
