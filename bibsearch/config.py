@@ -25,10 +25,7 @@ class Config():
         }
     }
 
-    def __init__(self):
-        pass
-
-    def initialize(self, fname):
+    def __init__(self, fname):
         config = configparser.ConfigParser()
         config.read_dict(self.__class__.defaults)
         config.read(fname)

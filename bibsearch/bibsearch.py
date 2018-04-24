@@ -582,8 +582,7 @@ def main():
     parser_man.set_defaults(func=_man)
 
     args = parser.parse_args()
-    config = Config()
-    config.initialize(args.config_file)
+    config = Config(args.config_file)
     args.func(args, config)
 
 if __name__ == '__main__':
