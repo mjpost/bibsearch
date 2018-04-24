@@ -150,6 +150,21 @@ or perhaps more robustly
 
     bibsearch search author:matt author:post
 
+You can also use pre-defined macros for more convenient queries. `bibsearch`
+provides some pre-defined macros for well-known conferences in the area of
+computational linguistics (the research area of the authors) which can be listed
+with the `macros` command. E.g. if you want to look for papers by Matt Post in
+the ACL conference, you may use
+
+    bibsearch search matt post @acl
+
+which internally will get expanded to
+
+    bibsearch search matt post venue:"Annual Meeting of the Association for Computational Linguistics"
+
+You can define your own custom macros in the config file (see [CONFIG FILE][]).
+Macros pre-defined by `bibsearch` will always start with the '@' symbol.
+
 ## CONFIG FILE
 
 TODO
