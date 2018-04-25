@@ -77,6 +77,11 @@ Bibsearch operation is guided by commands. Each command accepts the `-h`,
     Requires the BibTeX entry to specify an <URL> field. See the [SEARCH
     QUERIES][] section for the syntax of the <query>.
 
+* `download` [<query>]:
+    Downloads the papers returned by query to the directory specified in the
+    [CONFIG FILE][]. Defaults to a <bibsearch> subdirectory in your system's
+    default temporary directory.
+
 * `tex` <file>:
     Generates the BibTeX file corresponding to a .tex file. The information is
     read from the .aux file, i.e. LaTeX needs to have been run at least once.
@@ -162,9 +167,13 @@ which internally will get expanded to
 
     bibsearch search matt post venue:"Annual Meeting of the Association for Computational Linguistics"
 
-You can define your own custom macros in the config file (see [CONFIG FILE][]).
-Macros pre-defined by `bibsearch` will always start with the '@' symbol.
+You can define your own custom macros in the [CONFIG FILE][].  Macros
+pre-defined by `bibsearch` will always start with the '@' symbol.
 
 ## CONFIG FILE
+
+By default, `bibsearch` will load $HOME/.bibsearch/config, but an alternative
+config file can be specified via the `-c` option.
+
 
 TODO

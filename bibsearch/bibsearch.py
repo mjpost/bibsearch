@@ -147,10 +147,27 @@ def _open(args, config):
     logging.info('Downloading "%s"', entry.fields["title"])
     if "url" not in entry.fields:
         logging.error("Entry does not contain an URL field")
-    if not os.path.exists(config.temp_dir):
-        os.makedirs(config.temp_dir)
-    temp_fname = download_file(entry.fields["url"], os.path.join(config.temp_dir, entry.key + ".pdf"))
+    if not os.path.exists(config.download_dir):
+        os.makedirs(config.download_dir)
+    temp_fname = download_file(entry.fields["url"], os.path.join(config.download_dir, entry.key + ".pdf"))
     subprocess.run([config.open_command, temp_fname])
+
+def _download(args, config):
+    db = BibDB(config)
+    results = db.search(args.terms)
+    if not results:
+        logging.error("No documents returned by query")
+        sys.exit(1)
+    logging.info("Downloading to %s", config.download_dir)
+    if not os.path.exists(config.download_dir):
+        os.makedirs(config.download_dir)
+    iterable = tqdm(results, ncols=80, bar_format="{l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]")
+    for fulltext, _ in iterable:
+        entry = bibutils.fulltext_to_single_entry(fulltext)
+        tqdm.write('Downloading "%s"' % entry.fields["title"])
+        if "url" not in entry.fields:
+            logging.error("Entry does not contain an URL field")
+        download_file(entry.fields["url"], os.path.join(config.download_dir, entry.key + ".pdf"))
 
 class AddFileError(BibsearchError):
     pass
@@ -560,6 +577,10 @@ def main():
     parser_open = subparsers.add_parser('open', help='Open the article, if search returns only one result and url is available')
     parser_open.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
     parser_open.set_defaults(func=_open)
+
+    parser_download = subparsers.add_parser('download', help='download articles')
+    parser_download.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
+    parser_download.set_defaults(func=_download)
 
     parser_tex = subparsers.add_parser('tex', help='Create .bib file for a latex article')
     parser_tex.add_argument('file', help='Article file name or .aux file')

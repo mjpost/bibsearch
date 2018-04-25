@@ -3,13 +3,14 @@ import logging
 import os
 import os.path
 import platform
+import tempfile
 
 class Config():
     defaults = {
         "bibsearch" : {
               "bibsearch_dir": os.path.join(os.path.expanduser("~"), '.bibsearch')
             , "open_command": "xdg-open" if platform.system() == "Linux" else "open"
-            , "temp_dir": "/tmp/bibsearch"
+            , "download_dir": os.path.join(tempfile.gettempdir(), "bibsearch")
             , "database_url": "https://github.com/mjpost/bibsearch/raw/master/resources/"
             , "custom_key_format": "{surname}{year}{suffix}:{title}"
             , "editor": os.environ.get("EDITOR", "nano")
