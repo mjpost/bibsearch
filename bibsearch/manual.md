@@ -219,4 +219,49 @@ commands that accept queries. See [SEARCH QUERIES][] for details.
 
 ## CUSTOM BIBTEX KEYS
 
-TODO
+`bibsearch` will generate custom BibTeX keys for the entries. By default it
+will use the last name of the first author, the publication year and the first
+non-function word of the title, e.g.
+
+    @Article{brown1993:mathematics,
+        author = "Brown, Peter E. and Pietra, Stephen A. Della and Pietra, Vincent J. Della and Mercer, Robert L.",
+        title = "The Mathematics of Statistical Machine Translation: Parameter Estimation",
+        journal = "Computational Linguistics, Volume 19, Number 2, June 1993, Special Issue on Using Large Corpora: II",
+        year = "1993",
+        url = "http://www.aclweb.org/anthology/J93-2003"
+    }
+
+You can customize the format of the keys in the config file, using the
+custom_key_format option (see [CONFIG FILE][]). You can specify any string, with
+special fields delimited by curly braces which will substituted with information
+extracted from the entry, e.g. the default string is
+{surname}{year}{suffix}:{title}.
+
+The supported keywords are
+
+* `{surname}`:
+Surname of the first author of the paper.
+
+* `{et_al}`:
+"_etAl" will be added if there is more than one author.
+
+* `{year}`:
+The year of publication.
+
+* `{short_year}`:
+The year of publication in short form (i.e. the last two digits).
+
+* `{suffix}`:
+An alphabetical suffix to avoid conflicts in key generation (e.g. brown1993 and
+brown1993a).
+
+* `{title}`:
+The first non-function word of the title.
+
+## BUGS
+
+Currently tildes ('~') are not correctly handled.
+
+## SEE ALSO
+
+bibtex(1)
