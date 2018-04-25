@@ -65,8 +65,7 @@ Bibsearch operation is guided by commands. Each command accepts the `-h`,
     flag.
 
 * `search` [<query>]:
-    Searches the database. For the syntax of search queries look at the [SEARCH
-    QUERIES][] section. By default the search results are listed in a
+    Searches the database. For the syntax of search queries look at the [SEARCH QUERIES][] section. By default the search results are listed in a
     human-readable format. Use the `-b` option to show them in BibTeX format.
 
 * `arxiv` [<query>]:
@@ -74,8 +73,7 @@ Bibsearch operation is guided by commands. Each command accepts the `-h`,
 
 * `open` [<query>]:
     Opens the corresponding paper if the <query> returns only one result.
-    Requires the BibTeX entry to specify an <URL> field. See the [SEARCH
-    QUERIES][] section for the syntax of the <query>.
+    Requires the BibTeX entry to specify an <URL> field. See the [SEARCH QUERIES][] section for the syntax of the <query>.
 
 * `download` [<query>]:
     Downloads the papers returned by query to the directory specified in the
