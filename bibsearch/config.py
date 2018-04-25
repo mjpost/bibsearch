@@ -9,8 +9,8 @@ class Config():
     defaults = {
         "bibsearch" : {
               "bibsearch_dir": os.path.join(os.path.expanduser("~"), '.bibsearch')
-            , "open_command": "xdg-open" if platform.system() == "Linux" else "open"
             , "download_dir": os.path.join(tempfile.gettempdir(), "bibsearch")
+            , "open_command": "xdg-open" if platform.system() == "Linux" else "open"
             , "database_url": "https://github.com/mjpost/bibsearch/raw/master/resources/"
             , "custom_key_format": "{surname}{year}{suffix}:{title}"
             , "editor": os.environ.get("EDITOR", "nano")

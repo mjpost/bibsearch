@@ -179,6 +179,44 @@ what is supported by python's configparser library, see
 https://docs.python.org/3/library/configparser.html). An example of the contents
 of such a config file could be
 
+    [bibsearch]
+    bibsearch_dir = /Users/dvilar/bibsearch_dir
+    download_dir = /Users/dvilar/downloaded_papers
+    open_command = zathura
+    custom_key_format = {surname}{et_al}{short_year}{suffix}_{title}
 
+    [macros]
+    mp = matt post
+    dv = david vilar
 
+The main section of the config file has the <[bibsearch]> label. Supported
+options are
 
+* `bibsearch_dir`:
+The directory where different `bibsearch` files (including the database)
+will be stored in.
+
+* `download_dir`:
+The target directory to download papers to for the `open` and `download`
+commands. If not specified, a temporary directory will be used.
+
+* `open_command`:
+The command that will be used to open pdf files. This command will be called
+with the file name of the pdf file as first and only argument.
+
+* `database_url`:
+The URL to query when parsing bibset specifications in the `add` command.
+
+* `custom_key_format`:
+The format used for generating custom keys. See [CUSTOM BIBTEX KEYS][]
+
+* `editor`:
+The editor used for editing entries in the `edit` command. The command will be
+called with a single file path as argument.
+
+The <[macros]> section can be used for defining custom macros for usage in
+commands that accept queries. See [SEARCH QUERIES][] for details.
+
+## CUSTOM BIBTEX KEYS
+
+TODO
