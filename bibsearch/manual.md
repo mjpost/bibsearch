@@ -173,7 +173,12 @@ pre-defined by `bibsearch` will always start with the '@' symbol.
 ## CONFIG FILE
 
 By default, `bibsearch` will load $HOME/.bibsearch/config, but an alternative
-config file can be specified via the `-c` option.
+config file can be specified via the `-c` option. The format of this file is
+"similar to what’s found in Microsoft Windows INI files" (or more specifically
+what is supported by python's configparser library, see
+https://docs.python.org/3/library/configparser.html). An example of the contents
+of such a config file could be
 
 
-TODO
+
+

@@ -66,7 +66,9 @@ def fulltext_to_single_entry(fulltext: str) -> pybtex.Entry:
 
 custom_key_skip_chars = str.maketrans("", "", " `~!@#$%^&*()+=[]{}|\\'\":;,<.>/?")
 custom_key_skip_words = set(stop_words.get_stop_words("en"))
-def generate_custom_key(entry: pybtex.Entry, key_format, suffix_level=0):
+def generate_custom_key(entry: pybtex.Entry, key_format_in, suffix_level=0):
+    key_format = key_format_in.replace('''{short_year}''', '''{short_year:02d}''')
+
     # TODO: fault tolerance against missing fields!
     year = int(entry.fields["year"])
     all_authors = parse_names(entry.fields["author"])
