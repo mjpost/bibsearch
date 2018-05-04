@@ -95,7 +95,7 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires = ['typing', 'tqdm', 'pyaml', 'stop-words', 'pybtex', 'feedparser'],
+    install_requires = ['typing', 'tqdm', 'pyaml', 'stop-words', 'pybtex', 'feedparser', 'click'],
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
@@ -108,7 +108,7 @@ setup(
     # pip to create the appropriate form of executable for the target platform.
     entry_points={
         'console_scripts': [
-            'bibsearch = bibsearch.bibsearch:main',
+            'bibsearch = bibsearch.bibsearch:cli',
         ],
     },
 )

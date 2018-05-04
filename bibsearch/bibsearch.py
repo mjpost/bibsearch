@@ -10,6 +10,7 @@ Authors:
 """
 
 import argparse
+import click
 import logging
 import os
 import re
@@ -66,9 +67,6 @@ def prompt(message: str, *answers_in: List[str], default=0, case_insensitive=Tru
                 except ValueError:
                     answer = input("Please answer one of %s: " % "/".join(answers_in))
     return answers_in[answer_index]
-
-
-
 
 def download_file(url, fname_out=None) -> None:
     """
@@ -130,13 +128,42 @@ def format_search_results(results,
             output += "\n".join(lines) + "\n\n"
     return output[:-1] # Remove the last empty line
 
-def _find(args, config):
-    db = BibDB(config)
-    print(format_search_results(db.search(args.terms), args.bibtex, args.original_key), end='')
+# CLI definition ###############################################################
+@click.group(context_settings={"help_option_names": ['-h', '--help']})
+@click.option('-c', '--config-file', help="use this config file", 
+              metavar="CONFIG",
+              default=os.path.join(os.path.expanduser("~"),
+                                   '.bibsearch',
+                                   "config")
+              )
+@click.version_option(version=VERSION)
+@click.pass_context
+def cli(ctx, config_file):
+    logging.basicConfig(level=logging.INFO,
+                        format="[%(levelname)s] %(message)s")
+    # Needed when going through setuptools
+    if ctx.obj is None:
+        ctx.obj = {}
+    ctx.obj["config"] = Config(config_file)
 
-def _open(args, config):
+@cli.command(help="Search the database")
+@click.option("-b", "--bibtex", help="Print entries in bibtex format", is_flag=True)
+@click.option("-o", "--original-key", help="Print the original key of the entries", is_flag=True)
+@click.argument("terms", nargs=-1)
+@click.pass_context
+def search(ctx, bibtex, original_key, terms):
+    db = BibDB(ctx.obj["config"])
+    print(format_search_results(db.search(terms), bibtex, original_key), end='')
+
+@cli.command(name="open",
+             short_help="Download and open paper",
+             help="Download and open the paper returned by search, if only one result is returned and the entry contains an 'url' field")
+@click.argument("terms", nargs=-1)
+@click.pass_context
+def open_bib_url(ctx, terms):
+    config = ctx.obj["config"]
     db = BibDB(config)
-    results = db.search(args.terms)
+    results = db.search(terms)
     if not results:
         logging.error("No documents returned by query")
         sys.exit(1)
@@ -152,9 +179,14 @@ def _open(args, config):
     temp_fname = download_file(entry.fields["url"], os.path.join(config.download_dir, entry.key + ".pdf"))
     subprocess.run([config.open_command, temp_fname])
 
-def _download(args, config):
+@cli.command(short_help="Download papers",
+             help="Download papers returned by search, if the entries contain an 'url' field")
+@click.argument("terms", nargs=-1)
+@click.pass_context
+def download(ctx, terms):
+    config = ctx.obj["config"]
     db = BibDB(config)
-    results = db.search(args.terms)
+    results = db.search(terms)
     if not results:
         logging.error("No documents returned by query")
         sys.exit(1)
@@ -246,12 +278,18 @@ def get_fnames_from_bibset(raw_fname, database_url):
     return rec_extract_bib(currentSet)
 
 
-def _arxiv(args, config):
+@cli.command(help="Search the arXiv")
+@click.option("-a", "--add", is_flag=True,
+              help="Add all results to the database (default: just print them to STDOUT)")
+@click.argument("terms", nargs=-1)
+@click.pass_context
+def arxiv(ctx, add, terms):
     import feedparser
 
+    config = ctx.obj["config"]
     db = BibDB(config)
 
-    query = 'http://export.arxiv.org/api/query?{}'.format(urllib.parse.urlencode({ 'search_query': ' AND '.join(args.query)}))
+    query = 'http://export.arxiv.org/api/query?{}'.format(urllib.parse.urlencode({ 'search_query': ' AND '.join(terms)}))
     response = download_file(query)
 
     feedparser._FeedParserMixin.namespaces['http://a9.com/-/spec/opensearch/1.1/'] = 'opensearch'
@@ -302,7 +340,7 @@ def _arxiv(args, config):
                                      bibtex_output=False,
                                      use_original_key=True))
 
-        if args.add:
+        if add:
             db.add(bib_entry)
             results_to_save.append((bibutils.single_entry_to_fulltext(bib_entry), bib_entry.key))
         else:
@@ -310,13 +348,16 @@ def _arxiv(args, config):
 
         db.save_to_search_cache(results_to_save)
 
-    if args.add:
+    if add:
         db.save()
 
 
-def _remove(args, config):
-    db = BibDB(config)
-    search_results = db.search(args.terms)
+@cli.command(help="Remove an entry")
+@click.argument("terms", nargs=-1)
+@click.pass_context
+def remove(ctx, terms):
+    db = BibDB(ctx.obj["config"])
+    search_results = db.search(terms)
     if not search_results:
         logging.error("Search returned no results. Aborting.")
         sys.exit(1)
@@ -333,11 +374,16 @@ def _remove(args, config):
     else:
         print("Aborted.")
 
-
-def _add(args, config):
+@cli.command(help="Add BibTeX files")
+@click.option("-r", "--redownload", help="Re-download already downloaded files", is_flag=True)
+@click.option("-v", "--verbose", help="Be verbose about which files are being downloaded", is_flag="True")
+@click.argument("files", nargs=-1)
+@click.pass_context
+def add(ctx, redownload, verbose, files):
+    config = ctx.obj["config"]
     db = BibDB(config)
 
-    for raw_fname in args.files:
+    for raw_fname in files:
         fnames = [raw_fname] if not raw_fname.startswith(BIBSETPREFIX) \
                              else get_fnames_from_bibset(raw_fname, config.database_url)
         added = 0
@@ -352,8 +398,8 @@ def _add(args, config):
         error_msgs = []
         for f in iterable:
             try:
-                f_added, f_skipped, file_skipped = _add_file(f, args.redownload, db, per_file_progress_bar)
-                if args.verbose and not per_file_progress_bar:
+                f_added, f_skipped, file_skipped = _add_file(f, redownload, db, per_file_progress_bar)
+                if verbose and not per_file_progress_bar:
                     if not file_skipped:
                         log_msg = "Added %d entries from %s" % (f_added, f)
                     else:
@@ -376,19 +422,27 @@ def _add(args, config):
             logging.error(m)
     db.save()
 
-def _print(args, config):
-    db = BibDB(config)
-    if args.summary:
+@cli.command(name="print", help="Print the BibTeX database")
+@click.option("--summary", help="Just print a summary", is_flag=True)
+@click.pass_context
+def print_db(ctx, summary):
+    db = BibDB(ctx.obj["config"])
+    if summary:
         print('Database has', len(db), 'entries')
     else:
         for entry in db:
             print(entry.rstrip() + "\n")
 
-def _tex(args, config):
+@cli.command(help="Create .bib file for a latex article")
+@click.option('-b', '--write-bibfile', help='Autodetect and write bibfile', is_flag=True)
+@click.option('-B', '--overwrite-bibfile', help='Autodetect and write bibfile', is_flag=True)
+@click.argument('file')
+@click.pass_context
+def tex(ctx, file, write_bibfile, overwrite_bibfile):
     citation_re = re.compile(r'\\citation{(.*)}')
     bibdata_re = re.compile(r'\\bibdata{(.*)}')
-    db = BibDB(config)
-    aux_fname = args.file
+    db = BibDB(ctx.obj["config"])
+    aux_fname = file
     if not aux_fname.endswith(".aux"):
         if aux_fname.endswith(".tex"):
             aux_fname = aux_fname[:-4] + ".aux"
@@ -406,14 +460,14 @@ def _tex(args, config):
                     entries.add(bib_entry)
                 else:
                     logging.warning("Entry '%s' not found", key)
-        elif args.write_bibfile or args.overwrite_bibfile:
+        elif write_bibfile or overwrite_bibfile:
             match = bibdata_re.match(l)
             if match:
                 bibfile = match.group(1)
     if bibfile:
         bibfile = os.path.join(os.path.dirname(aux_fname), bibfile+".bib")
         if os.path.exists(bibfile):
-            if args.overwrite_bibfile:
+            if overwrite_bibfile:
                 logging.info("Overwriting bib file %s.", bibfile)
             else:
                 logging.error("Refusing to overwrite bib file %s. Use '-B' to force.", bibfile)
@@ -447,10 +501,14 @@ def compare_entries(old, new):
     added = set(new.fields.keys()) - set(old.fields.keys())
     return added, deleted, edited
 
-def _edit(args, config):
+@cli.command(help="Edit entries")
+@click.argument("terms", nargs=-1)
+@click.pass_context
+def edit(ctx, terms):
+    config = ctx.obj["config"]
     db = BibDB(config)
     
-    search_results = db.search(args.terms)
+    search_results = db.search(terms)
     if not search_results:
         logging.error("Search returned no results. Aborting.")
         sys.exit(1)
@@ -459,8 +517,8 @@ def _edit(args, config):
         temp_fname = temp_file.name
         with open(temp_fname, "wt") as fp:
             original_entries_text = format_search_results(search_results,
-                                       bibtex_output=True,
-                                       use_original_key=False)
+                                                          bibtex_output=True,
+                                                          use_original_key=False)
             fp.write(original_entries_text)
             original_entries = pybtex.parse_string(original_entries_text,
                                                    bib_format="bibtex").entries.values()
@@ -519,92 +577,14 @@ def _edit(args, config):
     else:
         print("Aborted.")
 
-def _macros(args, config):
+@cli.command(help="Show defined macros")
+@click.pass_context
+def macros(ctx):
+    config = ctx.obj["config"]
     for macro, expansion in config.macros.items():
         print("%s:\t%s" % (macro, expansion))
 
-def _man(args, config):
+@cli.command(help="Shows the documentation")
+def man():
     subprocess.run(["man", 
                     os.path.join(os.path.dirname(__file__), "manual.1")])
-
-# From https://stackoverflow.com/questions/13423540/argparse-subparser-hide-metavar-in-command-listing
-class SubcommandHelpFormatter(argparse.RawDescriptionHelpFormatter):
-    def _format_action(self, action):
-        #parts = super(argparse.RawDescriptionHelpFormatter, self)._format_action(action)
-        parts = super()._format_action(action)
-        if action.nargs == argparse.PARSER:
-            parts = "\n".join(parts.split("\n")[1:])
-        return parts
-
-def main():
-    logging.basicConfig(level=logging.INFO,
-                        format="[%(levelname)s] %(message)s")
-
-    parser = argparse.ArgumentParser(description="bibsearch: Download, manage, and search a BibTeX database.\nUse '%(prog)s man' to get complete help.",
-                                     formatter_class=SubcommandHelpFormatter)
-    parser.add_argument('--version', '-V', action='version', version='%(prog)s {}'.format(VERSION))
-    parser.add_argument('-c', '--config_file', help="use this config file",
-                        default=os.path.join(os.path.expanduser("~"),
-                                             '.bibsearch',
-                                             "config")
-                        )
-    parser.set_defaults(func=lambda *_ : parser.print_help())
-    subparsers = parser.add_subparsers(title="commands",
-                                       description="Use '%(prog)s <command> -h' to obtain additional help.",
-                                       metavar="<command>")
-
-    parser_add = subparsers.add_parser('add', help='Add a BibTeX file')
-    parser_add.add_argument('files', type=str, default=None, help='BibTeX files to add', nargs='+')
-    parser_add.add_argument("-r", "--redownload", help="Re-download already downloaded files", action="store_true")
-    parser_add.add_argument("-v", "--verbose", help="Be verbose about which files are being downloaded", action="store_true")
-    parser_add.set_defaults(func=_add)
-
-    parser_arxiv = subparsers.add_parser('arxiv', help='Search the arXiv')
-    parser_arxiv.add_argument('query', type=str, nargs='+', default=None, help='Search query')
-    parser_arxiv.add_argument("-a", "--add", action='store_true', help="Add all results to the database (default: just print them to STDOUT)")
-    parser_arxiv.set_defaults(func=_arxiv)
-
-    parser_dump = subparsers.add_parser('print', help='Print the BibTeX database')
-    parser_dump.add_argument('--summary', action='store_true', help='Just print a summary')
-    parser_dump.set_defaults(func=_print)
-
-    parser_find = subparsers.add_parser('find', help='Search the database using fuzzy syntax', aliases=['search'])
-    parser_find.add_argument('-b', '--bibtex', help='Print entries in bibtex format', action='store_true')
-    parser_find.add_argument('-o', "--original-key", help='Print the original key of the entries', action='store_true')
-    parser_find.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
-    parser_find.set_defaults(func=_find)
-
-    parser_open = subparsers.add_parser('open', help='Open the article, if search returns only one result and url is available')
-    parser_open.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
-    parser_open.set_defaults(func=_open)
-
-    parser_download = subparsers.add_parser('download', help='download articles')
-    parser_download.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
-    parser_download.set_defaults(func=_download)
-
-    parser_tex = subparsers.add_parser('tex', help='Create .bib file for a latex article')
-    parser_tex.add_argument('file', help='Article file name or .aux file')
-    parser_tex.add_argument('-b', '--write-bibfile', help='Autodetect and write bibfile', action='store_true')
-    parser_tex.add_argument('-B', '--overwrite-bibfile', help='Autodetect and write bibfile', action='store_true')
-    parser_tex.set_defaults(func=_tex)
-
-    parser_edit = subparsers.add_parser('edit', help='Edit entries')
-    parser_edit.add_argument('terms', nargs='*', help='One or more search terms')
-    parser_edit.set_defaults(func=_edit)
-
-    parser_rm = subparsers.add_parser('remove', help='Remove an entry', aliases=['rm'])
-    parser_rm.add_argument('terms', nargs='*', help='One or more search terms')
-    parser_rm.set_defaults(func=_remove)
-
-    parser_macros = subparsers.add_parser('macros', help='Show defined macros')
-    parser_macros.set_defaults(func=_macros)
-
-    parser_man = subparsers.add_parser('man', help='Shows documentation in form of a man page', aliases=['help'])
-    parser_man.set_defaults(func=_man)
-
-    args = parser.parse_args()
-    config = Config(args.config_file)
-    args.func(args, config)
-
-if __name__ == '__main__':
-    main()
