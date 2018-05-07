@@ -1,7 +1,4 @@
 include README.md
 include CHANGELOG
 include LICENSE
-exclude *.sh
-exclude contrib
-recursive-exclude contrib *
-recursive-include bibsearch manual.*
+include bibsearch/manual.1

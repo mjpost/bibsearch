@@ -23,6 +23,8 @@ import textwrap
 from tqdm import tqdm
 import yaml
 
+from pkg_resources import resource_filename, resource_exists
+
 from .bibdb import BibDB
 from . import bibutils
 from .config import Config
@@ -530,8 +532,12 @@ def _macros(args, config):
         print("%s:\t%s" % (macro, expansion))
 
 def _man(args, config):
-    subprocess.run(["man",
-                    os.path.join(os.path.dirname(__file__), "manual.1")])
+    if not resource_exists('bibsearch', 'manual.1'):
+        logging.error("Can't find manual page")
+        sys.exit(1)
+
+    manfile_path = resource_filename('bibsearch', 'manual.1')
+    subprocess.run(["man", manfile_path])
 
 # From https://stackoverflow.com/questions/13423540/argparse-subparser-hide-metavar-in-command-listing
 class SubcommandHelpFormatter(argparse.RawDescriptionHelpFormatter):
