@@ -1,8 +1,0 @@
-include README.md
-include CHANGELOG
-include LICENSE
-include bibsearch/manual.*
-include manual.*
-exclude resources
-recursive-exclude resources *
-exclude *.yml
