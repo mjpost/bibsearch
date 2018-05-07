@@ -37,4 +37,3 @@ class Config():
                 logging.warning("Unknown config option '%s'", k)
 
         self.macros = config["macros"]
-        

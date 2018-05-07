@@ -5,8 +5,8 @@
 Tool for downloading, maintaining, and searching a BibTeX database.
 
 Authors:
-- Matt Post <post@cs.jhu.edu>
 - David Vilar <david.vilar@gmail.com>
+- Matt Post <post@cs.jhu.edu>
 """
 
 import argparse
@@ -27,7 +27,7 @@ from .bibdb import BibDB
 from . import bibutils
 from .config import Config
 
-VERSION = '0.2.0'
+VERSION = '0.3.0'
 
 class BibsearchError(Exception):
     pass
@@ -251,7 +251,13 @@ def _arxiv(args, config):
 
     db = BibDB(config)
 
-    query = 'http://export.arxiv.org/api/query?{}'.format(urllib.parse.urlencode({ 'search_query': ' AND '.join(args.query)}))
+    query = ' AND '.join(['"{}"'.format(x) for x in args.query])
+    # move the query field search terms outside the quotes
+    query = re.sub(r'"au(thor)?:', 'au:"', query)
+    query = re.sub(r'"ti(tle)?:', 'ti:"', query)
+    query = 'http://export.arxiv.org/api/query?{}'.format(urllib.parse.urlencode({ 'search_query': query,
+                                                                                   'max_results': args.max_results }))
+    logging.info('ARXIV QUERY: %s', query)
     response = download_file(query)
 
     feedparser._FeedParserMixin.namespaces['http://a9.com/-/spec/opensearch/1.1/'] = 'opensearch'
@@ -524,7 +530,7 @@ def _macros(args, config):
         print("%s:\t%s" % (macro, expansion))
 
 def _man(args, config):
-    subprocess.run(["man", 
+    subprocess.run(["man",
                     os.path.join(os.path.dirname(__file__), "manual.1")])
 
 # From https://stackoverflow.com/questions/13423540/argparse-subparser-hide-metavar-in-command-listing
@@ -561,6 +567,7 @@ def main():
 
     parser_arxiv = subparsers.add_parser('arxiv', help='Search the arXiv')
     parser_arxiv.add_argument('query', type=str, nargs='+', default=None, help='Search query')
+    parser_arxiv.add_argument("-m", "--max-results", type=int, default=10, help="Maximum number of results to return") 
     parser_arxiv.add_argument("-a", "--add", action='store_true', help="Add all results to the database (default: just print them to STDOUT)")
     parser_arxiv.set_defaults(func=_arxiv)
 

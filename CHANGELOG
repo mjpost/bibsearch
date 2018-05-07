@@ -1,4 +1,14 @@
-0.2.0 (in progress)
+0.2.1 (2018-05-07)
+    - Added `man` subcommand
+    - Macros
+    - Lots of documentation
+    - Smoothed over presence/absence of FTS5 support in SQLite
+    - Merged where/search
+    - Support for editing entires (`edit` subcommand)
+    - Support for xdg-open under Linux
+    - Added PMLR
+
+0.2.0 (2018-04-06)
     - Added arxiv searching and adding
     - Added NIPS database
     - Added 'where' command for finer grained search (with SQL syntax)

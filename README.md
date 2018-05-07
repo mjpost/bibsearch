@@ -1,5 +1,17 @@
 # bibsearch
 
+Bibsearch is a tool for downloading, searching, and managing official BibTeX entries.
+It also integrates with the LaTeX pipeline for paper writing, automatically generating a BibTeX file the citations in the file.
+Its key features are summarized here:
+
+- Automatic downloading of official citations from predefined collections (`bibsearch add bib://`) or arbitrary URI's (`bibsearch add`)
+- Keyword-based search against a private collection of entries (`bibsearch search`)
+- Searching and downloading from the arXiv (`bibsearch arxiv`)
+- Automatic generation of a project BibTeX file from LaTeX source (`bibsearch tex`)
+- Keyword-based downloading and opening of PDF files (`bibsearch open`)
+
+## The problem
+
 The process of searching for BibTeX entries is cumbersome and annoying.
 Authors are inconsistent in providing them, and they are optional on [the arXiv](http://arxiv.org/).
 Google Scholar is useful, but yielding BibTeX entries requires drilling down into entries.
@@ -8,14 +20,6 @@ And anyway, why should you have to open a web browser to do something that is in
 Ideally one should have to do these tasks only once per paper, but the reality is that management of a database introduces another set of problems.
 
 If this problem statement strikes a chord, `bibsearch` is the tool for you.
-It provides the following services:
-
-- Keyword-based search against a private collection of entries (`bibsearch search`)
-- Automatic downloading of citations from predefined collections (`bibsearch add bib://`) or arbitrary URI's (`bibsearch add`)
-- Searching and downloading from the arXiv (`bibsearch arxiv`)
-- Automatic generation of a project BibTeX file from LaTeX source (`bibsearch tex`)
-- Keyword-based downloading and opening of PDF files (`bibsearch open`)
-
 Stick to the command line where life is best!
 
 ## Installation
@@ -24,7 +28,7 @@ Install bibsearch with
 
     pip3 install bibsearch
 
-`bibsearch` requires SQLite with full-text search support.
+`bibsearch` works best with SQLite with full-text search support.
 This causes no performance degradation to SQLite, but is unfortunately not part of the default installation.
 If you are on a Mac and have [brew](https://brew.sh/) installed, you can get this with
 

@@ -29,12 +29,18 @@ import re
 import os
 import subprocess
 
+ROOT = os.path.dirname(__file__)
+
+def get_long_description():
+    with open(os.path.join(ROOT, 'README.md'), encoding='utf-8') as f:
+        return f.read()
+
 def get_version():
     VERSION_RE = re.compile(r'''VERSION\s+=\s+['"]([0-9.]+)['"]''')
-    init = open(os.path.join(os.path.dirname(__file__), 'bibsearch', 'bibsearch.py'), encoding='utf-8').read()
+    init = open(os.path.join(ROOT, 'bibsearch', 'bibsearch.py')).read()
     return VERSION_RE.search(init).group(1)
 
-subprocess.run(["ronn", "bibsearch/manual.md"])
+#subprocess.run(["ronn", "bibsearch/manual.md"])
 setup(
     name = 'bibsearch',
 
@@ -44,14 +50,14 @@ setup(
     version = get_version(),
 
     description = 'Download, manage, and search a BibTeX database.',
-    long_description = 'Download, manage, and search a BibTeX database.',
+    long_description = get_long_description(),
 
     # The project's main homepage.
     url = 'https://github.com/mjpost/bibsearch',
 
-    author = 'Matt Post, David Vilar',
-    author_email='post@cs.jhu.edu, david.vilar@gmail.com',
-    maintainer_email='post@cs.jhu.edu, david.vilar@gmail.com',
+    author = 'David Vilar, Matt Post',
+    author_email='david.vilar@gmail.com, post@cs.jhu.edu',
+    maintainer_email='david.vilar@gmail.com, post@cs.jhu.edu',
 
     license = 'Apache License 2.0',
 
