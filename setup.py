@@ -73,6 +73,8 @@ setup(
     # py_modules = ["bibsearch", "bibdb", "bibutils", "config"],
     packages = find_packages(),
 
+    package_data = { '': ['manual.*'] },
+
     # List run-time dependencies here.  These will be installed by pip when
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:

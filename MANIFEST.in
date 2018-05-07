@@ -1,4 +1,8 @@
 include README.md
 include CHANGELOG
 include LICENSE
-include bibsearch/manual.1
+include bibsearch/manual.*
+include manual.*
+exclude resources
+recursive-exclude resources *
+exclude *.yml
