@@ -1,4 +1,7 @@
-0.2.1 (2018-05-07)
+0.3.1 (2018-05-07)
+    - Added LICENSE and proper MANIFEST file (now includes man page)
+
+0.3.0 (2018-05-07)
     - Added `man` subcommand
     - Macros
     - Lots of documentation
