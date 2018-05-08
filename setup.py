@@ -41,12 +41,6 @@ def get_version():
     init = open(os.path.join(ROOT, 'bibsearch', 'bibsearch.py')).read()
     return VERSION_RE.search(init).group(1)
 
-try:
-    subprocess.run(["ronn", "bibsearch/manual.md"])
-except FileNotFoundError as e:
-    print("Can't find ronn. Maybe `gem install ronn`?")
-    sys.exit(1)
-
 setup(
     name = 'bibsearch',
 

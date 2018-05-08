@@ -1,4 +1,4 @@
-0.3.4 (2018-05-08)
+0.3.5 (2018-05-08)
     - Added manual page, removing calling of `ronn` from `setup.py`
 
 0.3.3 (2018-05-07)
