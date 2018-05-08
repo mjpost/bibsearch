@@ -1,30 +1,21 @@
 # bibsearch
 
-Bibsearch is a tool for downloading, searching, and managing official BibTeX entries.
-It also integrates with the LaTeX pipeline for paper writing, automatically generating a BibTeX file the citations in the file.
-Its key features are summarized here:
+Bibsearch is a tool for downloading, searching, and managing BibTeX
+entries.  It attempts to make use of the official BibTeX entries for
+various collections of proceedings, all without you ever needing to
+open a web browser and fumble around on Google Scholar or other tools.
+Its key features are:
 
 - Automatic downloading of official citations from predefined collections (`bibsearch add bib://`) or arbitrary URI's (`bibsearch add`)
 - Keyword-based search against a private collection of entries (`bibsearch search`)
 - Searching and downloading from the arXiv (`bibsearch arxiv`)
-- Automatic generation of a project BibTeX file from LaTeX source (`bibsearch tex`)
+- Automatic generation of a BibTeX file from LaTeX source (`bibsearch tex`)
 - Keyword-based downloading and opening of PDF files (`bibsearch open`)
-
-## The problem
-
-The process of searching for BibTeX entries is cumbersome and annoying.
-Authors are inconsistent in providing them, and they are optional on [the arXiv](http://arxiv.org/).
-Google Scholar is useful, but yielding BibTeX entries requires drilling down into entries.
-What's worse, for some research fields (such as citations from the [ACL Anthology](http://aclanthology.info/)), the correct citations are not the first search result.
-And anyway, why should you have to open a web browser to do something that is inherently text-based?
-Ideally one should have to do these tasks only once per paper, but the reality is that management of a database introduces another set of problems.
-
-If this problem statement strikes a chord, `bibsearch` is the tool for you.
-Stick to the command line where life is best!
 
 ## Installation
 
-Install bibsearch with
+The official source can be found on [GitHub](https://github.com/mjpost/bibsearch).
+The easiest way to install it is via the Python package manager:
 
     pip3 install bibsearch
 
@@ -52,6 +43,7 @@ Or even the entire anthology:
     bibsearch add bib://acl
 
 Other collections available include ICML and NIPS.
+Type `bibsearch add bib://list` for a complete list.
 
 You can also add your own files, either locally or via URL.
 
@@ -71,7 +63,7 @@ Now, search across all fields to find your entries:
 (`find` also works)
 Get the outputs in BibTeX format:
 
-    bibsearch search brown 1993 statistical
+    bibsearch search brown 1993 statistical -b
 
 If there is only one match, you can also open the corresponding PDF:
 
@@ -97,13 +89,9 @@ Search the arXiv:
 
     bibsearch arxiv vaswani attention is all you need
 
-Add the results to your database:
+Add the results of an arXiv search to your database:
 
     bibsearch arxiv vaswani attention is all you need -a
-
-Open the PDF:
-
-    bibsearch open
 
 Get the key to use with `\cite`:
 
@@ -116,8 +104,11 @@ Get the key to use with `\cite`:
 
 ## Incorporate in a LaTeX workflow
 
-If you use the following in a Makefile, you can use bibsearch to find paper keys, and avoid creating the bibliography file entirely.
-`bibsearch` will generate it for you!
+Bibsearch is easy to incorporate in your paper writing: it will automatically generate a BibTeX file from your LaTeX paper.
+To use this feature, first use bibsearch to find the papers you want to cite and add them to your private database.
+Then, use the keys in the database with `\cite` commands in your paper.
+Run `pdflatex` once to generate a `.aux` file, and then use `bibsearch` to generate the bibliography file.
+You can use the following in your `Makefile`, for example:
 
     pdflatex PAPER
     bibsearch tex PAPER -B

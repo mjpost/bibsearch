@@ -1,0 +1,313 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "BIBSEARCH" "1" "May 2018" "" ""
+.
+.SH "NAME"
+\fBbibsearch\fR \- BibTeX database management tool
+.
+.SH "SYNOPSIS"
+\fBbibsearch\fR [\fIglobal options\fR] \fIcommand\fR [\fIcommand options\fR]
+.
+.SH "DESCRIPTION"
+Bibsearch is a tool for downloading, searching, and managing BibTeX entries\. It attempts to make use of the official BibTeX entries for various collections of proceedings, all without you ever needing to open a web browser and fumble around on Google Scholar or other tools\. Its key features are:
+.
+.IP "\(bu" 4
+Automatic downloading of official citations from predefined collections (\fBbibsearch add bib://\fR) or arbitrary URI\'s (\fBbibsearch add\fR)
+.
+.IP "\(bu" 4
+Keyword\-based search against a private collection of entries (\fBbibsearch search\fR)
+.
+.IP "\(bu" 4
+Searching and downloading from the arXiv (\fBbibsearch arxiv\fR)
+.
+.IP "\(bu" 4
+Automatic generation of a BibTeX file from LaTeX source (\fBbibsearch tex\fR)
+.
+.IP "\(bu" 4
+Keyword\-based downloading and opening of PDF files (\fBbibsearch open\fR)
+.
+.IP "" 0
+.
+.SH "GLOBAL OPTIONS"
+.
+.TP
+\fB\-c\fR, \fB\-\-config\fR
+Specify the config file used by \fBbibsearch\fR\. The options accepted in the config file are listed in the \fICONFIG FILE\fR section\.
+.
+.TP
+\fB\-V\fR, \fB\-\-version\fR
+Show \fBbibsearch\fR version\.
+.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Show a short help message\.
+.
+.SH "COMMANDS"
+Bibsearch operation is guided by commands\. Each command accepts the \fB\-h\fR, \fB\-\-help\fR option to list additional options\.
+.
+.TP
+\fBadd\fR \fIfiles\fR or \fIURLs\fR or \fIbibspecs\fR
+Adds entries to the BibTeX database\. Three types of inputs are supported: \fIfiles\fR, \fIURLs\fR and \fIbibspecs\fR\. \fIfiles\fR are local files present in the filesystem\. \fIURLs\fR are http addresses\. The file will be downloaded and added to the database\. \fIbibspecs\fR have the form \fBbib://<spec>\fR, e\.g\. \fBbib://acl\fR\. These are known resources for \fBbibsearch\fR which will be updated as new conferences are held\. The list of know resources can be listed with the special \fBbib://list\fR specification\. For some of these resources, finer grain specification is available, e\.g\. you can specify \fBbib://acl/emnlp\fR for only adding the EMNLP conference\. \fBbibsearch\fR stores which URLs have already been downloaded, and by default does not re\-download them again\. In this way you can update your database efficiently by giving a bibspec resource, \fBbibsearch\fR will only download the new entries\. If you still want to re\-download known files, use the \fB\-r\fR flag\.
+.
+.TP
+\fBsearch\fR [\fIquery\fR]
+Searches the database\. For the syntax of search queries look at the \fISEARCH QUERIES\fR section\. By default the search results are listed in a human\-readable format\. Use the \fB\-b\fR option to show them in BibTeX format\.
+.
+.TP
+\fBarxiv\fR [\fIquery\fR]
+TODO
+.
+.TP
+\fBopen\fR [\fIquery\fR]
+Opens the corresponding paper if the \fIquery\fR returns only one result\. Requires the BibTeX entry to specify an \fIURL\fR field\. See the \fISEARCH QUERIES\fR section for the syntax of the \fIquery\fR\.
+.
+.TP
+\fBdownload\fR [\fIquery\fR]
+Downloads the papers returned by query to the directory specified in the \fICONFIG FILE\fR\. Defaults to a \fIbibsearch\fR subdirectory in your system\'s default temporary directory\.
+.
+.TP
+\fBtex\fR \fIfile\fR
+Generates the BibTeX file corresponding to a \.tex file\. The information is read from the \.aux file, i\.e\. LaTeX needs to have been run at least once\. By default the BibTeX entries are printed to stdout\. With the \fB\-b\fR option the bib file specified in the \.tex file is generated, although it will not be overwritten if it already exists\. Use \fB\-B\fR if you want to overwrite the file\.
+.
+.TP
+\fBedit\fR [\fIquery\fR]
+Opens an external editor to edit the BibTeX entries returned by the \fIquery\fR\. Please do not modify the \fBoriginal_key\fR field, as this is used internally by \fBbibsearch\fR to identify the entries\.
+.
+.TP
+\fBremove\fR [\fIquery\fR]
+Removes the entries returned by \fIquery\fR\.
+.
+.TP
+\fBmacros\fR
+Lists the macros known by bibsearch that can be used in search queries\.
+.
+.TP
+\fBman\fR
+Shows this man page\.
+.
+.SH "SEARCH QUERIES"
+If available, queries will be processed by sqlite\'s full text search system (FTS, see https://www\.sqlite\.org/fts5\.html)\. This means that in general you just type the terms you want to look for, as you would do in an online search engine\. E\.g\. for searching for papers by David Vilar published in 2015, you can just type
+.
+.IP "" 4
+.
+.nf
+
+bibsearch search david vilar 2015
+.
+.fi
+.
+.IP "" 0
+.
+.P
+or if you are looking for the seminal paper on statistical machine translation
+.
+.IP "" 4
+.
+.nf
+
+bibsearch search brown mathematics machine translation
+.
+.fi
+.
+.IP "" 0
+.
+.P
+If FTS is not available in your system, \fBbibsearch\fR will do its best to approximate the results\. Note however that the search quality will be better for systems supporting FTS (e\.g\. not using FTS the first query above will also match papers for author David Vilares)\. Have a look at the installation section of the README file for pointers for enabling FTS on your system\.
+.
+.P
+If you do not specify any query terms, the results of the last search will be reused\. This works across commands, i\.e\. you can search for the paper you are interested in through the \fBsearch\fR command and then just open the result simply typing \fBbibsearch open\fR\.
+.
+.P
+Although in most cases it will not be necessary, if you want to narrow down your search, you can specify the relevant fields for each search term\. Known fields are
+.
+.IP "\(bu" 4
+author
+.
+.IP "\(bu" 4
+title
+.
+.IP "\(bu" 4
+venue
+.
+.IP "\(bu" 4
+year
+.
+.IP "\(bu" 4
+key
+.
+.IP "" 0
+.
+.P
+You specify them by prepending the search term with the desired field specification, separated with a colon \':\'\. E\.g\. if you want to look for papers by [Matt] Post, but not necessarily all papers containing "post\-processing" or similar in the title, you can issue the command
+.
+.IP "" 4
+.
+.nf
+
+bibsearch search author:post
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Remember to quote the search terms if they include more than one word\. But keep also in mind, that author names are normalized in the form "surname, given name" in the database, i\.e\. if you want to search for Matt Post, you would do
+.
+.IP "" 4
+.
+.nf
+
+bibsearch search author:"post, matt"
+.
+.fi
+.
+.IP "" 0
+.
+.P
+or perhaps more robustly
+.
+.IP "" 4
+.
+.nf
+
+bibsearch search author:matt author:post
+.
+.fi
+.
+.IP "" 0
+.
+.P
+You can also use pre\-defined macros for more convenient queries\. \fBbibsearch\fR provides some pre\-defined macros for well\-known conferences in the area of computational linguistics (the research area of the authors) which can be listed with the \fBmacros\fR command\. E\.g\. if you want to look for papers by Matt Post in the ACL conference, you may use
+.
+.IP "" 4
+.
+.nf
+
+bibsearch search matt post @acl
+.
+.fi
+.
+.IP "" 0
+.
+.P
+which internally will get expanded to
+.
+.IP "" 4
+.
+.nf
+
+bibsearch search matt post venue:"Annual Meeting of the Association for Computational Linguistics"
+.
+.fi
+.
+.IP "" 0
+.
+.P
+You can define your own custom macros in the \fICONFIG FILE\fR\. Macros pre\-defined by \fBbibsearch\fR will always start with the \'@\' symbol\.
+.
+.SH "CONFIG FILE"
+By default, \fBbibsearch\fR will load $HOME/\.bibsearch/config, but an alternative config file can be specified via the \fB\-c\fR option\. The format of this file is "similar to what’s found in Microsoft Windows INI files" (or more specifically what is supported by python\'s configparser library, see https://docs\.python\.org/3/library/configparser\.html)\. An example of the contents of such a config file could be
+.
+.IP "" 4
+.
+.nf
+
+[bibsearch]
+bibsearch_dir = /Users/dvilar/bibsearch_dir
+download_dir = /Users/dvilar/downloaded_papers
+open_command = zathura
+custom_key_format = {surname}{et_al}{short_year}{suffix}_{title}
+
+[macros]
+mp = matt post
+dv = david vilar
+.
+.fi
+.
+.IP "" 0
+.
+.P
+The main section of the config file has the \fI[bibsearch]\fR label\. Supported options are
+.
+.TP
+\fBbibsearch_dir\fR
+The directory where different \fBbibsearch\fR files (including the database) will be stored in\.
+.
+.TP
+\fBdownload_dir\fR
+The target directory to download papers to for the \fBopen\fR and \fBdownload\fR commands\. If not specified, a temporary directory will be used\.
+.
+.TP
+\fBopen_command\fR
+The command that will be used to open pdf files\. This command will be called with the file name of the pdf file as first and only argument\.
+.
+.TP
+\fBdatabase_url\fR
+The URL to query when parsing bibset specifications in the \fBadd\fR command\.
+.
+.TP
+\fBcustom_key_format\fR
+The format used for generating custom keys\. See \fICUSTOM BIBTEX KEYS\fR
+.
+.TP
+\fBeditor\fR
+The editor used for editing entries in the \fBedit\fR command\. The command will be called with a single file path as argument\.
+.
+.P
+The \fI[macros]\fR section can be used for defining custom macros for usage in commands that accept queries\. See \fISEARCH QUERIES\fR for details\.
+.
+.SH "CUSTOM BIBTEX KEYS"
+\fBbibsearch\fR will generate custom BibTeX keys for the entries\. By default it will use the last name of the first author, the publication year and the first non\-function word of the title, e\.g\.
+.
+.IP "" 4
+.
+.nf
+
+@Article{brown1993:mathematics,
+    author = "Brown, Peter E\. and Pietra, Stephen A\. Della and Pietra, Vincent J\. Della and Mercer, Robert L\.",
+    title = "The Mathematics of Statistical Machine Translation: Parameter Estimation",
+    journal = "Computational Linguistics, Volume 19, Number 2, June 1993, Special Issue on Using Large Corpora: II",
+    year = "1993",
+    url = "http://www\.aclweb\.org/anthology/J93\-2003"
+}
+.
+.fi
+.
+.IP "" 0
+.
+.P
+You can customize the format of the keys in the config file, using the custom_key_format option (see \fICONFIG FILE\fR)\. You can specify any string, with special fields delimited by curly braces which will substituted with information extracted from the entry, e\.g\. the default string is {surname}{year}{suffix}:{title}\.
+.
+.P
+The supported keywords are
+.
+.TP
+\fB{surname}\fR
+Surname of the first author of the paper\.
+.
+.TP
+\fB{et_al}\fR
+"_etAl" will be added if there is more than one author\.
+.
+.TP
+\fB{year}\fR
+The year of publication\.
+.
+.TP
+\fB{short_year}\fR
+The year of publication in short form (i\.e\. the last two digits)\.
+.
+.TP
+\fB{suffix}\fR
+An alphabetical suffix to avoid conflicts in key generation (e\.g\. brown1993 and brown1993a)\.
+.
+.TP
+\fB{title}\fR
+The first non\-function word of the title\.
+.
+.SH "BUGS"
+Currently tildes (\'~\') are not correctly handled\.
+.
+.SH "SEE ALSO"
+bibtex(1)

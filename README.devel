@@ -1,0 +1,9 @@
+To generate the man page, run
+
+    ronn bibsearch/manual.md
+
+If you don't have `ronn` installed, you can install it with
+
+    gem install ronn
+
+You then need to commit the resulting file `bibsearch/manual.1` to the repository.

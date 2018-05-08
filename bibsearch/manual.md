@@ -7,27 +7,17 @@ bibsearch(1) -- BibTeX database management tool
 
 ## DESCRIPTION
 
-The process of searching for BibTeX entries is cumbersome and annoying. Authors
-are inconsistent in providing them, and they are optional on the arXiv. Google
-Scholar is useful, but yielding BibTeX entries requires drilling down into
-entries. What's worse, for some research fields (such as citations from the ACL
-Anthology), the correct citations are not the first search result. And anyway,
-why should you have to open a web browser to do something that is inherently
-text-based? Ideally one should have to do these tasks only once per paper, but
-the reality is that management of a database introduces another set of
-problems.
+Bibsearch is a tool for downloading, searching, and managing BibTeX
+entries.  It attempts to make use of the official BibTeX entries for
+various collections of proceedings, all without you ever needing to
+open a web browser and fumble around on Google Scholar or other tools.
+Its key features are:
 
-If this problem statement strikes a chord, `bibsearch` is the tool for you. It
-provides the following services:
-
-* Keyword-based search against a private collection of entries (`bibsearch
-  search`)
-* Automatic downloading of citations from predefined collections (`bibsearch
-  add bib://`) or arbitrary URI's (`bibsearch add`)
-* Searching and downloading from the arXiv (`bibsearch arxiv`)
-* Automatic generation of a project BibTeX file from LaTeX source (`bibsearch
-  tex`)
-* Keyword-based downloading and opening of PDF files (`bibsearch open`)
+- Automatic downloading of official citations from predefined collections (`bibsearch add bib://`) or arbitrary URI's (`bibsearch add`)
+- Keyword-based search against a private collection of entries (`bibsearch search`)
+- Searching and downloading from the arXiv (`bibsearch arxiv`)
+- Automatic generation of a BibTeX file from LaTeX source (`bibsearch tex`)
+- Keyword-based downloading and opening of PDF files (`bibsearch open`)
 
 ## GLOBAL OPTIONS
 
