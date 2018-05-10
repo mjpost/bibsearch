@@ -163,22 +163,26 @@ class BibDB:
                     query_values.append(wildquery)
         return " AND ".join(query_terms), query_values
 
-    def search(self, query):
-        results = []
-        if not query:
-            results = self.load_search_cache()
+    def search(self, query: str):
+        """
+        Performs a search against the private database.
+
+        :param query: The search query.
+        :return: A list of search results.
+        """
+        if self.has_fts:
+            self.cursor.execute("SELECT fulltext, key FROM bibindex \
+                                WHERE bibindex MATCH ?",
+                                [self._format_query_fts(query)])
         else:
-            if self.has_fts:
-                self.cursor.execute("SELECT fulltext, key FROM bibindex \
-                                    WHERE bibindex MATCH ?",
-                                    [self._format_query_fts(query)])
-            else:
-                where_clause, query_values = self._format_query_no_fts(query)
-                self.cursor.execute("SELECT fulltext, key FROM bib \
-                                        WHERE %s" % where_clause,
-                                    query_values)
-            results = list(self.cursor)
-            self.save_to_search_cache(results)
+            where_clause, query_values = self._format_query_no_fts(query)
+            self.cursor.execute("SELECT fulltext, key FROM bib \
+                                    WHERE %s" % where_clause,
+                                query_values)
+        results = list(self.cursor)
+
+        self.save_to_search_cache(results)
+
         return results
 
     def search_key(self, key) -> str:

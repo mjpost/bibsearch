@@ -14,7 +14,7 @@ import logging
 import os
 import re
 import sys
-from typing import List
+from typing import List, Tuple
 import urllib.request
 import pybtex.database as pybtex
 import subprocess
@@ -101,13 +101,23 @@ def download_file(url, fname_out=None) -> None:
         #                 '"Python 3" folder, often found under /Applications')
         sys.exit(1)
 
-def format_search_results(results,
+def format_search_results(results: List[Tuple[str,str]],
                           bibtex_output=False,
                           use_original_key=False) -> str:
+    """
+    Formats a set of (Pybtex.Entry, custom_key) pairs for printing to the terminal.
+    Output can be either actual BibTeX or a summarized form.
+
+    :param results: A list of pairs of full bibtex entries and their associated keys
+    :param bibtex_output: Whether to retun the result as a bibtex entry instead of summarized text.
+    :param use_original_key: Whether to use the default key instead of the custom one.
+    :return: An amalgamated string including all entries.
+    """
+
     if not bibtex_output:
-        textwrapper = textwrap.TextWrapper(subsequent_indent="  ")
+        textwrapper = textwrap.TextWrapper(subsequent_indent="     ")
     output = ""
-    for (fulltext, original_key) in results:
+    for entryno, (fulltext, original_key) in enumerate(results, 1):
         entry = bibutils.fulltext_to_single_entry(fulltext)
         if use_original_key:
             entry.key = original_key
@@ -123,12 +133,14 @@ def format_search_results(results,
             utf_venue = bibutils.field_to_unicode(entry, "journal", "")
             if not utf_venue:
                 utf_venue = bibutils.field_to_unicode(entry, "booktitle", "")
-            lines = textwrapper.wrap('[{key}] {author} "{title}", {venue}{year}'.format(
+            lines = textwrapper.wrap('{index}. [{key}] {author} "{title}", {venue}{year}\n{url}'.format(
+                            index=entryno,
                             key=entry.key,
                             author=utf_author,
                             title=utf_title,
                             venue=utf_venue + ", ",
-                            year=entry.fields["year"]))
+                            year=entry.fields["year"],
+                            url=entry.fields["url"]))
             output += "\n".join(lines) + "\n\n"
     return output[:-1] # Remove the last empty line
 
@@ -137,20 +149,41 @@ def _find(args, config):
     print(format_search_results(db.search(args.terms), args.bibtex, args.original_key), end='')
 
 def _open(args, config):
+    """
+    Opens the PDF associated with the last search query (if no
+    arguments were given) or the requested index (if a single numeric
+    argument was given) or the results of a search term (all other cases).
+
+    """
     db = BibDB(config)
-    results = db.search(args.terms)
+
+    # Which entry to open
+    entry_index = 0
+
+    if len(args.terms) == 1 and re.match(r'\d+', args.terms[0]) is not None:
+        results = db.load_search_cache()
+        entry_index = int(args.terms[0]) - 1
+
+    elif len(args.terms) == 0:
+        results = db.load_search_cache()
+        entry_index = 0
+
+    else:
+        results = db.search(args.terms)
+
     if not results:
-        logging.error("No documents returned by query")
+        logging.error("No documents found in search cache.")
         sys.exit(1)
-    elif len(results) > 1:
-        logging.error("%d results returned by query. Narrow down to only one results.", len(results))
-        sys.exit(1)
-    entry = bibutils.fulltext_to_single_entry(results[0][0])
-    logging.info('Downloading "%s"', entry.fields["title"])
+
+    if entry_index >= len(results):
+        logging.error("Index {} too high, returning last item in cache".format(entry_index))
+        entry_index = len(results) - 1
+    entry = bibutils.fulltext_to_single_entry(results[entry_index][0])
     if "url" not in entry.fields:
         logging.error("Entry does not contain an URL field")
     if not os.path.exists(config.download_dir):
         os.makedirs(config.download_dir)
+    logging.info('Downloading "%s"', entry.fields["title"])
     temp_fname = download_file(entry.fields["url"], os.path.join(config.download_dir, entry.key + ".pdf"))
     subprocess.run([config.open_command, temp_fname])
 
@@ -276,7 +309,7 @@ def _arxiv(args, config):
     # print('startIndex for this query: %s'   % feed.feed.opensearch_startindex)
 
     # Run through each entry, and print out information
-    results_to_save = []
+    results = []
     for entry in feed.entries:
         arxiv_id = re.sub(r'v\d+$', '', entry.id.split('/abs/')[-1])
 
@@ -306,17 +339,18 @@ def _arxiv(args, config):
         bib_entry = pybtex.Entry('article', persons=authors, fields=fields)
         bib_entry.key = bibutils.generate_custom_key(bib_entry, config.custom_key_format)
 
-        print(format_search_results( [(bibutils.single_entry_to_fulltext(bib_entry), arxiv_id)],
-                                     bibtex_output=False,
-                                     use_original_key=True))
-
         if args.add:
             db.add(bib_entry)
-            results_to_save.append((bibutils.single_entry_to_fulltext(bib_entry), bib_entry.key))
+            results.append((bib_entry, bib_entry.key))
         else:
-            results_to_save.append((bibutils.single_entry_to_fulltext(bib_entry), arxiv_id))
+            results.append((bib_entry, arxiv_id))
 
-        db.save_to_search_cache(results_to_save)
+        # Save the results to the search cache
+        db.save_to_search_cache([(bibutils.single_entry_to_fulltext(bib_entry), key) for bib_entry, key in results])
+
+    print(format_search_results( [(bibutils.single_entry_to_fulltext(bib_entry), arxiv_id)],
+                                 bibtex_output=False,
+                                 use_original_key=True))
 
     if args.add:
         db.save()
@@ -457,7 +491,7 @@ def compare_entries(old, new):
 
 def _edit(args, config):
     db = BibDB(config)
-    
+
     search_results = db.search(args.terms)
     if not search_results:
         logging.error("Search returned no results. Aborting.")

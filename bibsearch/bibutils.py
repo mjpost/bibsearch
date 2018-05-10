@@ -49,9 +49,14 @@ _CONTROL_SEQS = {
     '\\o': 'ø', '\\O': 'Ø', '\\l': 'ł', '\\L': 'Ł', '\\ss': 'ß'
 }
 
-def single_entry_to_fulltext(entry: pybtex.Entry, overwrite_key: str = None) -> str:
+def single_entry_to_fulltext(entry: pybtex.Entry,
+                             overwrite_key: str = None) -> str:
     """
     Converts a pybtex.Entry to text.
+
+    :param entry: A pybtex.Entry.
+    :param overwrite_key: A key to use instead of the default one.
+    :return: A BibTeX entry as text.
     """
     effective_key = entry.key if not overwrite_key else overwrite_key
     formatter = pybtex.BibliographyData(entries={effective_key: entry})
