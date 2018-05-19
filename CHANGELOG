@@ -1,3 +1,6 @@
+0.3.6 (2018-05-19)
+    - "open" and "edit" now take an index into the cache
+
 0.3.5 (2018-05-08)
     - Added manual page, removing calling of `ronn` from `setup.py`
 

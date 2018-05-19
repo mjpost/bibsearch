@@ -29,7 +29,7 @@ from .bibdb import BibDB
 from . import bibutils
 from .config import Config
 
-VERSION = '0.3.5'
+VERSION = '0.3.6'
 
 class BibsearchError(Exception):
     pass
@@ -144,6 +144,45 @@ def format_search_results(results: List[Tuple[str,str]],
             output += "\n".join(lines) + "\n\n"
     return output[:-1] # Remove the last empty line
 
+def _get_cache_or_search_result(db: BibDB,
+                                search_terms: List[str]) -> Tuple[str, str]:
+    """
+    If search_terms is empty or a single digit, return that item from
+    the cache. Otherwise, return the first item from the search results.
+    Item returned is a tuple (bibtex_str, custom_key).
+    """
+    if len(search_terms) == 0:
+        # load the search cache, use first entry
+        results = db.load_search_cache()
+        if not results:
+            logging.error("No documents found in search cache.")
+            sys.exit(1)
+
+        entry_index = 0
+
+    elif len(search_terms) == 1 and re.match(r'\d+', search_terms[0]) is not None:
+        # load the search cache, use specified entry
+        results = db.load_search_cache()
+        if not results:
+            logging.error("No documents found in search cache.")
+            sys.exit(1)
+
+        entry_index = int(search_terms[0]) - 1
+
+    else:
+        results = db.search(args.terms)
+
+        if not results:
+            logging.error("Search returned no results.")
+            sys.exit(1)
+
+    if entry_index >= len(results):
+        logging.error("You requested result {}, but only {} documents were found.".format(entry_index, len(results)))
+        sys.exit(1)
+
+    return results[entry_index]
+
+
 def _find(args, config):
     db = BibDB(config)
     print(format_search_results(db.search(args.terms), args.bibtex, args.original_key), end='')
@@ -156,29 +195,9 @@ def _open(args, config):
 
     """
     db = BibDB(config)
+    bibtex, key = _get_cache_or_search_result(db, args.terms)
 
-    # Which entry to open
-    entry_index = 0
-
-    if len(args.terms) == 1 and re.match(r'\d+', args.terms[0]) is not None:
-        results = db.load_search_cache()
-        entry_index = int(args.terms[0]) - 1
-
-    elif len(args.terms) == 0:
-        results = db.load_search_cache()
-        entry_index = 0
-
-    else:
-        results = db.search(args.terms)
-
-    if not results:
-        logging.error("No documents found in search cache.")
-        sys.exit(1)
-
-    if entry_index >= len(results):
-        logging.error("Index {} too high, returning last item in cache".format(entry_index))
-        entry_index = len(results) - 1
-    entry = bibutils.fulltext_to_single_entry(results[entry_index][0])
+    entry = bibutils.fulltext_to_single_entry(bibtex)
     if "url" not in entry.fields:
         logging.error("Entry does not contain an URL field")
     if not os.path.exists(config.download_dir):
@@ -490,22 +509,20 @@ def compare_entries(old, new):
     return added, deleted, edited
 
 def _edit(args, config):
-    db = BibDB(config)
 
-    search_results = db.search(args.terms)
-    if not search_results:
-        logging.error("Search returned no results. Aborting.")
-        sys.exit(1)
+    db = BibDB(config)
+    bibtex, key = _get_cache_or_search_result(db, args.terms)
 
     with tempfile.NamedTemporaryFile("w") as temp_file:
         temp_fname = temp_file.name
         with open(temp_fname, "wt") as fp:
-            original_entries_text = format_search_results(search_results,
-                                       bibtex_output=True,
-                                       use_original_key=False)
+            original_entries_text = format_search_results(results=[(bibtex, key)],
+                                                          bibtex_output=True,
+                                                          use_original_key=False)
             fp.write(original_entries_text)
             original_entries = pybtex.parse_string(original_entries_text,
                                                    bib_format="bibtex").entries.values()
+        logging.info('Using value of $EDITOR to choose editor.')
         subprocess.run([config.editor, temp_file.name])
 
         with open(temp_fname, "rt"):
@@ -544,7 +561,7 @@ def _edit(args, config):
             changelog.append("\t%s" % e.key)
 
     if not edited_entries and not deleted_entries:
-        logging.warning("There were not changes in the entries.")
+        logging.info("There were no changes in the entries.")
         sys.exit(0)
 
     print("Summary of changes:")
