@@ -849,12 +849,12 @@ naacl:
     'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-naacl-student-research-workshop.bib',
     'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2016-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-demonstrations.bib',
     'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2016-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-tutorial-abstracts.bib']
-  '2018': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies-volume-1-long-papers',
-    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies-volume-2-short-papers',
-    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies-volume-3-industry-papers',
-    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-student-research-workshop',
-    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-demonstrations',
-    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-tutorial-abstracts']
+  '2018': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies-volume-1-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies-volume-2-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-human-language-technologies-volume-3-industry-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-of-the-north-american-chapter-of-the-association-for-computational-linguistics-tutorial-abstracts.bib']
 nesp-nlp:
   '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-negation-and-speculation-in-natural-language-processing.bib']
 news:
