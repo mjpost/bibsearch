@@ -135,6 +135,7 @@ atanlp:
 ats-ma:
   '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-on-automatic-text-simplification-methods-and-applications-in-the-multilingual-society-ats-ma-2014.bib']
 bea:
+  '2018': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-thirteenth-workshop-on-innovative-use-of-nlp-for-building-educational-applications.bib']
   '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighth-workshop-on-innovative-use-of-nlp-for-building-educational-applications.bib']
   '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ninth-workshop-on-innovative-use-of-nlp-for-building-educational-applications.bib']
   '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-tenth-workshop-on-innovative-use-of-nlp-for-building-educational-applications.bib']
@@ -329,6 +330,7 @@ clpsych:
 cltw:
   '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-celtic-language-technology-workshop.bib']
 cmcl:
+  '2018': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-8th-workshop-on-cognitive-modeling-and-computational-linguistics-cmcl-2018.bib']
   '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-annual-workshop-on-cognitive-modeling-and-computational-linguistics-cmcl.bib']
   '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-workshop-on-cognitive-modeling-and-computational-linguistics.bib']
   '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-6th-workshop-on-cognitive-modeling-and-computational-linguistics.bib']
@@ -1199,6 +1201,7 @@ tag:
 teachingnlp:
   '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-workshop-on-teaching-nlp-and-cl.bib']
 textgraphs:
+  '2018': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-twelfth-workshop-on-graph-based-methods-for-natural-language-processing-textgraphs-12.bib']
   '2013': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-textgraphs-8-graph-based-methods-for-natural-language-processing.bib']
   '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-textgraphs-9-the-workshop-on-graph-based-methods-for-natural-language-processing.bib']
   '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-textgraphs-10-the-workshop-on-graph-based-methods-for-natural-language-processing.bib']
