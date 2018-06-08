@@ -58,6 +58,10 @@ Bibsearch operation is guided by commands. Each command accepts the `-h`,
     Searches the database. For the syntax of search queries look at the [SEARCH QUERIES][] section. By default the search results are listed in a
     human-readable format. Use the `-b` option to show them in BibTeX format.
 
+    Options: -o {txt,bib,md}
+
+    Controls how output is formatted: either a text summary (default), the entire bibtex entry, or a Markdown-formatted entry.
+
 * `arxiv` [<query>]:
     TODO
 

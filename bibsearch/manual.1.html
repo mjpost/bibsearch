@@ -130,7 +130,11 @@ Its key features are:</p>
   the new entries. If you still want to re-download known files, use the <code>-r</code>
   flag.</p></dd>
 <dt><code>search</code> [<var>query</var>]</dt><dd><p>  Searches the database. For the syntax of search queries look at the <a href="#SEARCH-QUERIES" title="SEARCH QUERIES" data-bare-link="true">SEARCH QUERIES</a> section. By default the search results are listed in a
-  human-readable format. Use the <code>-b</code> option to show them in BibTeX format.</p></dd>
+  human-readable format. Use the <code>-b</code> option to show them in BibTeX format.</p>
+
+<p>  Options: -o {txt,bib,md}</p>
+
+<p>  Controls how output is formatted: either a text summary (default), the entire bibtex entry, or a Markdown-formatted entry.</p></dd>
 <dt><code>arxiv</code> [<var>query</var>]</dt><dd><p>  TODO</p></dd>
 <dt><code>open</code> [<var>query</var>]</dt><dd><p>  Opens the corresponding paper if the <var>query</var> returns only one result.
   Requires the BibTeX entry to specify an <var>URL</var> field. See the <a href="#SEARCH-QUERIES" title="SEARCH QUERIES" data-bare-link="true">SEARCH QUERIES</a> section for the syntax of the <var>query</var>.</p></dd>
@@ -313,7 +317,7 @@ brown1993a).</p></dd>
 
   <ol class='man-decor man-foot man foot'>
     <li class='tl'></li>
-    <li class='tc'>May 2018</li>
+    <li class='tc'>June 2018</li>
     <li class='tr'>bibsearch(1)</li>
   </ol>
 

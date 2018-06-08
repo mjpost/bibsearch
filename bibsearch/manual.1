@@ -1,7 +1,7 @@
 .\" generated with Ronn/v0.7.3
 .\" http://github.com/rtomayko/ronn/tree/0.7.3
 .
-.TH "BIBSEARCH" "1" "May 2018" "" ""
+.TH "BIBSEARCH" "1" "June 2018" "" ""
 .
 .SH "NAME"
 \fBbibsearch\fR \- BibTeX database management tool
@@ -53,6 +53,12 @@ Adds entries to the BibTeX database\. Three types of inputs are supported: \fIfi
 .TP
 \fBsearch\fR [\fIquery\fR]
 Searches the database\. For the syntax of search queries look at the \fISEARCH QUERIES\fR section\. By default the search results are listed in a human\-readable format\. Use the \fB\-b\fR option to show them in BibTeX format\.
+.
+.IP
+Options: \-o {txt,bib,md}
+.
+.IP
+Controls how output is formatted: either a text summary (default), the entire bibtex entry, or a Markdown\-formatted entry\.
 .
 .TP
 \fBarxiv\fR [\fIquery\fR]
