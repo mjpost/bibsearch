@@ -1,3 +1,6 @@
+0.3.8 (2018-06-08)
+    - Papers now download to ~/.bibsearch/papers, are cached
+
 0.3.7 (2018-06-07)
     - Can now specify summary print format: -o {txt,bib,md} (default = txt)
       e.g., `bibsearch search harmony -o md` will output a summary in Markdown format.

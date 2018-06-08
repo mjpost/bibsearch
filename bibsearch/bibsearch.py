@@ -29,7 +29,7 @@ from .bibdb import BibDB
 from . import bibutils
 from .config import Config
 
-VERSION = '0.3.7'
+VERSION = '0.3.8'
 
 class BibsearchError(Exception):
     pass
@@ -83,6 +83,14 @@ def download_file(url, fname_out=None) -> None:
     import ssl
 
     #~ logging.info('Downloading {} to {}'.format(url, fname_out if fname_out is not None else 'STR'))
+    # check if the file has already been downloaded
+    if fname_out is not None and os.path.exists(fname_out):
+        logging.info('Loading "%s" from cache at "%s"', url, fname_out)
+        return fname_out
+    elif fname_out:
+        logging.info('Downloading "%s" -> "%s"', url, fname_out)
+    else:
+        logging.info('Downloading "%s"', url)
 
     try:
         with urllib.request.urlopen(url) as f:
@@ -95,14 +103,15 @@ def download_file(url, fname_out=None) -> None:
 
                 with open(fname_out, "wb") as outfile:
                     outfile.write(f.read())
+
                 return fname_out
 
     except ssl.SSLError:
-        print("WHAT!")
-        # logging.warning('An SSL error was encountered in downloading the files. If you\'re on a Mac, '
-        #                 'you may need to run the "Install Certificates.command" file located in the '
-        #                 '"Python 3" folder, often found under /Applications')
+        logging.warning('An SSL error was encountered in downloading the files. If you\'re on a Mac, '
+                        'you may need to run the "Install Certificates.command" file located in the '
+                        '"Python 3" folder, often found under /Applications')
         sys.exit(1)
+
 
 def format_search_results(results: List[Tuple[str,str]],
                           output_type=DEFAULT_OUTPUT_TYPE,
@@ -215,7 +224,6 @@ def _open(args, config):
         logging.error("Entry does not contain an URL field")
     if not os.path.exists(config.download_dir):
         os.makedirs(config.download_dir)
-    logging.info('Downloading "%s"', entry.fields["title"])
     temp_fname = download_file(entry.fields["url"], os.path.join(config.download_dir, entry.key + ".pdf"))
     subprocess.run([config.open_command, temp_fname])
 
@@ -225,13 +233,12 @@ def _download(args, config):
     if not results:
         logging.error("No documents returned by query")
         sys.exit(1)
-    logging.info("Downloading to %s", config.download_dir)
+
     if not os.path.exists(config.download_dir):
         os.makedirs(config.download_dir)
     iterable = tqdm(results, ncols=80, bar_format="{l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]")
     for fulltext, _ in iterable:
         entry = bibutils.fulltext_to_single_entry(fulltext)
-        tqdm.write('Downloading "%s"' % entry.fields["title"])
         if "url" not in entry.fields:
             logging.error("Entry does not contain an URL field")
         download_file(entry.fields["url"], os.path.join(config.download_dir, entry.key + ".pdf"))
