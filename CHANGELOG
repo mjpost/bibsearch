@@ -1,3 +1,7 @@
+0.3.7 (2018-06-07)
+    - Can now specify summary print format: -o {txt,bib,md} (default = txt)
+      e.g., `bibsearch search harmony -o md` will output a summary in Markdown format.
+
 0.3.6 (2018-05-19)
     - "open" and "edit" now take an index into the cache
 

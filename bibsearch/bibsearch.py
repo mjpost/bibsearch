@@ -29,7 +29,7 @@ from .bibdb import BibDB
 from . import bibutils
 from .config import Config
 
-VERSION = '0.3.6'
+VERSION = '0.3.7'
 
 class BibsearchError(Exception):
     pass
@@ -46,6 +46,9 @@ except ImportError:
     logging.warning('Could not import signal.SIGPIPE (this is expected on Windows machines)')
 
 BIBSETPREFIX="bib://"
+
+OUTPUT_TYPES = ['txt', 'bib', 'md']
+DEFAULT_OUTPUT_TYPE = 'txt'
 
 def prompt(message: str, *answers_in: List[str], default=0, case_insensitive=True):
     valid_answers = [a.lower() for a in answers_in] if case_insensitive else answers_in
@@ -102,7 +105,7 @@ def download_file(url, fname_out=None) -> None:
         sys.exit(1)
 
 def format_search_results(results: List[Tuple[str,str]],
-                          bibtex_output=False,
+                          output_type=DEFAULT_OUTPUT_TYPE,
                           use_original_key=False) -> str:
     """
     Formats a set of (Pybtex.Entry, custom_key) pairs for printing to the terminal.
@@ -114,15 +117,13 @@ def format_search_results(results: List[Tuple[str,str]],
     :return: An amalgamated string including all entries.
     """
 
-    if not bibtex_output:
-        textwrapper = textwrap.TextWrapper(subsequent_indent="     ")
     output = ""
     for entryno, (fulltext, original_key) in enumerate(results, 1):
         entry = bibutils.fulltext_to_single_entry(fulltext)
         if use_original_key:
             entry.key = original_key
             fulltext = bibutils.single_entry_to_fulltext(entry)
-        if bibtex_output:
+        if output_type == 'bib':
             output += fulltext + "\n"
         else:
             utf_author = bibutils.field_to_unicode(entry, "author", "")
@@ -133,15 +134,27 @@ def format_search_results(results: List[Tuple[str,str]],
             utf_venue = bibutils.field_to_unicode(entry, "journal", "")
             if not utf_venue:
                 utf_venue = bibutils.field_to_unicode(entry, "booktitle", "")
-            lines = textwrapper.wrap('{index}. [{key}] {author} "{title}", {venue}{year}\n{url}'.format(
-                            index=entryno,
-                            key=entry.key,
-                            author=utf_author,
-                            title=utf_title,
-                            venue=utf_venue + ", ",
-                            year=entry.fields["year"],
-                            url=entry.fields["url"]))
-            output += "\n".join(lines) + "\n\n"
+
+            if output_type == 'txt':
+                textwrapper = textwrap.TextWrapper(subsequent_indent="     ")
+                lines = textwrapper.wrap('{index}. [{key}] {author} "{title}", {venue}{year}\n{url}'.format(
+                                index=entryno,
+                                key=entry.key,
+                                author=utf_author,
+                                title=utf_title,
+                                venue=utf_venue + ", ",
+                                year=entry.fields["year"],
+                                url=entry.fields["url"]))
+                output += "\n".join(lines) + "\n\n"
+
+            elif output_type == 'md':
+                output += '[{title}]({url})\n{authors}\n{venue}. {year}.'.format(
+                    title=utf_title,
+                    url=entry.fields["url"],
+                    authors=utf_author,
+                    venue=utf_venue,
+                    year=entry.fields["year"]) + '\n\n'
+
     return output[:-1] # Remove the last empty line
 
 def _get_cache_or_search_result(db: BibDB,
@@ -185,7 +198,7 @@ def _get_cache_or_search_result(db: BibDB,
 
 def _find(args, config):
     db = BibDB(config)
-    print(format_search_results(db.search(args.terms), args.bibtex, args.original_key), end='')
+    print(format_search_results(db.search(args.terms), args.output_type, args.original_key), end='')
 
 def _open(args, config):
     """
@@ -273,11 +286,13 @@ def get_fnames_from_bibset(raw_fname, database_url):
                 name, description = line.split("\t")
                 print("\n".join(textwrapper.wrap("%-10s%s" % (name, description))))
         return []
+    uri = database_url + resource + '.yml'
     try:
-        currentSet = yaml.load(download_file(database_url + resource + ".yml"))
+        currentSet = yaml.load(download_file(uri))
         #~ currentSet = yaml.load(open("resources/" + resource + ".yml")) # for local testing
-    except urllib.error.URLError:
-        logging.error("Could not find resource %s", resource)
+    except urllib.error.URLError as e:
+        logging.error("Could not load resource %s from %s", resource, uri)
+        logging.error('Maybe your connection is down?')
         sys.exit(1)
     if len(spec_fields) > 1:
         for f in spec_fields[1:]:
@@ -517,7 +532,7 @@ def _edit(args, config):
         temp_fname = temp_file.name
         with open(temp_fname, "wt") as fp:
             original_entries_text = format_search_results(results=[(bibtex, key)],
-                                                          bibtex_output=True,
+                                                          output_type='bibtex',
                                                           use_original_key=False)
             fp.write(original_entries_text)
             original_entries = pybtex.parse_string(original_entries_text,
@@ -626,6 +641,7 @@ def main():
     parser_arxiv.add_argument('query', type=str, nargs='+', default=None, help='Search query')
     parser_arxiv.add_argument("-m", "--max-results", type=int, default=10, help="Maximum number of results to return") 
     parser_arxiv.add_argument("-a", "--add", action='store_true', help="Add all results to the database (default: just print them to STDOUT)")
+    parser_arxiv.add_argument("--output-type", "-o", default=DEFAULT_OUTPUT_TYPE, choices=OUTPUT_TYPES, help="Output type. Default: %(default)s")
     parser_arxiv.set_defaults(func=_arxiv)
 
     parser_dump = subparsers.add_parser('print', help='Print the BibTeX database')
@@ -634,7 +650,8 @@ def main():
 
     parser_find = subparsers.add_parser('find', help='Search the database using fuzzy syntax', aliases=['search'])
     parser_find.add_argument('-b', '--bibtex', help='Print entries in bibtex format', action='store_true')
-    parser_find.add_argument('-o', "--original-key", help='Print the original key of the entries', action='store_true')
+    parser_find.add_argument('--original-key', help='Print the original key of the entries', action='store_true')
+    parser_find.add_argument('--output-type', '-o', default=DEFAULT_OUTPUT_TYPE, choices=OUTPUT_TYPES, help="Output type. Default: %(default)s")
     parser_find.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
     parser_find.set_defaults(func=_find)
 
