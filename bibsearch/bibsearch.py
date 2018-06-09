@@ -404,16 +404,18 @@ def _arxiv(args, config):
 
 
 def _remove(args, config):
+    """
+    Removes entries from the database.
+    """
     db = BibDB(config)
     search_results = db.search(args.terms)
     if not search_results:
         logging.error("Search returned no results. Aborting.")
         sys.exit(1)
-    print("You are about to delete these entries:")
-    print("")
+    print("You are about to delete these entries:\n")
     print(format_search_results(search_results))
-    confirmation = prompt("Do you want to proced with the deletion?", "yes", "NO",
-                          default=1)
+    confirmation = 'yes' if args.force else prompt("Do you want to proced with the deletion?", "yes", "NO",
+                                                   default=1)
     if confirmation == "yes":
         for (_, original_key) in search_results:
             db.remove(original_key)
@@ -688,6 +690,7 @@ def main():
 
     parser_rm = subparsers.add_parser('remove', help='Remove an entry', aliases=['rm'])
     parser_rm.add_argument('terms', nargs='*', help='One or more search terms')
+    parser_rm.add_argument('--force', '-f', action='store_true', help="Don't ask for confirmation")
     parser_rm.set_defaults(func=_remove)
 
     parser_macros = subparsers.add_parser('macros', help='Show defined macros')
