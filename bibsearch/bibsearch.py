@@ -29,7 +29,7 @@ from .bibdb import BibDB
 from . import bibutils
 from .config import Config
 
-VERSION = '0.3.8'
+VERSION = '0.3.9'
 
 class BibsearchError(Exception):
     pass
@@ -144,6 +144,9 @@ def format_search_results(results: List[Tuple[str,str]],
             if not utf_venue:
                 utf_venue = bibutils.field_to_unicode(entry, "booktitle", "")
 
+            url = entry.fields.get('url', '')
+            year = entry.fields.get('year', '')
+
             if output_type == 'txt':
                 textwrapper = textwrap.TextWrapper(subsequent_indent="     ")
                 lines = textwrapper.wrap('{index}. [{key}] {author} "{title}", {venue}{year}\n{url}'.format(
@@ -153,16 +156,16 @@ def format_search_results(results: List[Tuple[str,str]],
                                 title=utf_title,
                                 venue=utf_venue + ", ",
                                 year=entry.fields["year"],
-                                url=entry.fields["url"]))
+                                url=url))
                 output += "\n".join(lines) + "\n\n"
 
             elif output_type == 'md':
                 output += '[{title}]({url})\n{authors}\n{venue}. {year}.'.format(
                     title=utf_title,
-                    url=entry.fields["url"],
+                    url=url,
                     authors=utf_author,
                     venue=utf_venue,
-                    year=entry.fields["year"]) + '\n\n'
+                    year=year) + '\n\n'
 
     return output[:-1] # Remove the last empty line
 
