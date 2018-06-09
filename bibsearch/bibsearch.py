@@ -29,7 +29,7 @@ from .bibdb import BibDB
 from . import bibutils
 from .config import Config
 
-VERSION = '0.3.9'
+VERSION = '0.3.10'
 
 class BibsearchError(Exception):
     pass
@@ -73,11 +73,9 @@ def prompt(message: str, *answers_in: List[str], default=0, case_insensitive=Tru
     return answers_in[answer_index]
 
 
-
-
 def download_file(url, fname_out=None) -> None:
     """
-    Downloads a file to a location.
+    Downloads a file to a string or a file.
     """
 
     import ssl
@@ -111,6 +109,26 @@ def download_file(url, fname_out=None) -> None:
                         'you may need to run the "Install Certificates.command" file located in the '
                         '"Python 3" folder, often found under /Applications')
         sys.exit(1)
+
+
+def download_entry(entry: pybtex.Entry,
+                   config) -> str:
+    """
+    Downloads an entry's PDF using its "url" field, and returns the file path.
+
+    :param entry: The pybtex.Entry item.
+    :param config: The config object.
+    :return: The downloaded path.
+    """
+
+    outpath = None
+    if "url" not in entry.fields:
+        logging.error("Entry does not contain a URL field")
+    else:
+        outpath = os.path.join(config.download_dir, entry.fields['year'], entry.key + ".pdf")
+        download_file(entry.fields["url"], outpath)
+
+    return outpath
 
 
 def format_search_results(results: List[Tuple[str,str]],
@@ -212,6 +230,7 @@ def _find(args, config):
     db = BibDB(config)
     print(format_search_results(db.search(args.terms), args.output_type, args.original_key), end='')
 
+
 def _open(args, config):
     """
     Opens the PDF associated with the last search query (if no
@@ -224,11 +243,13 @@ def _open(args, config):
 
     entry = bibutils.fulltext_to_single_entry(bibtex)
     if "url" not in entry.fields:
-        logging.error("Entry does not contain an URL field")
-    if not os.path.exists(config.download_dir):
-        os.makedirs(config.download_dir)
-    temp_fname = download_file(entry.fields["url"], os.path.join(config.download_dir, entry.key + ".pdf"))
-    subprocess.run([config.open_command, temp_fname])
+        logging.error("Entry does not contain a URL field")
+    else:
+        if not os.path.exists(config.download_dir):
+            os.makedirs(config.download_dir)
+        pdf_path = download_entry(entry, config)
+        subprocess.run([config.open_command, pdf_path])
+
 
 def _download(args, config):
     """
@@ -245,9 +266,8 @@ def _download(args, config):
     iterable = tqdm(results, ncols=80, bar_format="{l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]")
     for fulltext, _ in iterable:
         entry = bibutils.fulltext_to_single_entry(fulltext)
-        if "url" not in entry.fields:
-            logging.error("Entry does not contain an URL field")
-        download_file(entry.fields["url"], os.path.join(config.download_dir, entry.key + ".pdf"))
+        download_entry(entry, config)
+
 
 class AddFileError(BibsearchError):
     pass

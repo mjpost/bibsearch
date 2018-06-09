@@ -22,6 +22,7 @@ class Config():
             , '@cl': 'venue:"Computational Linguistics"'  # Probably useless because the terms comes up in several conferences as well
             , '@arxiv': 'venue:"Computing Research Repository"'
             , '@corr': 'venue:"Computing Research Repository"'
+            , '@lrec': 'venue:"International Conference on Language Resources and Evaluation"'
         }
     }
 
