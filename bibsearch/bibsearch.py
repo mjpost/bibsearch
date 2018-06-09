@@ -148,19 +148,19 @@ def format_search_results(results: List[Tuple[str,str]],
             year = entry.fields.get('year', '')
 
             if output_type == 'txt':
-                textwrapper = textwrap.TextWrapper(subsequent_indent="     ")
-                lines = textwrapper.wrap('{index}. [{key}] {author} "{title}", {venue}{year}\n{url}'.format(
+                textwrapper = textwrap.TextWrapper(subsequent_indent="   ")
+                lines = textwrapper.wrap('{index}. [{key}] {author}. {year}. "{title}". {venue}.\n{url}'.format(
                                 index=entryno,
                                 key=entry.key,
                                 author=utf_author,
                                 title=utf_title,
-                                venue=utf_venue + ", ",
+                                venue=utf_venue,
                                 year=entry.fields["year"],
                                 url=url))
                 output += "\n".join(lines) + "\n\n"
 
             elif output_type == 'md':
-                output += '[{title}]({url})\n{authors}\n{venue}. {year}.'.format(
+                output += '{authors}. {year}.\n[{title}]({url})\n{venue}.'.format(
                     title=utf_title,
                     url=url,
                     authors=utf_author,
