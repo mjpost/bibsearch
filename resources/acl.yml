@@ -767,6 +767,8 @@ lrec:
   '2010': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-seventh-conference-on-international-language-resources-and-evaluation-lrec-10.bib']
   '2012': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-eighth-international-conference-on-language-resources-and-evaluation-lrec-2012.bib']
   '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-ninth-international-conference-on-language-resources-and-evaluation-lrec-2014.bib']
+  '2016': ['https://raw.githubusercontent.com/mjpost/bibsearch/master/resources/bib/lrec2016.bib']
+  '2018': ['https://raw.githubusercontent.com/mjpost/bibsearch/master/resources/bib/lrec2018.bib']
 lsdsem:
   '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-workshop-on-linking-computational-models-of-lexical-sentential-and-discourse-level-semantics.bib']
   '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-linking-models-of-lexical-sentential-and-discourse-level-semantics.bib']

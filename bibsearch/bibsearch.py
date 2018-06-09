@@ -228,6 +228,9 @@ def _open(args, config):
     subprocess.run([config.open_command, temp_fname])
 
 def _download(args, config):
+    """
+    Downloads to the local cache all files matching the search terms.
+    """
     db = BibDB(config)
     results = db.search(args.terms)
     if not results:
