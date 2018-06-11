@@ -213,11 +213,12 @@ def _get_cache_or_search_result(db: BibDB,
         entry_index = int(search_terms[0]) - 1
 
     else:
-        results = db.search(args.terms)
-
+        results = db.search(search_terms)
         if not results:
             logging.error("Search returned no results.")
             sys.exit(1)
+
+        entry_index = 0
 
     if entry_index >= len(results):
         logging.error("You requested result {}, but only {} documents were found.".format(entry_index, len(results)))
@@ -248,7 +249,7 @@ def _open(args, config):
         if not os.path.exists(config.download_dir):
             os.makedirs(config.download_dir)
         pdf_path = download_entry(entry, config)
-        subprocess.run([config.open_command, pdf_path])
+        subprocess.Popen([config.open_command, pdf_path])
 
 
 def _download(args, config):

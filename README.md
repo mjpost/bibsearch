@@ -73,6 +73,10 @@ If there is only one match, you can also open the corresponding PDF:
 
     bibsearch open
 
+If there are multiple matches, `open` will open the top result:
+
+    bibsearch open embedding
+
 Generate the BibTeX file based on citations found in a LaTeX source (requires that `LATEX_FILE.aux` exists):
 
     bibsearch tex LATEX_FILE
