@@ -1,8 +1,10 @@
-0.3.10 (XXXX-XX-XX)
-    - Added force delete
-    - Fiddled with output formatting to mirror ACL citation format
+0.3.10 (2018-06-09)
+    - Added forced deletion to `rm` subcommand
+    - Modified output formatting to mirror ACL citation format
     - Files now downloaded to ~/.bibsearch/paper/{YEAR}/{KEY}.pdf
-    - Bugfix in no "url" field logic
+    - Bugfix with logic when no "url" field present
+    - Postprocessing when outputting to remove pybtex escaping
+    - Bugfix in 'open' with search terms (thanks to Christian Bailey @cl3wis)
 
 0.3.9 (2018-06-09)
     - Bugfix in URL handling

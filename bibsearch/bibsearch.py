@@ -3,6 +3,10 @@
 
 """
 Tool for downloading, maintaining, and searching a BibTeX database.
+For installation and usage, run:
+
+    pip3 install bibsearch
+    bibsearch man
 
 Authors:
 - David Vilar <david.vilar@gmail.com>
@@ -131,6 +135,16 @@ def download_entry(entry: pybtex.Entry,
     return outpath
 
 
+def pybtex_unescape(string: str) -> str:
+    """
+    Reverts the escaping applied by Pybtex.
+
+    :param str: Input string with pybtex-escape characters.
+    :return: Output string where this has been reverted.
+    """
+    return string.replace('\\_', '_').replace('\\textasciitilde ', '~')
+
+
 def format_search_results(results: List[Tuple[str,str]],
                           output_type=DEFAULT_OUTPUT_TYPE,
                           use_original_key=False) -> str:
@@ -151,7 +165,7 @@ def format_search_results(results: List[Tuple[str,str]],
             entry.key = original_key
             fulltext = bibutils.single_entry_to_fulltext(entry)
         if output_type == 'bib':
-            output += fulltext + "\n"
+            output += pybtex_unescape(fulltext) + "\n"
         else:
             utf_author = bibutils.field_to_unicode(entry, "author", "")
             utf_author = [a.pretty() for a in bibutils.parse_names(utf_author)]
@@ -162,7 +176,7 @@ def format_search_results(results: List[Tuple[str,str]],
             if not utf_venue:
                 utf_venue = bibutils.field_to_unicode(entry, "booktitle", "")
 
-            url = entry.fields.get('url', '')
+            url = pybtex_unescape(entry.fields.get('url', ''))
             year = entry.fields.get('year', '')
 
             if output_type == 'txt':
@@ -487,6 +501,7 @@ def _add(args, config):
         for m in error_msgs:
             logging.error(m)
     db.save()
+
 
 def _print(args, config):
     db = BibDB(config)
