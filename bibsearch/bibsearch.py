@@ -33,7 +33,7 @@ from .bibdb import BibDB
 from . import bibutils
 from .config import Config
 
-VERSION = '0.3.10'
+VERSION = '0.3.11'
 
 class BibsearchError(Exception):
     pass
@@ -374,7 +374,6 @@ def _arxiv(args, config):
     query = re.sub(r'"ti(tle)?:', 'ti:"', query)
     query = 'http://export.arxiv.org/api/query?{}'.format(urllib.parse.urlencode({ 'search_query': query,
                                                                                    'max_results': args.max_results }))
-    logging.info('ARXIV QUERY: %s', query)
     response = download_file(query)
 
     feedparser._FeedParserMixin.namespaces['http://a9.com/-/spec/opensearch/1.1/'] = 'opensearch'
@@ -420,19 +419,18 @@ def _arxiv(args, config):
         authors = {'author': [pybtex.Person(author.name) for author in entry.authors]}
         bib_entry = pybtex.Entry('article', persons=authors, fields=fields)
         bib_entry.key = bibutils.generate_custom_key(bib_entry, config.custom_key_format)
+        print_key = arxiv_id
 
         if args.add:
             db.add(bib_entry)
-            results.append((bib_entry, bib_entry.key))
-        else:
-            results.append((bib_entry, arxiv_id))
+            print_key = bib_entry.key
 
-        # Save the results to the search cache
-        db.save_to_search_cache([(bibutils.single_entry_to_fulltext(bib_entry), key) for bib_entry, key in results])
+        results.append((bibutils.single_entry_to_fulltext(bib_entry), print_key))
 
-    print(format_search_results( [(bibutils.single_entry_to_fulltext(bib_entry), arxiv_id)],
-                                 bibtex_output=False,
-                                 use_original_key=True))
+    # Save the results to the search cache
+    db.save_to_search_cache(results)
+
+    print(format_search_results(results, args.output_type, use_original_key=True))
 
     if args.add:
         db.save()
@@ -690,7 +688,7 @@ def main():
 
     parser_arxiv = subparsers.add_parser('arxiv', help='Search the arXiv')
     parser_arxiv.add_argument('query', type=str, nargs='+', default=None, help='Search query')
-    parser_arxiv.add_argument("-m", "--max-results", type=int, default=10, help="Maximum number of results to return") 
+    parser_arxiv.add_argument("-m", "--max-results", type=int, default=10, help="Maximum number of results to return")
     parser_arxiv.add_argument("-a", "--add", action='store_true', help="Add all results to the database (default: just print them to STDOUT)")
     parser_arxiv.add_argument("--output-type", "-o", default=DEFAULT_OUTPUT_TYPE, choices=OUTPUT_TYPES, help="Output type. Default: %(default)s")
     parser_arxiv.set_defaults(func=_arxiv)

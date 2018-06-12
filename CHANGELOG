@@ -1,3 +1,6 @@
+0.3.11 (2018-06-12)
+    - Bugfix in arxiv searching, caching, and displaying
+
 0.3.10 (2018-06-09)
     - Added forced deletion to `rm` subcommand
     - Modified output formatting to mirror ACL citation format
