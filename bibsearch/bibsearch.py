@@ -33,7 +33,7 @@ from .bibdb import BibDB
 from . import bibutils
 from .config import Config
 
-VERSION = '0.3.11'
+VERSION = '0.3.11.1'
 
 class BibsearchError(Exception):
     pass
@@ -243,8 +243,10 @@ def _get_cache_or_search_result(db: BibDB,
 
 def _find(args, config):
     db = BibDB(config)
-    print(format_search_results(db.search(args.terms), args.output_type, args.original_key), end='')
-
+    results = db.search(args.terms)
+    print(format_search_results(results, args.output_type, args.original_key), end='')
+    if len(results):
+        logging.info("Download and display any of these PDFs with 'bibsearch open N' (N the index).")
 
 def _open(args, config):
     """
@@ -393,14 +395,17 @@ def _arxiv(args, config):
     results = []
     for entry in feed.entries:
         arxiv_id = re.sub(r'v\d+$', '', entry.id.split('/abs/')[-1])
+        primary_category = entry.arxiv_primary_category['term']
 
+        # Following the suggestion here: https://arxiv.org/hypertex/bibstyles/
         fields = { 'title': entry.title,
-                   'journal': 'Computing Research Repository',
+#                   'booktitle': 'eprint arXiv:{}/{}'.format(primary_category, arxiv_id),
+                   'journal': 'arXiv e-prints',
                    'year': str(entry.published[:4]),
                    'abstract': entry.summary,
                    'volume': 'abs/{}'.format(arxiv_id),
                    'archivePrefix': 'arXiv',
-                   'eprint': arxiv_id,
+                   'eprint': entry.arxiv_primary_category['term']
         }
 
         try:
