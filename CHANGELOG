@@ -1,3 +1,7 @@
+0.3.12 (XXXX-XX-XX)
+    - Added output format: -f {txt,bib,md} (text, bibtex, markdown)
+    - can set 'default_output_format' in the config file
+
 0.3.11 (2018-06-12)
     - Bugfix in arxiv searching, caching, and displaying
 

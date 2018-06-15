@@ -12,6 +12,7 @@ class Config():
             , "open_command": "xdg-open" if platform.system() == "Linux" else "open"
             , "database_url": "https://github.com/mjpost/bibsearch/raw/master/resources/"
             , "custom_key_format": "{surname}{year}{suffix}:{title}"
+            , "default_output_format": "txt"
             , "editor": os.environ.get("EDITOR", "nano")
         }
         , "macros" : {
@@ -26,10 +27,16 @@ class Config():
         }
     }
 
-    def __init__(self, fname):
+    def __init__(self, config_file: str = None):
         config = configparser.ConfigParser()
+
+        # Setup items from defaults
         config.read_dict(self.__class__.defaults)
-        config.read(fname)
+
+        # Override those defaults from the config file
+        config.read(config_file)
+
+        # Make available as member variables
         for k, v in config["bibsearch"].items():
             if k in self.__class__.defaults["bibsearch"]:
                 self.__setattr__(k, v)
@@ -37,3 +44,7 @@ class Config():
                 logging.warning("Unknown config option '%s'", k)
 
         self.macros = config["macros"]
+
+    @classmethod
+    def get_default(cls, key: str) -> str:
+        return cls.defaults['bibsearch'][key]

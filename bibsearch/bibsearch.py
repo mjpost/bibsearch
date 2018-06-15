@@ -33,7 +33,7 @@ from .bibdb import BibDB
 from . import bibutils
 from .config import Config
 
-VERSION = '0.3.11.1'
+VERSION = '0.3.12'
 
 class BibsearchError(Exception):
     pass
@@ -51,8 +51,7 @@ except ImportError:
 
 BIBSETPREFIX="bib://"
 
-OUTPUT_TYPES = ['txt', 'bib', 'md']
-DEFAULT_OUTPUT_TYPE = 'txt'
+OUTPUT_FORMATS = ['txt', 'bib', 'md']
 
 def prompt(message: str, *answers_in: List[str], default=0, case_insensitive=True):
     valid_answers = [a.lower() for a in answers_in] if case_insensitive else answers_in
@@ -146,7 +145,7 @@ def pybtex_unescape(string: str) -> str:
 
 
 def format_search_results(results: List[Tuple[str,str]],
-                          output_type=DEFAULT_OUTPUT_TYPE,
+                          output_format: str,
                           use_original_key=False) -> str:
     """
     Formats a set of (Pybtex.Entry, custom_key) pairs for printing to the terminal.
@@ -164,7 +163,7 @@ def format_search_results(results: List[Tuple[str,str]],
         if use_original_key:
             entry.key = original_key
             fulltext = bibutils.single_entry_to_fulltext(entry)
-        if output_type == 'bib':
+        if output_format == 'bib':
             output += pybtex_unescape(fulltext) + "\n"
         else:
             utf_author = bibutils.field_to_unicode(entry, "author", "")
@@ -179,7 +178,7 @@ def format_search_results(results: List[Tuple[str,str]],
             url = pybtex_unescape(entry.fields.get('url', ''))
             year = entry.fields.get('year', '')
 
-            if output_type == 'txt':
+            if output_format == 'txt':
                 textwrapper = textwrap.TextWrapper(subsequent_indent="   ")
                 lines = textwrapper.wrap('{index}. [{key}] {author}. {year}. "{title}". {venue}.\n{url}'.format(
                                 index=entryno,
@@ -191,7 +190,7 @@ def format_search_results(results: List[Tuple[str,str]],
                                 url=url))
                 output += "\n".join(lines) + "\n\n"
 
-            elif output_type == 'md':
+            elif output_format == 'md':
                 output += '{authors}. {year}.\n[{title}]({url})\n{venue}.'.format(
                     title=utf_title,
                     url=url,
@@ -244,7 +243,8 @@ def _get_cache_or_search_result(db: BibDB,
 def _find(args, config):
     db = BibDB(config)
     results = db.search(args.terms)
-    print(format_search_results(results, args.output_type, args.original_key), end='')
+    output_format = args.output_format if args.output_format is not None else config.default_output_format
+    print(format_search_results(results, output_format, args.original_key), end='')
     if len(results):
         logging.info("Download and display any of these PDFs with 'bibsearch open N' (N the index).")
 
@@ -400,7 +400,7 @@ def _arxiv(args, config):
         # Following the suggestion here: https://arxiv.org/hypertex/bibstyles/
         fields = { 'title': entry.title,
 #                   'booktitle': 'eprint arXiv:{}/{}'.format(primary_category, arxiv_id),
-                   'journal': 'arXiv e-prints',
+                   'journal': 'ArXiv e-prints',
                    'year': str(entry.published[:4]),
                    'abstract': entry.summary,
                    'volume': 'abs/{}'.format(arxiv_id),
@@ -435,7 +435,8 @@ def _arxiv(args, config):
     # Save the results to the search cache
     db.save_to_search_cache(results)
 
-    print(format_search_results(results, args.output_type, use_original_key=True))
+    output_format = args.output_format if args.output_format is not None else config.default_output_format
+    print(format_search_results(results, output_format, use_original_key=True))
 
     if args.add:
         db.save()
@@ -586,7 +587,7 @@ def _edit(args, config):
         temp_fname = temp_file.name
         with open(temp_fname, "wt") as fp:
             original_entries_text = format_search_results(results=[(bibtex, key)],
-                                                          output_type='bibtex',
+                                                          output_format='bibtex',
                                                           use_original_key=False)
             fp.write(original_entries_text)
             original_entries = pybtex.parse_string(original_entries_text,
@@ -695,7 +696,7 @@ def main():
     parser_arxiv.add_argument('query', type=str, nargs='+', default=None, help='Search query')
     parser_arxiv.add_argument("-m", "--max-results", type=int, default=10, help="Maximum number of results to return")
     parser_arxiv.add_argument("-a", "--add", action='store_true', help="Add all results to the database (default: just print them to STDOUT)")
-    parser_arxiv.add_argument("--output-type", "-o", default=DEFAULT_OUTPUT_TYPE, choices=OUTPUT_TYPES, help="Output type. Default: %(default)s")
+    parser_arxiv.add_argument("--output-format", "-f", default=None, choices=OUTPUT_FORMATS, help="Output format. Default: {}".format(Config.get_default('default_output_format')))
     parser_arxiv.set_defaults(func=_arxiv)
 
     parser_dump = subparsers.add_parser('print', help='Print the BibTeX database')
@@ -705,7 +706,7 @@ def main():
     parser_find = subparsers.add_parser('find', help='Search the database using fuzzy syntax', aliases=['search'])
     parser_find.add_argument('-b', '--bibtex', help='Print entries in bibtex format', action='store_true')
     parser_find.add_argument('--original-key', help='Print the original key of the entries', action='store_true')
-    parser_find.add_argument('--output-type', '-o', default=DEFAULT_OUTPUT_TYPE, choices=OUTPUT_TYPES, help="Output type. Default: %(default)s")
+    parser_find.add_argument("--output-format", "-f", default=None, choices=OUTPUT_FORMATS, help="Output format. Default: {}".format(Config.get_default('default_output_format')))
     parser_find.add_argument('terms', nargs='*', help="One or more search terms which are ANDed together")
     parser_find.set_defaults(func=_find)
 
