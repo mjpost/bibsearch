@@ -243,7 +243,13 @@ def _get_cache_or_search_result(db: BibDB,
 def _find(args, config):
     db = BibDB(config)
     results = db.search(args.terms)
-    output_format = args.output_format if args.output_format is not None else config.default_output_format
+    # -o takes priority over --bibtex, --bibtex over config default
+    if args.output_format is not None:
+        output_format = args.output_format
+    elif args.bibtex:
+        output_format = "bib"
+    else:
+        output_format = config.default_output_format
     print(format_search_results(results, output_format, args.original_key), end='')
     if len(results):
         logging.info("Download and display any of these PDFs with 'bibsearch open N' (N the index).")
