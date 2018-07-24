@@ -33,7 +33,7 @@ from .bibdb import BibDB
 from . import bibutils
 from .config import Config
 
-VERSION = '0.3.12'
+VERSION = '0.3.13'
 
 class BibsearchError(Exception):
     pass
