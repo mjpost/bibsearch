@@ -1,4 +1,7 @@
-0.3.12 (XXXX-XX-XX)
+0.3.13 (2018-07-24)
+    - Fixes -b option to `bibsearch search` (thanks to @cl3wis)
+
+0.3.12 (2018-07-15)
     - Added output format: -f {txt,bib,md} (text, bibtex, markdown)
     - can set 'default_output_format' in the config file
 
