@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#i!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
@@ -197,6 +197,8 @@ def format_search_results(results: List[Tuple[str,str]],
                     authors=utf_author,
                     venue=utf_venue,
                     year=year) + '\n\n'
+            else:
+                raise ValueError("Unknown output format: %s" % output_format)
 
     return output[:-1] # Remove the last empty line
 
@@ -251,8 +253,8 @@ def _find(args, config):
     else:
         output_format = config.default_output_format
     print(format_search_results(results, output_format, args.original_key), end='')
-    if len(results):
-        logging.info("Download and display any of these PDFs with 'bibsearch open N' (N the index).")
+    #if len(results):
+    #    logging.info("Download and display any of these PDFs with 'bibsearch open N' (N the index).")
 
 def _open(args, config):
     """
@@ -587,18 +589,17 @@ def compare_entries(old, new):
 def _edit(args, config):
 
     db = BibDB(config)
-    bibtex, key = _get_cache_or_search_result(db, args.terms)
+    results = db.search(args.terms)
 
     with tempfile.NamedTemporaryFile("w") as temp_file:
         temp_fname = temp_file.name
         with open(temp_fname, "wt") as fp:
-            original_entries_text = format_search_results(results=[(bibtex, key)],
-                                                          output_format='bibtex',
+            original_entries_text = format_search_results(results=results,
+                                                          output_format='bib',
                                                           use_original_key=False)
             fp.write(original_entries_text)
             original_entries = pybtex.parse_string(original_entries_text,
                                                    bib_format="bibtex").entries.values()
-        logging.info('Using value of $EDITOR to choose editor.')
         subprocess.run([config.editor, temp_file.name])
 
         with open(temp_fname, "rt"):
