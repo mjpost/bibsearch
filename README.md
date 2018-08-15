@@ -27,20 +27,24 @@ Depending on your setup, you might want to check one of the installation methods
 
 * If you are on a Mac and have [brew](https://brew.sh/) installed, you can get this with
 
+    ```
     brew reinstall sqlite3 --with-fts5
+    ```
 
 * If you are on Arch Linux, the default installation already include FTS5 support.
 
-* If you are on Ubuntu, you might want to use this PPA (not related to this project) https://launchpad.net/~jonathonf/+archive/ubuntu/backports
+* If you are on Ubuntu, you might want to use this PPA (not related to this project) https://launchpad.net/~jonathonf/+archive/ubuntu/backports.
 
-* If you use a conda installation you can rebuild the sqlite package, eg. by using the recipe in https://github.com/conda-forge/sqlite-feedstock (unrelated to this project)
+* If you use a conda installation you can rebuild the sqlite package, eg. by using the recipe in https://github.com/conda-forge/sqlite-feedstock (unrelated to this project):
 
+    ```
     conda install conda-build
     git clone https://github.com/conda-forge/sqlite-feedstock.git
     cd sqlite-feedstock
     <Edit build.sh adding --enable-fts5>
     conda build recipe
     conda install <created tar.bz2 package>
+    ```
 
 ## Usage
 
