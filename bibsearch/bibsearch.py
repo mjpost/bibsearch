@@ -86,12 +86,12 @@ def download_file(url, fname_out=None) -> None:
     #~ logging.info('Downloading {} to {}'.format(url, fname_out if fname_out is not None else 'STR'))
     # check if the file has already been downloaded
     if fname_out is not None and os.path.exists(fname_out):
-        logging.info('Loading "%s" from cache at "%s"', url, fname_out)
+        logging.debug('Loading "%s" from cache at "%s"', url, fname_out)
         return fname_out
     elif fname_out:
-        logging.info('Downloading "%s" -> "%s"', url, fname_out)
+        logging.debug('Downloading "%s" -> "%s"', url, fname_out)
     else:
-        logging.info('Downloading "%s"', url)
+        logging.debug('Downloading "%s"', url)
 
     try:
         with urllib.request.urlopen(url) as f:
