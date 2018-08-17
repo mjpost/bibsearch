@@ -1085,6 +1085,8 @@ sedmt:
 sembear:
   '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-workshop-computational-semantics-beyond-events-and-roles.bib']
 semeval:
+  '2018': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-12th-international-workshop-on-semantic-evaluation.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-seventh-joint-conference-on-lexical-and-computational-semantics.bib']
   '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-pilot-senseval.bib']
   '2001': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-senseval-2-second-international-workshop-on-evaluating-word-sense-disambiguation-systems.bib']
   '2004': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-senseval-3-the-third-international-workshop-on-the-evaluation-of-systems-for-the-semantic-analysis-of-text.bib']
