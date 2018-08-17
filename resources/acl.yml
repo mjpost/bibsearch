@@ -89,6 +89,11 @@ acl:
     'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-2017-student-research-workshop.bib',
     'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-2017-system-demonstrations.bib',
     'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-2017-tutorial-abstracts.bib']
+  '2018': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-56th-annual-meeting-of-the-association-for-computational-linguistics-volume-1-long-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-56th-annual-meeting-of-the-association-for-computational-linguistics-volume-2-short-papers.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-2018-student-research-workshop.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-2018-system-demonstrations.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-acl-2018-tutorial-abstracts.bib']
 aha:
   '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-aha-workshop-on-information-discovery-in-text.bib']
 akbc:
@@ -1188,6 +1193,7 @@ tacl:
   '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-3-issue-1.bib']
   '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-4-issue-1.bib']
   '2017': ['https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-of-computational-linguistics-volume-5-issue-1.bib']
+  '2018': ['https://aclanthology.coli.uni-saarland.de/volumes/transactions-of-the-association-for-computational-linguistics-volume-6.bib']
 tag:
   '1990': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-first-international-workshop-on-tree-adjoining-grammar-and-related-frameworks-tag-1.bib']
   '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fourth-international-workshop-on-tree-adjoining-grammars-and-related-frameworks-tag-4.bib']
