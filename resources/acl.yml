@@ -507,6 +507,8 @@ eamt:
   '2015': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-18th-annual-conference-of-the-european-association-for-machine-translation.bib']
   '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-19th-annual-conference-of-the-european-association-for-machine-translation.bib']
 emnlp:
+  '2018': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-on-empirical-methods-in-natural-language-processing.bib',
+    'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2018-conference-on-empirical-methods-in-natural-language-processing-system-demonstrations.bib']
   '1996': ['https://aclanthology.coli.uni-saarland.de/volumes/conference-on-empirical-methods-in-natural-language-processing.bib']
   '1997': ['https://aclanthology.coli.uni-saarland.de/volumes/second-conference-on-empirical-methods-in-natural-language-processing.bib']
   '1998': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-conference-on-empirical-methods-for-natural-language-processing.bib']
@@ -1273,6 +1275,8 @@ wat:
 webnlg:
   '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-international-workshop-on-natural-language-generation-and-the-semantic-web-webnlg-2016.bib']
 wmt:
+  '2018': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-conference-on-machine-translation-research-papers.bib',
+  	  'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-conference-on-machine-translation-shared-task-papers.bib']
   '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-on-the-workshop-on-statistical-machine-translation.bib']
   '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-workshop-on-statistical-machine-translation.bib']
   '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-workshop-on-statistical-machine-translation.bib']
@@ -1292,4 +1296,5 @@ wnut:
 wssanlp:
   '2014': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-fifth-workshop-on-south-and-southeast-asian-natural-language-processing.bib']
   '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-6th-workshop-on-south-and-southeast-asian-natural-language-processing-wssanlp2016.bib']
-
+wnmt:
+  '2018': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-workshop-on-neural-machine-translation-and-generation.bib']
