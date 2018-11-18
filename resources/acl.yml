@@ -1276,7 +1276,7 @@ webnlg:
   '2016': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-2nd-international-workshop-on-natural-language-generation-and-the-semantic-web-webnlg-2016.bib']
 wmt:
   '2018': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-conference-on-machine-translation-research-papers.bib',
-  	  'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-conference-on-machine-translation-shared-task-papers.bib']
+           'https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-conference-on-machine-translation-shared-task-papers.bib']
   '2006': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-on-the-workshop-on-statistical-machine-translation.bib']
   '2007': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-second-workshop-on-statistical-machine-translation.bib']
   '2008': ['https://aclanthology.coli.uni-saarland.de/volumes/proceedings-of-the-third-workshop-on-statistical-machine-translation.bib']
