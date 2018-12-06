@@ -214,12 +214,12 @@ class BibDB:
         # TODO: make this a better sanity checking and perhaps report errors
         if not entry.key:
             return False
-        if not entry.fields.get("author"):
-            entry.fields["author"] = "UNKNOWN"
+        if not entry.persons.get("author"):
+            entry.persons["author"] = [pybtex.Person("UNKNOWN")]
 
         original_key = entry.key
         entry.fields["original_key"] = original_key
-        utf_author = bibutils.field_to_unicode(entry, "author")
+        utf_author = bibutils.authors_to_unicode(entry)
         utf_title = bibutils.field_to_unicode(entry, "title")
         utf_venue = bibutils.field_to_unicode(entry, "journal")
         if not utf_venue:
@@ -285,7 +285,7 @@ class BibDB:
             return False
 
         original_key = entry.fields["original_key"]
-        utf_author = bibutils.field_to_unicode(entry, "author")
+        utf_author = bibutils.authors_to_unicode(entry)
         utf_title = bibutils.field_to_unicode(entry, "title")
         utf_venue = bibutils.field_to_unicode(entry, "journal")
         if not utf_venue:

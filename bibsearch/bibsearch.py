@@ -166,9 +166,7 @@ def format_search_results(results: List[Tuple[str,str]],
         if output_format == 'bib':
             output += pybtex_unescape(fulltext) + "\n"
         else:
-            utf_author = bibutils.field_to_unicode(entry, "author", "")
-            utf_author = [a.pretty() for a in bibutils.parse_names(utf_author)]
-            utf_author = ", ".join(utf_author[:-2] + [" and ".join(utf_author[-2:])])
+            utf_author = bibutils.authors_to_unicode(entry)
 
             utf_title = bibutils.field_to_unicode(entry, "title", "")
             utf_venue = bibutils.field_to_unicode(entry, "journal", "")

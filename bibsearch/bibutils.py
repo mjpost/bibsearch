@@ -98,6 +98,26 @@ def generate_custom_key(entry: pybtex.Entry, key_format_in, suffix_level=0):
         suffix='' if suffix_level==0 else chr(ord('a') + suffix_level - 1),
         title=title_word)
 
+def get_author_name(person):
+    components = []
+    if person.bibtex_first_names:
+        components += person.bibtex_first_names
+    if person.prelast_names:
+        components += person.prelast_names
+    if person.last_names:
+        components += person.last_names
+    if person.lineage_names:
+        components += person.lineage_names
+    return " ".join(components)
+
+def authors_to_unicode(entry):
+    authors = entry.persons["author"]
+    authors_string = ", ".join([get_author_name(a) for a in authors[:-1]])
+    if len(authors) > 1:
+        authors_string += " and "
+    authors_string += get_author_name(authors[-1])
+    return tex_to_unicode(authors_string)
+
 def field_to_unicode(entry, field, default_value=None):
     utf_field = entry.fields.get(field, default_value)
     try:
