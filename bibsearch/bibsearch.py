@@ -547,11 +547,16 @@ def _tex(args, config):
         if match:
             keystr = match.group(1)
             for key in keystr.split(','):
-                bib_entry = db.search_key(key)
-                if bib_entry:
-                    entries.add(bib_entry)
-                else:
+                #bib_entry = db.search_key(key)
+                bib_entries = db.search(key.strip().replace("_", " ").split())
+                if not bib_entries:
                     logging.warning("Entry '%s' not found", key)
+                else:
+                    if len(bib_entries) > 1:
+                        logging.warning("More than one entry found for '%s', taking the first one", key)
+                    bib_entry = bibutils.single_entry_to_fulltext(bibutils.fulltext_to_single_entry(bib_entries[0][0]),
+                                                                  overwrite_key=key)
+                    entries.add(bib_entry)
         elif args.write_bibfile or args.overwrite_bibfile:
             match = bibdata_re.match(l)
             if match:
