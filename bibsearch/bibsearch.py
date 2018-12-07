@@ -297,11 +297,11 @@ class AddFileError(BibsearchError):
 
 def _add_file(fname, force_redownload, db, per_file_progress_bar):
     """
-    Return #added, #skipped, file_skipped
+    Return #added, #skipped, file_skipped, warnings
     """
     if fname.startswith('http'):
         if not force_redownload and db.file_has_been_downloaded(fname): 
-            return 0, 0, True
+            return 0, 0, True, []
         try:
             new_entries = pybtex.parse_string(download_file(fname),
                                               bib_format="bibtex").entries
@@ -320,13 +320,16 @@ def _add_file(fname, force_redownload, db, per_file_progress_bar):
         iterable = tqdm(new_entries.values(), ncols=80, bar_format="{l_bar}{bar}| [Elapsed: {elapsed} ETA: {remaining}]")
     else:
         iterable = new_entries.values()
+    all_warnings = []
     for entry in iterable:
-        if db.add(entry):
+        success, warnings = db.add(entry)
+        if success:
             added += 1
         else:
             skipped += 1
+        all_warnings += warnings
 
-    return added, skipped, False
+    return added, skipped, False, all_warnings
 
 def get_fnames_from_bibset(raw_fname, database_url):
     bib_spec = raw_fname[len(BIBSETPREFIX):].strip()
@@ -486,15 +489,17 @@ def _add(args, config):
             iterable = fnames
             per_file_progress_bar = True
         error_msgs = []
+        warning_msgs = []
         for f in iterable:
             try:
-                f_added, f_skipped, file_skipped = _add_file(f, args.redownload, db, per_file_progress_bar)
+                f_added, f_skipped, file_skipped, file_warnings = _add_file(f, args.redownload, db, per_file_progress_bar)
                 if args.verbose and not per_file_progress_bar:
                     if not file_skipped:
                         log_msg = "Added %d entries from %s" % (f_added, f)
                     else:
                         log_msg = "Skipped %s" % f
                     tqdm.write(log_msg)
+                warning_msgs += file_warnings
             except AddFileError as e:
                 f_added = 0
                 f_skipped = 0
@@ -505,13 +510,17 @@ def _add(args, config):
             if file_skipped:
                 n_files_skipped += 1
 
-    print('Added', added, 'entries, skipped', skipped, 'duplicates. Skipped', n_files_skipped, 'files')
-    if error_msgs:
-        print("During operation followint errors occured:")
-        for m in error_msgs:
-            logging.error(m)
     db.save()
 
+    if warning_msgs:
+        print("\nDuring operation following warnings occured:")
+        for m in warning_msgs:
+            logging.warning(m)
+    if error_msgs:
+        print("\nDuring operation following errors occured:")
+        for m in error_msgs:
+            logging.error(m)
+    print('\nAdded', added, 'entries, skipped', skipped, 'duplicates. Skipped', n_files_skipped, 'files')
 
 def _print(args, config):
     db = BibDB(config)

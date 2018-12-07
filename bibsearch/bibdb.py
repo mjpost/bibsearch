@@ -226,6 +226,7 @@ class BibDB:
             utf_venue = bibutils.field_to_unicode(entry, "booktitle")
         custom_key_tries = 0
         added = False
+        warnings = []
         while not added:
             custom_key = None
             if custom_key_tries < 27:
@@ -234,7 +235,7 @@ class BibDB:
                 except Exception as e:
                     pass
             else:
-                logging.warning("Could not generate a unique custom key for entry %s", original_key)
+                warnings.append("Could not generate a unique custom key for entry %s" % original_key)
                 custom_key = original_key
             try:
                 self.cursor.execute('INSERT INTO bib(key, custom_key, author, title, venue, year, fulltext) VALUES (?,?,?,?,?,?,?)',
@@ -261,7 +262,7 @@ class BibDB:
                         raise
                 else:
                     raise
-        return added
+        return added, warnings
 
     def update_custom_key(self, original_key, new_custom_key):
         self.cursor.execute("SELECT fulltext FROM bib WHERE key=? LIMIT 1", (original_key,))

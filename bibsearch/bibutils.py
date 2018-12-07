@@ -76,11 +76,13 @@ def generate_custom_key(entry: pybtex.Entry, key_format_in, suffix_level=0):
 
     # TODO: fault tolerance against missing fields!
     year = int(entry.fields["year"])
-    all_authors = parse_names(entry.fields["author"])
-    author_surname = all_authors[0]\
-        .pretty(template="{last}")\
-        .lower()\
-        .translate(custom_key_skip_chars)
+    all_authors = entry.persons["author"]
+    author_surname = all_authors[0].last_names[0].lower().translate(custom_key_skip_chars)
+    #~ all_authors = parse_names(entry.fields["author"])
+    #~ author_surname = all_authors[0]\
+    #~     .pretty(template="{last}")\
+    #~     .lower()\
+    #~     .translate(custom_key_skip_chars)
     et_al = "_etAl" if len(all_authors) > 1 else ""
 
     filtered_title = [w for w in [t.lower() for t in entry.fields["title"].split()] if w not in custom_key_skip_words]
@@ -467,10 +469,11 @@ class TeXProcessor:
             macro = m.group(1)
             nval = self._expand(macro)
             if nval is None:
-                if macro.startswith('\\'):
-                    raise ValueError('unknown macro `{}\''.format(macro))
-                raise ValueError(
-                    'unknown special character `{}\''.format(macro))
+                continue
+                #~ if macro.startswith('\\'):
+                #~     raise ValueError('unknown macro `{}\''.format(macro))
+                #~ raise ValueError(
+                #~     'unknown special character `{}\''.format(macro))
             self.__data = self.__data[:m.start()] + nval + \
                           self.__data[self.__off:]
             self.__off = m.start() + len(nval)
