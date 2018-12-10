@@ -1,3 +1,7 @@
+0.3.14 (2018-12-10)
+    - Fixed 'UNKNOWN' author appearing in some installations
+      (due to wrong handling of pybtex structures on our side)
+
 0.3.13 (2018-07-24)
     - Fixes -b option to `bibsearch search` (thanks to @cl3wis)
 
