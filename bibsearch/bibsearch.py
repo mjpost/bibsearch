@@ -461,7 +461,7 @@ def _remove(args, config):
         logging.error("Search returned no results. Aborting.")
         sys.exit(1)
     print("You are about to delete these entries:\n")
-    print(format_search_results(search_results))
+    print(format_search_results(search_results, "bib"))
     confirmation = 'yes' if args.force else prompt("Do you want to proced with the deletion?", "yes", "NO",
                                                    default=1)
     if confirmation == "yes":
